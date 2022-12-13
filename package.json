@@ -3,8 +3,11 @@
   "version": "1.0.0",
   "description": "my first typescript usage to make an ecommerce app",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./index.js",
+    "dev": "nodemon ./index.js"
   },
   "author": "Mohammad Barghamadi",
   "license": "ISC",
@@ -14,5 +17,13 @@
     "express": "^4.18.2",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.8.0"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
+    "@types/cors": "^2.8.13",
+    "@types/express": "^4.17.14",
+    "@types/jsonwebtoken": "^8.5.9",
+    "@types/node": "^18.11.14",
+    "dotenv": "^16.0.3"
   }
 }
