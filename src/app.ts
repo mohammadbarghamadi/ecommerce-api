@@ -3,6 +3,9 @@ import dotenv from 'dotenv'
 import express from 'express'
 import cors from 'cors'
 
+// import express error handler
+import errorHandler from './middlewares/error.js'
+
 // import main routes
 // import {
 //     userRoute,
@@ -35,7 +38,11 @@ app.use(cors()) // let's frontend app to send api request without cors issues
 // app.use('/api/favo',favoRoute)
 
 
-// here I will import express error handler middleware
-// app.use(errorHandler)
+// express error handler middleware
+app.use(errorHandler)
 
-app.listen(PORT, () => console.log(`nodejs server start and running with express on port:${PORT}`))
+const server = app.listen(PORT, () => console.log(`nodejs server start and running with express on port:${PORT}`))
+process.on("unhandledRejection", (err, promise) => {
+    console.log("Logged Error" + err )
+    server.close(() => process.exit(1))
+})

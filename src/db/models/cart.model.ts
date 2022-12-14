@@ -1,7 +1,18 @@
 import mongoose from "mongoose";
 
 
-const cartSchema = new mongoose.Schema({
+export interface CartSchemaInt {
+    userId: mongoose.Types.ObjectId
+    list: {
+        prodId: mongoose.Types.ObjectId
+        quantity: Number
+        title: String
+        price: Number
+    },
+    amount: Number
+}
+
+const cartSchema = new mongoose.Schema<CartSchemaInt>({
 
     userId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -12,7 +23,7 @@ const cartSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             required: true
         },
-        count: {
+        quantity: {
             type: Number,
             required: true,
             default: 1
@@ -26,10 +37,11 @@ const cartSchema = new mongoose.Schema({
             required: true
         }
     }],
-    price: {
+    amount: {
         type: Number,
         required: true
-    }
+    },
+    
 
 })
 

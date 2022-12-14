@@ -1,6 +1,10 @@
 import mongoose from "mongoose";
-import { isValidEmail } from "../../config/regex";
-import { ROLES } from "../../config/roles";
+import bcrypt from "bcrypt"
+import dotenv from "dotenv"
+import { isValidEmail } from "../../config/regex.js";
+import { ROLES } from "../../config/roles.js";
+
+dotenv.config({ path: '.config' })
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -55,6 +59,13 @@ const userSchema = new mongoose.Schema({
 })
 
 
+
+userSchema.pre('save', async function () {
+    if (this.isModified('password')) {
+        const salt = await bcrypt.genSalt(10)
+        this.password = await bcrypt.hash(this.password,salt)
+    }
+})
 
 const UserModel = mongoose.model('users', userSchema)
 
