@@ -27,6 +27,10 @@ const userSchema = new mongoose.Schema({
         },
         match: [isValidEmail, 'Invalid email address!']
     },
+    address: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'addresses'
+    },
     phone: {
         type: String,
         unique: true,

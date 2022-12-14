@@ -14,10 +14,6 @@ const productSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'categories'
     },
-    address: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'addresses'
-    },
     tag: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'tags'
