@@ -28,11 +28,11 @@ export const userSigninCtr: RequestHandler = async (req, res, next) => {
 
     try {
         const user = await UserModel.findByCredentials(email, phone, password)
-
-        if (!user.success) return next({})
-
+        if (user.error) return next({ message: 'Invalid Credentials!', code: 401})
+        const token = await user.genAuthToken()
+        res.json({status: 200, data: {user, token}, message: 'User signed in.'})
     } catch (e) {
-
+        next(e)
     }
 }
 

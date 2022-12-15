@@ -1,12 +1,13 @@
 import mongoose, { Types, Model, Document, Schema } from "mongoose";
 import bcrypt from "bcrypt"
+import jwt from 'jsonwebtoken'
 import dotenv from "dotenv"
 import { isValidEmail } from "../../config/regex.js";
 import { ROLES } from "../../config/roles.js";
 
 dotenv.config({ path: '.config' })
 
-interface UserSchemaInt {
+interface UserInt {
     name: string
     username: string
     email: string
@@ -14,21 +15,25 @@ interface UserSchemaInt {
     phone?: string
     password: string
     role: number
-    tokens?: {}[]
+    tokens?: { token: string }[]
     resetToken?: string
     resetExpire?: string
 }
 
 interface CredentialPromInt {
-    success: boolean,
-    data:  UserSchemaInt
+    error: boolean,
+    data: UserInt
+}
+
+interface UserSchemaInt extends UserInt, CredentialPromInt, Document {
+    genAuthToken: () => Promise<string>
 }
 
 interface UserModelInt extends Model<UserSchemaInt> {
-    findByCredentials: (email: string, phone: string, password: string) => Promise<CredentialPromInt>
+    findByCredentials: (email: string, phone: string, password: string) => Promise<UserSchemaInt>
 }
 
-const userSchema = new mongoose.Schema({
+const userSchema: Schema<UserSchemaInt> = new mongoose.Schema({
     name: {
         type: String,
         required: true,
@@ -67,7 +72,9 @@ const userSchema = new mongoose.Schema({
         default: ROLES.customer
     },
     tokens: [{
-        type: String
+        token: {
+            type: String
+        }
     }],
     resetToken: { type: String },
     resetExpire: { type: String }
@@ -75,16 +82,33 @@ const userSchema = new mongoose.Schema({
     timestamps: true
 })
 
+// remove password and tokens field to prevent user information exposure
+userSchema.methods.toJSON = function() {
+    const user = this.toObject()
+    delete user.password
+    delete user.tokens
+    return user
+} 
+
+// generate auth token and saving it into DB
+userSchema.methods.genAuthToken = async function () {
+    const token = jwt.sign({ _id: this._id }, process.env.JWT_SECRET_KEY!, { expiresIn: '7d' })
+    this.tokens = this.tokens.concat({ token })
+    await this.save()
+    return token
+
+}
+
 // check user password with findByCredintial method
-userSchema.statics.findByCredintial = async function (email, phone, password) {
+userSchema.statics.findByCredentials = async function (email, phone, password) {
 
     let user
     if (email) user = await UserModel.findOne({ email })
     if (phone) user = await UserModel.findOne({ phone })
-    if (!user) return { success: false}
+    if (!user) return { error: true }
     const isMatch = await bcrypt.compare(password, user.password)
-    if (!isMatch) return { success: false }
-    return {success: true, data: user}
+    if (!isMatch) return { error: true }
+    return user
 
 }
 
@@ -96,6 +120,6 @@ userSchema.pre('save', async function () {
     }
 })
 
-const UserModel = mongoose.model<UserSchemaInt, UserModelInt>('users', userSchema)
+const UserModel = mongoose.model<UserInt, UserModelInt>('users', userSchema)
 
 export default UserModel
