@@ -1,10 +1,32 @@
-import mongoose from "mongoose";
+import mongoose, { Types, Model, Document, Schema } from "mongoose";
 import bcrypt from "bcrypt"
 import dotenv from "dotenv"
 import { isValidEmail } from "../../config/regex.js";
 import { ROLES } from "../../config/roles.js";
 
 dotenv.config({ path: '.config' })
+
+interface UserSchemaInt {
+    name: string
+    username: string
+    email: string
+    address?: Types.ObjectId
+    phone?: string
+    password: string
+    role: number
+    tokens?: {}[]
+    resetToken?: string
+    resetExpire?: string
+}
+
+interface CredentialPromInt {
+    success: boolean,
+    data:  UserSchemaInt
+}
+
+interface UserModelInt extends Model<UserSchemaInt> {
+    findByCredentials: (email: string, phone: string, password: string) => Promise<CredentialPromInt>
+}
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -22,13 +44,6 @@ const userSchema = new mongoose.Schema({
         type: String,
         unique: true,
         required: true,
-        validate: {
-            validator(email: string) {
-                if (isValidEmail.test(email)) {
-                    throw new Error('Invalid email address!')
-                }
-            }
-        },
         match: [isValidEmail, 'Invalid email address!']
     },
     address: {
@@ -47,7 +62,7 @@ const userSchema = new mongoose.Schema({
         minLength: 7
     },
     role: {
-        type: String,
+        type: Number,
         required: true,
         default: ROLES.customer
     },
@@ -56,17 +71,31 @@ const userSchema = new mongoose.Schema({
     }],
     resetToken: { type: String },
     resetExpire: { type: String }
+}, {
+    timestamps: true
 })
 
+// check user password with findByCredintial method
+userSchema.statics.findByCredintial = async function (email, phone, password) {
 
+    let user
+    if (email) user = await UserModel.findOne({ email })
+    if (phone) user = await UserModel.findOne({ phone })
+    if (!user) return { success: false}
+    const isMatch = await bcrypt.compare(password, user.password)
+    if (!isMatch) return { success: false }
+    return {success: true, data: user}
 
+}
+
+// Hash user password before saving it into DB
 userSchema.pre('save', async function () {
     if (this.isModified('password')) {
         const salt = await bcrypt.genSalt(10)
-        this.password = await bcrypt.hash(this.password,salt)
+        this.password = await bcrypt.hash(this.password, salt)
     }
 })
 
-const UserModel = mongoose.model('users', userSchema)
+const UserModel = mongoose.model<UserSchemaInt, UserModelInt>('users', userSchema)
 
 export default UserModel

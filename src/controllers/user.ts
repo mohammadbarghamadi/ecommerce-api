@@ -1,5 +1,5 @@
 import { RequestHandler } from "express-serve-static-core";
-import UserModel from "../db/models/user.model";
+import UserModel from "../db/models/user.model.js";
 
 
 export const userSignupCtr: RequestHandler = async (req, res, next) => {
@@ -7,21 +7,33 @@ export const userSignupCtr: RequestHandler = async (req, res, next) => {
     const element = Object.keys(req.body)
     const allowed = ['name', 'username', 'email', 'address', 'phone', 'password']
     const isMatch = element.every(item => allowed.includes(item))
-    if (!isMatch) return next('Invalid field')
+    if (!isMatch) return next({ message: 'Invalid field', code: 400 })
 
     try {
         const newUser = new UserModel(req.body)
-        const savedUser = newUser.save()
+        const savedUser = await newUser.save()
         res.status(200).json({ status: 200, data: savedUser, message: 'New user created!' })
-    } catch (e) {
-        next()
+    } catch (e: any) {
+        next(e)
     }
 }
 
-export const userSigninCtr: RequestHandler = async (req, res) => {
+export const userSigninCtr: RequestHandler = async (req, res, next) => {
 
-    
+    const element = Object.keys(req.body)
+    const allowed = ['phone', 'email', 'password']
+    const isMatch = element.every(item => allowed.includes(item))
+    if (!isMatch) return next({ message: 'Invalid field', code: 400 })
+    const { email, phone, password } = req.body
 
+    try {
+        const user = await UserModel.findByCredentials(email, phone, password)
+
+        if (!user.success) return next({})
+
+    } catch (e) {
+
+    }
 }
 
 export const userSignoutCtr: RequestHandler = async (req, res) => {
