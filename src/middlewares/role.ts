@@ -1,3 +1,4 @@
+import { Request, Response, NextFunction } from "express"
 export enum ROLES {
     Root = 1000,
     Admin = 1100,
@@ -11,8 +12,10 @@ export enum Access {
     Lower = 20
 }
 
-export const Role = (role: number, access: Access = Access.Higher) => () => {
-
-    
-
+export const Role = (role: number, access: Access = Access.Higher) =>
+    (req:Request, res:Response, next:NextFunction) => {
+        if(access === Access.Higher) if(req.user?.role! <= role) return next()
+        if(access === Access.Lower) if(req.user?.role! >= role) return next()
+        if(access === Access.Just) if(req.user?.role! === role) return next()
+        res.status(403).json({status: 403, message: 'You have not enough permission!'})
 }

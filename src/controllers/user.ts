@@ -74,7 +74,8 @@ export const userProfiletr: RequestHandler = async (req, res, next) => {
 export const userListCtr: RequestHandler = async (req, res, next) => {
 
     try {
-        
+        const users = await UserModel.find()
+        res.json({status: 200, data: users})
     } catch (e) {
         next(e)
     }
