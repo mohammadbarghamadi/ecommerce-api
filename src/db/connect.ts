@@ -1,7 +1,7 @@
 import dotenv from 'dotenv'
 import mongoose from 'mongoose'
 
-dotenv.config({path: '.config'})
+dotenv.config()
 
 const uri:string = process.env.DB_URI!
 const dbn:string = process.env.DB_NAM!

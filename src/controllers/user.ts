@@ -28,57 +28,70 @@ export const userSigninCtr: RequestHandler = async (req, res, next) => {
 
     try {
         const user = await UserModel.findByCredentials(email, phone, password)
-        if (user.error) return next({ message: 'Invalid Credentials!', code: 401})
+        if (user.error) return next({ message: 'Invalid Credentials!', code: 401 })
         const token = await user.genAuthToken()
-        res.json({status: 200, data: {user, token}, message: 'User signed in.'})
+        res.cookie('authToken', token, { httpOnly: true, maxAge: 7 * 24 * 60 * 1000 })
+        res.json({ status: 200, data: user, message: 'User signed in.' })
     } catch (e) {
         next(e)
     }
 }
 
-export const userSignoutCtr: RequestHandler = async (req, res) => {
+export const userSignoutCtr: RequestHandler = async (req, res, next) => {
+
+    try {
+        req.user!.tokens = req.user?.tokens?.filter(item => item.token !== req.token)
+        await req.user!.save()
+        res.json({status: 200, message: 'signout with success!'})
+    } catch (e) {
+        next(e)
+    }
+
+}
+
+export const userSignoutAllCtr: RequestHandler = async (req, res, next) => {
+
+    try {
+        req.user!.tokens = req.user?.tokens?.filter(item => item.token === req.token)
+        await req.user!.save()
+        res.json({status: 200, message: 'Signed out from all devices!'})
+    } catch(e) {
+        next(e)
+    }
+
+}
+
+export const userProfiletr: RequestHandler = async (req, res, next) => {
+
+    
+
+}
+
+export const userListCtr: RequestHandler = async (req, res, next) => {
 
 
 
 }
 
-export const userSignoutAllCtr: RequestHandler = async (req, res) => {
+export const userUpdateCtr: RequestHandler = async (req, res, next) => {
 
 
 
 }
 
-export const userProfiletr: RequestHandler = async (req, res) => {
+export const userForgetCtr: RequestHandler = async (req, res, next) => {
 
 
 
 }
 
-export const userListCtr: RequestHandler = async (req, res) => {
+export const userResetCtr: RequestHandler = async (req, res, next) => {
 
 
 
 }
 
-export const userUpdateCtr: RequestHandler = async (req, res) => {
-
-
-
-}
-
-export const userForgetCtr: RequestHandler = async (req, res) => {
-
-
-
-}
-
-export const userResetCtr: RequestHandler = async (req, res) => {
-
-
-
-}
-
-export const userDeleteCtr: RequestHandler = async (req, res) => {
+export const userDeleteCtr: RequestHandler = async (req, res, next) => {
 
 
 

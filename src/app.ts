@@ -2,6 +2,7 @@
 import dotenv from 'dotenv'
 import express from 'express'
 import cors from 'cors'
+import cookie from 'cookie-parser'
 
 // connect to database
 import './db/connect.js' 
@@ -19,7 +20,7 @@ import userRoute from './routes/user.route.js'
 
 
 // configure environment variables
-dotenv.config({ path: '.config' })
+dotenv.config()
 
 // setup express app
 const app = express()
@@ -30,6 +31,7 @@ const PORT = process.env.PORT || 8200
 // express main middlewares setup
 app.use(express.urlencoded({ extended: true })) // to parses urlencoded payloads 
 app.use(express.json()) // to parses request body as json
+app.use(cookie()) // parse incoming cookies from header
 app.use(cors()) // let's frontend app to send api request without cors issues
 
 

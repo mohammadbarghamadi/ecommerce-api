@@ -1,13 +1,11 @@
 import mongoose, { Types, Model, Document, Schema } from "mongoose";
 import bcrypt from "bcrypt"
 import jwt from 'jsonwebtoken'
-import dotenv from "dotenv"
 import { isValidEmail } from "../../config/regex.js";
 import { ROLES } from "../../config/roles.js";
 
-dotenv.config({ path: '.config' })
 
-interface UserInt {
+export interface UserInt {
     name: string
     username: string
     email: string
