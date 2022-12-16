@@ -1,5 +1,6 @@
 import { Router } from "express";
-import { auth } from "../middlewares/auth.js";
+import { Auth } from "../middlewares/auth.js";
+import { Role, ROLES, Access } from "../middlewares/role.js";
 import {
 
     userSignupCtr,
@@ -20,14 +21,14 @@ const router = Router()
 
 router.route('/signup').post(userSignupCtr)
 router.route('/signin').post(userSigninCtr)
-router.route('/signout').get(auth, userSignoutCtr)
-router.route('/signoutall').get(auth, userSignoutAllCtr)
-router.route('/profile').get(userProfiletr)
-router.route('/list').get(userListCtr)
-router.route('/update').patch(userUpdateCtr)
+router.route('/signout').get(Auth, userSignoutCtr)
+router.route('/signoutall').get(Auth, userSignoutAllCtr)
+router.route('/profile').get(Auth, userProfiletr)
+router.route('/list').get(Auth, Role(ROLES.Admin, Access.Higher), userListCtr)
+router.route('/update:/userId').patch(Auth, userUpdateCtr)
 router.route('/forget').post(userForgetCtr)
-router.route('/reset').patch(userResetCtr)
-router.route('/delete').delete(userDeleteCtr)
+router.route('/reset:/token').patch(userResetCtr)
+router.route('/delete:/userId').delete(Auth, userDeleteCtr)
 
 
 export default router

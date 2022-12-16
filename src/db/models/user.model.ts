@@ -2,7 +2,7 @@ import mongoose, { Types, Model, Document, Schema } from "mongoose";
 import bcrypt from "bcrypt"
 import jwt from 'jsonwebtoken'
 import { isValidEmail } from "../../config/regex.js";
-import { ROLES } from "../../config/roles.js";
+import { ROLES } from "../../middlewares/role.js";
 
 
 export interface UserInt {
@@ -67,7 +67,7 @@ const userSchema: Schema<UserSchemaInt> = new mongoose.Schema({
     role: {
         type: Number,
         required: true,
-        default: ROLES.customer
+        default: ROLES.Customer
     },
     tokens: [{
         token: {

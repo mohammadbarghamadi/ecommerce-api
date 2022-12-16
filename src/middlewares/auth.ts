@@ -8,7 +8,7 @@ interface JWTInt {
     exp: number
 }
 
-export const auth: RequestHandler = async (req, res, next) => {
+export const Auth: RequestHandler = async (req, res, next) => {
 
     try {
         const token: string = req.cookies.authToken

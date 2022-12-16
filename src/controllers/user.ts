@@ -63,13 +63,21 @@ export const userSignoutAllCtr: RequestHandler = async (req, res, next) => {
 
 export const userProfiletr: RequestHandler = async (req, res, next) => {
 
-    
+    try {
+        res.json({status: 200, data: req.user, message: 'User profile'})
+    } catch (e) {
+        next(e)
+    }
 
 }
 
 export const userListCtr: RequestHandler = async (req, res, next) => {
 
-
+    try {
+        
+    } catch (e) {
+        next(e)
+    }
 
 }
 
