@@ -1,5 +1,5 @@
 import { RequestHandler } from "express-serve-static-core";
-import UserModel from "../db/models/user.model.js";
+import UserModel, { UserInt } from "../db/models/user.model.js";
 import { queryHandler } from "../utils/filter.js";
 
 
@@ -76,7 +76,7 @@ export const userProfiletr: RequestHandler = async (req, res, next) => {
 export const userListCtr: RequestHandler = async (req, res, next) => {
 
     const { createdAt, updatedAt, limit, skip } = queryHandler(req.query)
-    
+
     try {
         const users = await UserModel.find().limit(limit).skip(skip).sort(createdAt).sort(updatedAt)
         res.json({ status: 200, data: users })
@@ -88,10 +88,10 @@ export const userListCtr: RequestHandler = async (req, res, next) => {
 export const userSearchCtr: RequestHandler = async (req, res, next) => {
 
     const { createdAt, updatedAt, limit, skip, keyphrase } = queryHandler(req.query)
-    
+
     try {
-        const users = await UserModel.find({$text: {$search: keyphrase, $caseSensitive: false}})
-        .limit(limit).skip(skip).sort(createdAt).sort(updatedAt)
+        const users = await UserModel.find({ $text: { $search: keyphrase, $caseSensitive: false } })
+            .limit(limit).skip(skip).sort(createdAt).sort(updatedAt)
         res.json({ status: 200, data: users })
     } catch (e) {
         next(e)
@@ -100,7 +100,40 @@ export const userSearchCtr: RequestHandler = async (req, res, next) => {
 
 export const userUpdateCtr: RequestHandler = async (req, res, next) => {
 
+    const element = Object.keys(req.body)
+    const allowed = ['name', 'email', 'address', 'phone', 'password']
+    const isMatch = element.every(item => allowed.includes(item))
 
+    if (!isMatch) return next({ code: 400, message: 'Invalid fields!' })
+
+    try {
+        const user: any = req.user
+        element.forEach(item => user[item] = req.body[item])
+        const update = await user.save()
+        res.json({ status: 200, data: update, message: 'User updated!' })
+    } catch (e) {
+        next(e)
+    }
+
+}
+
+export const userEditCtr: RequestHandler = async (req, res, next) => {
+
+    const element = Object.keys(req.body)
+    const allowed = ['name', 'email', 'address', 'phone', 'password', 'role']
+    const isMatch = element.every(item => allowed.includes(item))
+
+    if (!isMatch) return next({ code: 400, message: 'Invalid fields!' })
+
+    try {
+        const user: any = await UserModel.findById(req.params.userId)
+        if (!user) return next({ code: 404, message: 'User not found!' })
+        element.forEach(item => user[item] = req.body[item])
+        const update = await user.save()
+        res.json({ status: 200, data: update, message: 'User updated!' })
+    } catch (e) {
+        next(e)
+    }
 
 }
 
