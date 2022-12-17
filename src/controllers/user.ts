@@ -1,5 +1,6 @@
 import { RequestHandler } from "express-serve-static-core";
 import UserModel from "../db/models/user.model.js";
+import { queryHandler } from "../utils/filter.js";
 
 
 export const userSignupCtr: RequestHandler = async (req, res, next) => {
@@ -42,7 +43,7 @@ export const userSignoutCtr: RequestHandler = async (req, res, next) => {
     try {
         req.user!.tokens = req.user?.tokens?.filter(item => item.token !== req.token)
         await req.user!.save()
-        res.json({status: 200, message: 'signout with success!'})
+        res.json({ status: 200, message: 'signout with success!' })
     } catch (e) {
         next(e)
     }
@@ -54,8 +55,8 @@ export const userSignoutAllCtr: RequestHandler = async (req, res, next) => {
     try {
         req.user!.tokens = req.user?.tokens?.filter(item => item.token === req.token)
         await req.user!.save()
-        res.json({status: 200, message: 'Signed out from all devices!'})
-    } catch(e) {
+        res.json({ status: 200, message: 'Signed out from all devices!' })
+    } catch (e) {
         next(e)
     }
 
@@ -63,8 +64,9 @@ export const userSignoutAllCtr: RequestHandler = async (req, res, next) => {
 
 export const userProfiletr: RequestHandler = async (req, res, next) => {
 
+
     try {
-        res.json({status: 200, data: req.user, message: 'User profile'})
+        res.json({ status: 200, data: req.user, message: 'User profile' })
     } catch (e) {
         next(e)
     }
@@ -73,13 +75,27 @@ export const userProfiletr: RequestHandler = async (req, res, next) => {
 
 export const userListCtr: RequestHandler = async (req, res, next) => {
 
+    const { createdAt, updatedAt, limit, skip } = queryHandler(req.query)
+    
     try {
-        const users = await UserModel.find()
-        res.json({status: 200, data: users})
+        const users = await UserModel.find().limit(limit).skip(skip).sort(createdAt).sort(updatedAt)
+        res.json({ status: 200, data: users })
     } catch (e) {
         next(e)
     }
+}
 
+export const userSearchCtr: RequestHandler = async (req, res, next) => {
+
+    const { createdAt, updatedAt, limit, skip, keyphrase } = queryHandler(req.query)
+    
+    try {
+        const users = await UserModel.find({$text: {$search: keyphrase, $caseSensitive: false}})
+        .limit(limit).skip(skip).sort(createdAt).sort(updatedAt)
+        res.json({ status: 200, data: users })
+    } catch (e) {
+        next(e)
+    }
 }
 
 export const userUpdateCtr: RequestHandler = async (req, res, next) => {

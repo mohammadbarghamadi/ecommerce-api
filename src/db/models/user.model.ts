@@ -35,14 +35,15 @@ const userSchema: Schema<UserSchemaInt> = new mongoose.Schema({
     name: {
         type: String,
         required: true,
-        trim: true
-    },
-    username: {
-        type: String,
-        unique: true,
         trim: true,
-        lowercase: true
+        index: true
     },
+    // username: {
+    //     type: String,
+    //     unique: true,
+    //     trim: true,
+    //     lowercase: true
+    // },
     email: {
         type: String,
         unique: true,
@@ -80,13 +81,15 @@ const userSchema: Schema<UserSchemaInt> = new mongoose.Schema({
     timestamps: true
 })
 
+userSchema.index({ name: 'text', phone: 'text', email: 'text' })
+
 // remove password and tokens field to prevent user information exposure
-userSchema.methods.toJSON = function() {
+userSchema.methods.toJSON = function () {
     const user = this.toObject()
     delete user.password
     delete user.tokens
     return user
-} 
+}
 
 // generate auth token and saving it into DB
 userSchema.methods.genAuthToken = async function () {

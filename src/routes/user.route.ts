@@ -9,6 +9,7 @@ import {
     userSignoutAllCtr,
     userProfiletr,
     userListCtr,
+    userSearchCtr,
     userUpdateCtr,
     userForgetCtr,
     userResetCtr,
@@ -25,6 +26,7 @@ router.route('/signout').get(Auth, userSignoutCtr)
 router.route('/signoutall').get(Auth, userSignoutAllCtr)
 router.route('/profile').get(Auth, userProfiletr)
 router.route('/list').get(Auth, Role(ROLES.Admin), userListCtr)
+router.route('/search').get(Auth, Role(ROLES.Admin), userSearchCtr)
 router.route('/update:/userId').patch(Auth, userUpdateCtr)
 router.route('/forget').post(userForgetCtr)
 router.route('/reset:/token').patch(userResetCtr)
