@@ -124,12 +124,12 @@ export const userResetCtr: RequestHandler = async (req, res, next) => {
 
     const token = req.params.resetToken
     const { password } = req.body
-    
+
     if (!token || !password) return next({ code: 400, message: 'Bad request!' })
     try {
         const user = await UserModel.resetPassword(token, password)
-        if(!user) return next({code: 401, message: 'Invalid request!'})
-        res.json({status: 200, message: 'Your password has been changed!'})
+        if (!user) return next({ code: 401, message: 'Invalid request!' })
+        res.json({ status: 200, message: 'Your password has been changed!' })
     } catch (e) {
         next(e)
     }
@@ -139,7 +139,13 @@ export const userResetCtr: RequestHandler = async (req, res, next) => {
 // user delete controller /api/user/delete
 export const userDeleteCtr: RequestHandler = async (req, res, next) => {
 
-
+    try {
+        const user = req.user?.delete()
+        if (!user) return next({ code: 404, message: 'User not found!' })
+        res.json({ status: 200, message: 'Your account has been removed!', data: user })
+    } catch (e) {
+        next(e)
+    }
 
 }
 
@@ -201,6 +207,20 @@ export const userEditCtr: RequestHandler = async (req, res, next) => {
 // remove users by admins /api/user/remove/:userId
 export const userRemoveCtr: RequestHandler = async (req, res, next) => {
 
+    const _id = req.params.userId
+    if (!_id) return next({ code: 400, message: 'Bad request' })
 
+    try {
+        const user = await UserModel.findOneAndDelete({ _id })
+        if (!user) return next({ code: 404, message: 'No user found!' })
+
+        if (req.user?.role !== 1000)
+            if (req.user?.role! >= user.role)
+                return next({ code: 403, message: `You have insufficient permission!` })
+
+        res.json({ status: 200, data: user, message: 'User has been removed!' })
+    } catch (e) {
+        next(e)
+    }
 
 }

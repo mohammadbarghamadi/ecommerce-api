@@ -14,6 +14,7 @@ export interface UserInt {
     phone?: string
     password: string
     role: number
+    cart: Types.ObjectId
     tokens?: { token: string }[]
     resetToken?: string
     resetExpire?: string
@@ -56,6 +57,10 @@ const userSchema: Schema<UserSchemaInt> = new mongoose.Schema({
         maxLength: 10,
         minLength: 10
     },
+    cart: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'carts'
+    },
     password: {
         type: String,
         required: true,
@@ -71,8 +76,8 @@ const userSchema: Schema<UserSchemaInt> = new mongoose.Schema({
             type: String
         }
     }],
-    resetToken: { type: String },
-    resetExpire: { type: Date }
+    resetToken: { type: String, select: false },
+    resetExpire: { type: Date, select: false }
 }, {
     timestamps: true
 })
@@ -114,32 +119,29 @@ userSchema.pre('save', async function () {
 
 // generate reset token
 userSchema.methods.genResetToken = async function () {
-
     const data = crypto.randomBytes(40).toString('hex')
     const resetToken = crypto.createHash('sha256').update(data).digest('hex')
-
     this.resetToken = resetToken
     this.resetExpire = Date.now() + 5 * 60 * 1000
-
     await this.save()
-
     return data
 }
 
+// reset user password with received token
 userSchema.statics.resetPassword = async function (token: string, password: string) {
-
     const resetToken = crypto.createHash('sha256').update(token).digest('hex')
-    const user = await UserModel.findOne({ resetToken, resetExpire: { $gte: Date.now() } })
-
-    if(!user) return false
-
+    const user = await UserModel.findOne({ resetToken, resetExpire: { $gte: Date.now() } }).select('resetToken resetExpire')
+    if (!user) return false
     user.password = password
     user.resetToken = ''
     user.resetExpire = ''
-
     await user.save()
     return true
 }
+
+userSchema.pre('remove', function () {
+    //  I will remove user carts
+})
 
 const UserModel = mongoose.model<UserInt, UserModelInt>('users', userSchema)
 

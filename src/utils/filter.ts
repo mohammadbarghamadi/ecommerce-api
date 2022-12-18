@@ -1,8 +1,8 @@
 interface QueryInt {
     csort?: 'dsc' | 'asc'
     usort?: 'dsc' | 'asc'
-    limit?: Number
-    skip?: Number
+    limit?: number
+    skip?: number
     keyphrase?: string
     match?: {}
 }
