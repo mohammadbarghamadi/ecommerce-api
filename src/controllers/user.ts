@@ -1,8 +1,10 @@
 import { RequestHandler } from "express-serve-static-core";
 import UserModel, { UserInt } from "../db/models/user.model.js";
 import { queryHandler } from "../utils/filter.js";
+import resetPassTemp from "../templates/emails/forgot.js";
+import sendEmail from "../utils/nodemailer.js";
 
-
+// user signup controller /api/user/signup
 export const userSignupCtr: RequestHandler = async (req, res, next) => {
 
     const element = Object.keys(req.body)
@@ -19,6 +21,7 @@ export const userSignupCtr: RequestHandler = async (req, res, next) => {
     }
 }
 
+// user signin controller /api/user/signin 
 export const userSigninCtr: RequestHandler = async (req, res, next) => {
 
     const element = Object.keys(req.body)
@@ -38,6 +41,7 @@ export const userSigninCtr: RequestHandler = async (req, res, next) => {
     }
 }
 
+// user singout controller /api/user/signout
 export const userSignoutCtr: RequestHandler = async (req, res, next) => {
 
     try {
@@ -50,6 +54,7 @@ export const userSignoutCtr: RequestHandler = async (req, res, next) => {
 
 }
 
+// user singout all controller /api/user/signoutall
 export const userSignoutAllCtr: RequestHandler = async (req, res, next) => {
 
     try {
@@ -62,8 +67,8 @@ export const userSignoutAllCtr: RequestHandler = async (req, res, next) => {
 
 }
 
+// user profile controller /api/user/profile
 export const userProfiletr: RequestHandler = async (req, res, next) => {
-
 
     try {
         res.json({ status: 200, data: req.user, message: 'User profile' })
@@ -73,31 +78,7 @@ export const userProfiletr: RequestHandler = async (req, res, next) => {
 
 }
 
-export const userListCtr: RequestHandler = async (req, res, next) => {
-
-    const { createdAt, updatedAt, limit, skip } = queryHandler(req.query)
-
-    try {
-        const users = await UserModel.find().limit(limit).skip(skip).sort(createdAt).sort(updatedAt)
-        res.json({ status: 200, data: users })
-    } catch (e) {
-        next(e)
-    }
-}
-
-export const userSearchCtr: RequestHandler = async (req, res, next) => {
-
-    const { createdAt, updatedAt, limit, skip, keyphrase } = queryHandler(req.query)
-
-    try {
-        const users = await UserModel.find({ $text: { $search: keyphrase, $caseSensitive: false } })
-            .limit(limit).skip(skip).sort(createdAt).sort(updatedAt)
-        res.json({ status: 200, data: users })
-    } catch (e) {
-        next(e)
-    }
-}
-
+// user update controller /api/user/update
 export const userUpdateCtr: RequestHandler = async (req, res, next) => {
 
     const element = Object.keys(req.body)
@@ -117,17 +98,97 @@ export const userUpdateCtr: RequestHandler = async (req, res, next) => {
 
 }
 
-export const userEditCtr: RequestHandler = async (req, res, next) => {
+// user forgot password controller /api/user/forgot
+export const userForgetCtr: RequestHandler = async (req, res, next) => {
 
+    if (!req.body.email) return next({ code: 400, message: 'Provide username or email address' })
+    const { email } = req.body
+    try {
+        const user = await UserModel.findOne({ email })
+        if (!user) return next({ code: 404, message: 'No user found!' })
+
+        const token = await user.genResetToken()
+        const template = resetPassTemp(token)
+        const options = { to: email, subject: 'Reset Password', html: template }
+        const message = await sendEmail(options)
+        res.json({ status: 200, message })
+
+    } catch (e) {
+        next(e)
+    }
+
+}
+
+// user password reset controller /api/user/reset
+export const userResetCtr: RequestHandler = async (req, res, next) => {
+
+    const token = req.params.resetToken
+    const { password } = req.body
+    
+    if (!token || !password) return next({ code: 400, message: 'Bad request!' })
+    try {
+        const user = await UserModel.resetPassword(token, password)
+        if(!user) return next({code: 401, message: 'Invalid request!'})
+        res.json({status: 200, message: 'Your password has been changed!'})
+    } catch (e) {
+        next(e)
+    }
+
+}
+
+// user delete controller /api/user/delete
+export const userDeleteCtr: RequestHandler = async (req, res, next) => {
+
+
+
+}
+
+// get user list by admins /api/user/list
+export const userListCtr: RequestHandler = async (req, res, next) => {
+    const { createdAt, updatedAt, limit, skip } = queryHandler(req.query)
+    try {
+        const users = await UserModel.find().limit(limit).skip(skip).sort(createdAt).sort(updatedAt)
+        res.json({ status: 200, data: users })
+    } catch (e) {
+        next(e)
+    }
+}
+
+// search between users by admins /api/user/search
+export const userSearchCtr: RequestHandler = async (req, res, next) => {
+    const { createdAt, updatedAt, limit, skip, keyphrase } = queryHandler(req.query)
+    try {
+        const users = await UserModel.find({ $text: { $search: keyphrase, $caseSensitive: false } })
+            .limit(limit).skip(skip).sort(createdAt).sort(updatedAt)
+        res.json({ status: 200, data: users })
+    } catch (e) {
+        next(e)
+    }
+}
+
+
+// create user by admins /api/user/create
+export const userCreateCtr: RequestHandler = async (req, res, next) => {
+
+
+
+}
+
+// edit users by admins /api/user/edit/:userId
+export const userEditCtr: RequestHandler = async (req, res, next) => {
     const element = Object.keys(req.body)
     const allowed = ['name', 'email', 'address', 'phone', 'password', 'role']
     const isMatch = element.every(item => allowed.includes(item))
-
     if (!isMatch) return next({ code: 400, message: 'Invalid fields!' })
 
     try {
         const user: any = await UserModel.findById(req.params.userId)
         if (!user) return next({ code: 404, message: 'User not found!' })
+
+        if (req.user?.role !== 1000)
+            if (req.body.role && req.user?.role! >= user.role)
+                return next({ code: 403, message: `You have insufficient permission!` })
+
         element.forEach(item => user[item] = req.body[item])
         const update = await user.save()
         res.json({ status: 200, data: update, message: 'User updated!' })
@@ -137,19 +198,8 @@ export const userEditCtr: RequestHandler = async (req, res, next) => {
 
 }
 
-export const userForgetCtr: RequestHandler = async (req, res, next) => {
-
-
-
-}
-
-export const userResetCtr: RequestHandler = async (req, res, next) => {
-
-
-
-}
-
-export const userDeleteCtr: RequestHandler = async (req, res, next) => {
+// remove users by admins /api/user/remove/:userId
+export const userRemoveCtr: RequestHandler = async (req, res, next) => {
 
 
 

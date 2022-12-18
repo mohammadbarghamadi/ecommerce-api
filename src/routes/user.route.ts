@@ -8,13 +8,15 @@ import {
     userSignoutCtr,
     userSignoutAllCtr,
     userProfiletr,
-    userListCtr,
     userSearchCtr,
     userUpdateCtr,
     userForgetCtr,
     userResetCtr,
     userDeleteCtr,
-    userEditCtr
+    userCreateCtr,
+    userListCtr,
+    userEditCtr,
+    userRemoveCtr
 
 } from "../controllers/user.js"
 
@@ -27,12 +29,15 @@ router.route('/signout').get(Auth, userSignoutCtr)
 router.route('/signoutall').get(Auth, userSignoutAllCtr)
 router.route('/profile').get(Auth, userProfiletr)
 router.route('/update').patch(Auth, userUpdateCtr)
-router.route('/forget').post(userForgetCtr)
-router.route('/reset/:token').patch(userResetCtr)
+router.route('/forgot').post(userForgetCtr)
+router.route('/reset/:resetToken').patch(userResetCtr)
 router.route('/delete').delete(Auth, userDeleteCtr)
+// user management
 router.route('/list').get(Auth, Role(ROLES.Admin), userListCtr)
 router.route('/search').get(Auth, Role(ROLES.Admin), userSearchCtr)
+router.route('/create').post(Auth, Role(ROLES.Admin), userCreateCtr)
 router.route('/edit/:userId').patch(Auth, Role(ROLES.Admin), userEditCtr)
+router.route('/remove/:userId').delete(Auth, Role(ROLES.Admin), userRemoveCtr)
 
 
 export default router

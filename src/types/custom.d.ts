@@ -4,6 +4,7 @@ declare namespace Express {
          role: Number
          tokens?: { token: string }[]
          save: () => Promise
+         genResetToken: () => Promise
       },
       token: string
    }
