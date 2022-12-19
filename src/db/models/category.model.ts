@@ -8,7 +8,9 @@ const categorySchema = new mongoose.Schema({
     },
     url: {
         type: String,
-        required: true
+        required: true,
+        unique: true,
+        lowercase: true
     },
     meta: {
         type: mongoose.Schema.Types.ObjectId,
@@ -16,6 +18,6 @@ const categorySchema = new mongoose.Schema({
     }
 })
 
-const CategoryModel = mongoose.model('categories',categorySchema)
+const CategoryModel = mongoose.model('categories', categorySchema)
 
 export default CategoryModel

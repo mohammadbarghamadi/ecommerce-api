@@ -10,6 +10,10 @@ const productSchema = new mongoose.Schema({
     description: {
         type: String
     },
+    url: {
+        type: String,
+        unique: true
+    },
     images: {
         main: {
             type: mongoose.Schema.Types.ObjectId,
@@ -20,10 +24,10 @@ const productSchema = new mongoose.Schema({
             ref: 'images'
         }
     },
-    category: {
+    category: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'categories'
-    },
+    }],
     tag: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'tags'
@@ -43,6 +47,12 @@ const productSchema = new mongoose.Schema({
 
 }, {
     timestamps: true
+})
+
+productSchema.pre('save',function () {
+    if(!this.url) {
+        this.url = this.title.toLowerCase().trim().replace(/ /g,'-') + '-' + Math.floor(Math.random() * 99999) + '-' + Date.now()
+    }
 })
 
 const ProductModel = mongoose.model('products', productSchema)

@@ -5,14 +5,16 @@ import cors from 'cors'
 import cookie from 'cookie-parser'
 
 // connect to database
-import './db/connect.js' 
+import './db/connect.js'
 
 // import express error handler
 import errorHandler from './middlewares/error.js'
 
 // import main routes
 import userRoute from './routes/user.route.js'
-// prodRoute,
+import prodRoute from './routes/product.route.js'
+import cateRoute from './routes/category.route.js'
+
 // cartRoute,
 // ordeRoute,
 // favoRoute
@@ -36,7 +38,9 @@ app.use(cors()) // let's frontend app to send api request without cors issues
 
 // here is I will import main apies routes
 app.use('/api/user', userRoute)
-// app.use('/api/prod',prodRoute)
+app.use('/api/prod', prodRoute)
+app.use('/api/cate', cateRoute)
+
 // app.use('/api/cart',cartRoute)
 // app.use('/api/orde',ordeRoute)
 // app.use('/api/favo',favoRoute)
