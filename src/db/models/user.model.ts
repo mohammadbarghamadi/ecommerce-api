@@ -15,6 +15,7 @@ export interface UserInt {
     password: string
     role: number
     cart: Types.ObjectId
+    order: Types.ObjectId
     tokens?: { token: string }[]
     resetToken?: string
     resetExpire?: string
@@ -61,6 +62,10 @@ const userSchema: Schema<UserSchemaInt> = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'carts'
     },
+    order: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'orders'
+    },
     password: {
         type: String,
         required: true,
@@ -81,6 +86,7 @@ const userSchema: Schema<UserSchemaInt> = new mongoose.Schema({
 }, {
     timestamps: true
 })
+
 
 // remove password and tokens field to prevent user information exposure
 userSchema.methods.toJSON = function () {

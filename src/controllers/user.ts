@@ -4,14 +4,13 @@ import { queryHandler } from "../utils/filter.js";
 import resetPassTemp from "../templates/emails/forgot.js";
 import sendEmail from "../utils/nodemailer.js";
 import { ROLES } from "../middlewares/role.js";
+import { isValidReq } from "../utils/validate.js";
 
 // user signup controller /api/user/signup
 export const userSignupCtr: RequestHandler = async (req, res, next) => {
 
-    const element = Object.keys(req.body)
-    const allowed = ['name', 'username', 'email', 'address', 'phone', 'password']
-    const isMatch = element.every(item => allowed.includes(item))
-    if (!isMatch) return next({ message: 'Invalid field', code: 400 })
+    const isValidRB = isValidReq(req.body, ['name', 'username', 'email', 'address', 'phone', 'password'])
+    if (!isValidRB) return next({ message: 'Invalid field', code: 400 })
 
     try {
         const newUser = new UserModel(req.body)
@@ -25,10 +24,8 @@ export const userSignupCtr: RequestHandler = async (req, res, next) => {
 // user signin controller /api/user/signin 
 export const userSigninCtr: RequestHandler = async (req, res, next) => {
 
-    const element = Object.keys(req.body)
-    const allowed = ['phone', 'email', 'password']
-    const isMatch = element.every(item => allowed.includes(item))
-    if (!isMatch) return next({ message: 'Invalid field', code: 400 })
+    const isValidRB = isValidReq(req.body, ['phone', 'email', 'password'])
+    if (!isValidRB) return next({ message: 'Invalid field', code: 400 })
     const { email, phone, password } = req.body
 
     try {
@@ -83,10 +80,8 @@ export const userProfiletr: RequestHandler = async (req, res, next) => {
 export const userUpdateCtr: RequestHandler = async (req, res, next) => {
 
     const element = Object.keys(req.body)
-    const allowed = ['name', 'email', 'address', 'phone', 'password']
-    const isMatch = element.every(item => allowed.includes(item))
-
-    if (!isMatch) return next({ code: 400, message: 'Invalid fields!' })
+    const isValidRB = isValidReq(req.body, ['name', 'email', 'address', 'phone', 'password'])
+    if (!isValidRB) return next({ code: 400, message: 'Invalid fields!' })
 
     try {
         const user: any = req.user
@@ -177,10 +172,8 @@ export const userSearchCtr: RequestHandler = async (req, res, next) => {
 // create user by admins /api/user/create
 export const userCreateCtr: RequestHandler = async (req, res, next) => {
 
-    const element = Object.keys(req.body)
-    const allowed = ['name', 'username', 'email', 'address', 'phone', 'password', 'role']
-    const isMatch = element.every(item => allowed.includes(item))
-    if (!isMatch) return next({ message: 'Invalid field', code: 400 })
+    const isValidRB = isValidReq(req.body, ['name', 'username', 'email', 'address', 'phone', 'password', 'role'])
+    if (!isValidRB) return next({ message: 'Invalid field', code: 400 })
 
     if (req.user?.role !== ROLES.Root)
         if (req.user?.role! >= req.body.role)
@@ -198,10 +191,10 @@ export const userCreateCtr: RequestHandler = async (req, res, next) => {
 
 // edit users by admins /api/user/edit/:userId
 export const userEditCtr: RequestHandler = async (req, res, next) => {
+
     const element = Object.keys(req.body)
-    const allowed = ['name', 'email', 'address', 'phone', 'password', 'role']
-    const isMatch = element.every(item => allowed.includes(item))
-    if (!isMatch) return next({ code: 400, message: 'Invalid fields!' })
+    const isValidRB = isValidReq(req.body, ['name', 'email', 'address', 'phone', 'password', 'role'])
+    if (!isValidRB) return next({ code: 400, message: 'Invalid fields!' })
 
     try {
         const user: any = await UserModel.findById(req.params.userId)

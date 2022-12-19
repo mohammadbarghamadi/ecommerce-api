@@ -10,6 +10,16 @@ const productSchema = new mongoose.Schema({
     description: {
         type: String
     },
+    images: {
+        main: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'images'
+        },
+        gallery: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'images'
+        }
+    },
     category: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'categories'
@@ -25,6 +35,10 @@ const productSchema = new mongoose.Schema({
     owner: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'users'
+    },
+    comments: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'comments'
     }
 
 }, {
@@ -32,3 +46,5 @@ const productSchema = new mongoose.Schema({
 })
 
 const ProductModel = mongoose.model('products', productSchema)
+
+export default ProductModel
