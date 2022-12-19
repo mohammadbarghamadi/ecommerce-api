@@ -139,7 +139,7 @@ userSchema.statics.resetPassword = async function (token: string, password: stri
     return true
 }
 
-userSchema.pre('remove', function () {
+userSchema.pre('findOneAndRemove', function () {
     //  I will remove user carts
 })
 

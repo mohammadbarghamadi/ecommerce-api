@@ -1,8 +1,9 @@
 import { RequestHandler } from "express-serve-static-core";
-import UserModel, { UserInt } from "../db/models/user.model.js";
+import UserModel from "../db/models/user.model.js";
 import { queryHandler } from "../utils/filter.js";
 import resetPassTemp from "../templates/emails/forgot.js";
 import sendEmail from "../utils/nodemailer.js";
+import { ROLES } from "../middlewares/role.js";
 
 // user signup controller /api/user/signup
 export const userSignupCtr: RequestHandler = async (req, res, next) => {
@@ -176,7 +177,22 @@ export const userSearchCtr: RequestHandler = async (req, res, next) => {
 // create user by admins /api/user/create
 export const userCreateCtr: RequestHandler = async (req, res, next) => {
 
+    const element = Object.keys(req.body)
+    const allowed = ['name', 'username', 'email', 'address', 'phone', 'password', 'role']
+    const isMatch = element.every(item => allowed.includes(item))
+    if (!isMatch) return next({ message: 'Invalid field', code: 400 })
 
+    if (req.user?.role !== ROLES.Root)
+        if (req.user?.role! >= req.body.role)
+            return next({ code: 403, message: `You have insufficient permission!` })
+
+    try {
+        const newUser = new UserModel(req.body)
+        const savedUser = await newUser.save()
+        res.status(200).json({ status: 200, data: savedUser, message: 'New user created!' })
+    } catch (e: any) {
+        next(e)
+    }
 
 }
 
@@ -191,8 +207,8 @@ export const userEditCtr: RequestHandler = async (req, res, next) => {
         const user: any = await UserModel.findById(req.params.userId)
         if (!user) return next({ code: 404, message: 'User not found!' })
 
-        if (req.user?.role !== 1000)
-            if (req.body.role && req.user?.role! >= user.role)
+        if (req.user?.role !== ROLES.Root)
+            if (req.user?.role! >= user.role)
                 return next({ code: 403, message: `You have insufficient permission!` })
 
         element.forEach(item => user[item] = req.body[item])
@@ -211,12 +227,14 @@ export const userRemoveCtr: RequestHandler = async (req, res, next) => {
     if (!_id) return next({ code: 400, message: 'Bad request' })
 
     try {
-        const user = await UserModel.findOneAndDelete({ _id })
+        const user = await UserModel.findOne({ _id })
         if (!user) return next({ code: 404, message: 'No user found!' })
 
-        if (req.user?.role !== 1000)
+        if (req.user?.role !== ROLES.Root)
             if (req.user?.role! >= user.role)
                 return next({ code: 403, message: `You have insufficient permission!` })
+
+        await user.remove()
 
         res.json({ status: 200, data: user, message: 'User has been removed!' })
     } catch (e) {

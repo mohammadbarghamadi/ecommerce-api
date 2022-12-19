@@ -12,7 +12,6 @@ import errorHandler from './middlewares/error.js'
 
 // import main routes
 import userRoute from './routes/user.route.js'
-// userRoute,
 // prodRoute,
 // cartRoute,
 // ordeRoute,
