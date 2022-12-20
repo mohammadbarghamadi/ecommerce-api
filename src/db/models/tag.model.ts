@@ -1,14 +1,18 @@
 import mongoose from "mongoose"
 
 
-const tagsSchema = new mongoose.Schema({
+const tagSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true
+        required: true,
+        trim: true
     },
     url: {
         type: String,
-        required: true
+        required: true,
+        unique: true,
+        lowercase: true,
+        trim: true
     },
     meta: {
         type: mongoose.Schema.Types.ObjectId,
@@ -16,6 +20,6 @@ const tagsSchema = new mongoose.Schema({
     }
 })
 
-const TagsModel = mongoose.model('tags',tagsSchema)
+const TagsModel = mongoose.model('tags',tagSchema)
 
 export default TagsModel

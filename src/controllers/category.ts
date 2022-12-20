@@ -58,13 +58,28 @@ export const viwCategoryCtr: RequestHandler = async (req, res, next) => {
 // delete a category /api/cate/delete
 export const delCategoryCtr: RequestHandler = async (req, res, next) => {
 
+    const _id = req.params.categoryId
+    if(!_id) return next({code: 400, message: 'Bad request!'})
 
+    try {
+        const category = await CategoryModel.findByIdAndDelete(_id)
+        if(!category) return next({code: 404, message: 'No category found!'})
+        res.json({status: 200, message: 'Category has been deleted', data: category})
+    } catch(e) {
+        next(e)
+    }
 
 }
 
 // list categories /api/cate/list
 export const LisCategoryCtr: RequestHandler = async (req, res, next) => {
 
-
+    try {
+        const categories = await CategoryModel.find()
+        if(categories.length < 1) return next({code: 404, message: 'No category found!'})
+        res.json({status: 200, message: 'Category found', data: categories})
+    } catch (e) {
+        next(e)
+    }
 
 }

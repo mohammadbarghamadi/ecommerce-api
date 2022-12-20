@@ -2,12 +2,15 @@ import mongoose from "mongoose";
 
 
 const metaSchema = new mongoose.Schema({
-    keyphrase: {
-        type: Array
+    title: {
+        type: String,
+        trim: true
     },
     description: {
-        type: String
-    }
+        type: String,
+        trim: true
+    },
+    keyphrase: [String]
 })
 
 const MetaModel = mongoose.model('meta',metaSchema)

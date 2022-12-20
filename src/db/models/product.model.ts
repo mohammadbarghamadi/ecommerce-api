@@ -1,13 +1,32 @@
-import mongoose from "mongoose";
+import mongoose, { Document, Model, Types } from "mongoose";
+
+interface ProductInt {
+    title: string
+    excerpt: string
+    content: string
+    url: string
+    images: {
+        main: Types.ObjectId,
+        gallery: Types.ObjectId
+    }
+    category: Types.ObjectId[]
+    tag: Types.ObjectId[]
+    meta: Types.ObjectId
+    owner: Types.ObjectId
+    comments: Types.ObjectId[]
+}
 
 
-const productSchema = new mongoose.Schema({
+const productSchema = new mongoose.Schema<ProductInt>({
     title: {
         type: String,
         trim: true,
         required: true
     },
-    description: {
+    excerpt: {
+        type: String
+    },
+    content: {
         type: String
     },
     url: {
@@ -28,10 +47,10 @@ const productSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'categories'
     }],
-    tag: {
+    tag: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'tags'
-    },
+    }],
     meta: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'meta'
@@ -40,18 +59,18 @@ const productSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'users'
     },
-    comments: {
+    comments: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'comments'
-    }
+    }]
 
 }, {
     timestamps: true
 })
 
-productSchema.pre('save',function () {
-    if(!this.url) {
-        this.url = this.title.toLowerCase().trim().replace(/ /g,'-') + '-' + Math.floor(Math.random() * 99999) + '-' + Date.now()
+productSchema.pre('save', function () {
+    if (!this.url) {
+        this.url = this.title.toLowerCase().trim().replace(/ /g, '-') + '-' + Math.floor(Math.random() * 99999) + '-' + Date.now()
     }
 })
 

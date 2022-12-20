@@ -3,6 +3,7 @@ declare namespace Express {
        user?: {
          role: Number
          tokens?: { token: string }[]
+         _id: string
          save: () => Promise
          delete: () => Promise
       },

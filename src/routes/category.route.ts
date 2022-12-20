@@ -14,10 +14,10 @@ import {
 } from '../controllers/category.js'
 
 
+router.route('/view/:categoryId').get(viwCategoryCtr)
+router.route('/list').get(LisCategoryCtr)
 router.route('/add').post(Auth, Role(ROLES.Admin, Access.Higher), addCategoryCtr)
 router.route('/edit/:categoryId').patch(Auth, Role(ROLES.Admin, Access.Higher), ediCategoryCtr)
-router.route('/view/:categoryId').get(Auth, Role(ROLES.Admin, Access.Higher), viwCategoryCtr)
 router.route('/delete/:categoryId').delete(Auth, Role(ROLES.Admin, Access.Higher), delCategoryCtr)
-router.route('/list').get(Auth, Role(ROLES.Admin, Access.Higher), LisCategoryCtr)
 
 export default router
