@@ -7,7 +7,7 @@ import { isValidReq } from "../utils/validate.js";
 export const addTagCtr: RequestHandler = async (req, res, next) => {
 
     const isValidRB = isValidReq(req.body, ['name', 'url', 'meta'])
-    if (!isValidRB) next({ code: 400, message: 'Invalid request!' })
+    if (!isValidRB) return next({ code: 400, message: 'Invalid request!' })
 
     try {
         const newTag = new TagModel(req.body)
@@ -47,7 +47,7 @@ export const viwTagCtr: RequestHandler = async (req, res, next) => {
     try {
         const tag = await TagModel.findById(req.params.tagId)
         const products = await ProductModel.find({ tag: req.params.tagId }).select('title ')
-        if (!tag) next({ code: 404, message: 'No tag found!' })
+        if (!tag) return next({ code: 404, message: 'No tag found!' })
         res.json({ status: 200, data: tag, products })
     } catch (e) {
         next(e)

@@ -22,16 +22,17 @@ export const listProdCtr: RequestHandler = async (req, res, next) => {
 export const addProdCtr: RequestHandler = async (req, res, next) => {
 
     const isValidRB = isValidReq(req.body, ['title', 'description', 'category', 'tag', 'meta', 'owner', 'url'])
-    if (!isValidRB) next({ code: 400, message: 'Invalid Request' })
+    if (!isValidRB) return next({ code: 400, message: 'Invalid Request' })
 
     try {
-        const newMeta = new MetaModel(req.body.meta)
-        const newProduct = new ProductModel({ ...req.body, owner: req.user?._id, meta: newMeta._id })
-
-        const meta = await newMeta.save()
-        const product = await newProduct.save()
-        res.json({ status: 200, message: 'New product added.', data: { product, meta } })
         
+        // const newMeta = new MetaModel(req.body.meta)
+        // const newProduct = new ProductModel({ ...req.body, owner: req.user?._id, meta: newMeta._id })
+
+        // const meta = await newMeta.save()
+        // const product = await newProduct.save()
+        res.json({ status: 200, message: 'New product added.', data: 'req.files' })
+
     } catch (e) {
         next(e)
     }

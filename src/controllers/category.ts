@@ -7,7 +7,7 @@ import { isValidReq } from "../utils/validate.js";
 export const addCategoryCtr: RequestHandler = async (req, res, next) => {
 
     const isValidRB = isValidReq(req.body, ['name', 'url', 'meta'])
-    if (!isValidRB) next({ code: 400, message: 'Invalid request!' })
+    if (!isValidRB) return next({ code: 400, message: 'Invalid request!' })
 
     try {
         const newCategory = new CategoryModel(req.body)
@@ -47,7 +47,7 @@ export const viwCategoryCtr: RequestHandler = async (req, res, next) => {
     try {
         const category = await CategoryModel.findById(req.params.categoryId)
         const products = await ProductModel.find({ category: req.params.categoryId }).select('title ')
-        if (!category) next({ code: 404, message: 'No category found!' })
+        if (!category) return next({ code: 404, message: 'No category found!' })
         res.json({ status: 200, data: category, products })
     } catch (e) {
         next(e)
