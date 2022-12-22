@@ -23,7 +23,10 @@ const fileSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    md5: { String },
+    md5: {
+        type: String,
+        required: true
+    },
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'users',
@@ -32,6 +35,12 @@ const fileSchema = new mongoose.Schema({
 
 })
 
-const FileModel = mongoose.model('images', fileSchema)
+fileSchema.virtual('myFiles', {
+    ref: 'users',
+    localField: 'userId',
+    foreignField: '_id',
+})
+
+const FileModel = mongoose.model('files', fileSchema)
 
 export default FileModel

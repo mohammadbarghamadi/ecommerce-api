@@ -23,9 +23,9 @@ router.route('/upload').post(
     fxLimit(['jpg','jpeg','png','mp3','mpeg']),
     fileUploadCtr
 )
-router.route('/update').patch(Auth, Role(ROLES.Seller, Access.Higher), fileUpdateCtr)
-router.route('/delete').delete(Auth, Role(ROLES.Seller, Access.Higher), fileDeleteCtr)
-router.route('/view').get(Auth, Role(ROLES.Seller, Access.Higher), fileViewCtr)
+router.route('/update/:fileId').patch(Auth, Role(ROLES.Seller, Access.Higher), fileUpdateCtr)
+router.route('/delete/:fileId').delete(Auth, Role(ROLES.Seller, Access.Higher), fileDeleteCtr)
+router.route('/view/:fileId').get(Auth, Role(ROLES.Seller, Access.Higher), fileViewCtr)
 router.route('/list').get(Auth, Role(ROLES.Seller, Access.Higher), fileListCtr)
 
 
