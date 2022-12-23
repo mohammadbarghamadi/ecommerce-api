@@ -42,12 +42,10 @@ export const fileUpdateCtr: RequestHandler = async (req, res, next) => {
     } catch (e) {
         next(e)
     }
-
 }
 
 // file delete /api/file/delete:delete
 export const fileDeleteCtr: RequestHandler = async (req, res, next) => {
-
     const _id = req.params.fileId
 
     try {
@@ -57,7 +55,6 @@ export const fileDeleteCtr: RequestHandler = async (req, res, next) => {
     } catch (e) {
         next(e)
     }
-
 }
 
 // file view /api/file/view:get
@@ -82,5 +79,4 @@ export const fileListCtr: RequestHandler = async (req, res, next) => {
     } catch (e) {
         next(e)
     }
-
 }

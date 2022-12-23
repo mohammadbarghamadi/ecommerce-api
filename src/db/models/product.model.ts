@@ -4,6 +4,7 @@ interface ProductInt {
     title: string
     excerpt: string
     content: string
+    price: number
     url: string
     images: {
         main: Types.ObjectId,
@@ -29,6 +30,11 @@ const productSchema = new mongoose.Schema<ProductInt>({
     content: {
         type: String
     },
+    price: {
+        type: Number,
+        default: 0,
+        required: true
+    },
     url: {
         type: String,
         unique: true
@@ -36,12 +42,12 @@ const productSchema = new mongoose.Schema<ProductInt>({
     images: {
         main: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'images'
+            ref: 'files'
         },
-        gallery: {
+        gallery: [{
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'images'
-        }
+            ref: 'files'
+        }]
     },
     category: [{
         type: mongoose.Schema.Types.ObjectId,
@@ -53,7 +59,7 @@ const productSchema = new mongoose.Schema<ProductInt>({
     }],
     meta: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'meta'
+        ref: 'metas'
     },
     owner: {
         type: mongoose.Schema.Types.ObjectId,
@@ -66,6 +72,12 @@ const productSchema = new mongoose.Schema<ProductInt>({
 
 }, {
     timestamps: true
+})
+
+productSchema.index({
+    title: 'text',
+    excerpt: 'text',
+    content: 'text'
 })
 
 productSchema.pre('save', function () {

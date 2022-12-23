@@ -13,6 +13,6 @@ const metaSchema = new mongoose.Schema({
     keyphrase: [String]
 })
 
-const MetaModel = mongoose.model('meta', metaSchema)
+const MetaModel = mongoose.model('metas', metaSchema)
 
 export default MetaModel
