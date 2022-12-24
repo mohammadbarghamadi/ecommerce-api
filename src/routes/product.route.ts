@@ -16,10 +16,9 @@ import {
 
 
 router.route('/add').post(Auth, Role(ROLES.Seller, Access.Higher), addProdCtr)
-router.route('/delete').delete(Auth, deleteProdCtr)
+router.route('/delete/:productId').delete(Auth, deleteProdCtr)
 router.route('/update/:productId').patch(Auth, updateProdCtr)
 router.route('/view/:productId').get(Auth, viewProdCtr)
 router.route('/list').get(Auth, listProdCtr)
-
 
 export default router

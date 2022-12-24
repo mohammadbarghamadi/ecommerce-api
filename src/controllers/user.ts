@@ -149,7 +149,7 @@ export const userDeleteCtr: RequestHandler = async (req, res, next) => {
 export const userListCtr: RequestHandler = async (req, res, next) => {
     const { createdAt, updatedAt, limit, skip } = queryHandler(req.query)
     try {
-        const users = await UserModel.find().limit(limit).skip(skip).sort(createdAt).sort(updatedAt)
+        const users = await UserModel.find().limit(limit).skip(skip).sort({createdAt})
         res.json({ status: 200, data: users })
     } catch (e) {
         next(e)
@@ -161,7 +161,7 @@ export const userSearchCtr: RequestHandler = async (req, res, next) => {
     const { createdAt, updatedAt, limit, skip, keyphrase } = queryHandler(req.query)
     try {
         const users = await UserModel.find({ $text: { $search: keyphrase, $caseSensitive: false } })
-            .limit(limit).skip(skip).sort(createdAt).sort(updatedAt)
+            .limit(limit).skip(skip).sort({createdAt})
         res.json({ status: 200, data: users })
     } catch (e) {
         next(e)
