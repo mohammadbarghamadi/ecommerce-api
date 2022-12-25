@@ -1,15 +1,15 @@
 import mongoose from "mongoose";
+import ProductModel from "./product.model";
 
 
 export interface CartSchemaInt {
     userId: mongoose.Types.ObjectId
-    list: {
+    list: [{
         prodId: mongoose.Types.ObjectId
-        quantity: Number
-        title: String
-        price: Number
-    },
-    amount: Number
+        quantity: number
+        price: number
+    }],
+    amount: number
 }
 
 const cartSchema = new mongoose.Schema<CartSchemaInt>({
@@ -28,23 +28,25 @@ const cartSchema = new mongoose.Schema<CartSchemaInt>({
             required: true,
             default: 1
         },
-        title: {
-            type: String,
-            required: true
-        },
         price: {
             type: Number,
-            required: true
+            required: true,
+            default: 0
         }
     }],
     amount: {
         type: Number,
-        required: true
-    },
-    
+        required: true,
+        default: 0
+    }
 
 })
 
-const CartModel = mongoose.model('carts',cartSchema)
+cartSchema.pre('save', function () {
+    let amount = 
+    this.list.forEach(item => console.log(item))
+})
 
-export default cartSchema
+const CartModel = mongoose.model('carts', cartSchema)
+
+export default CartModel

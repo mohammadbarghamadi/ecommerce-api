@@ -76,7 +76,7 @@ export const updateProdCtr: RequestHandler = async (req, res, next) => {
         if (!product) return next({ code: 404, message: 'No product found!' })
         const meta: any = await MetaModel.findById(product.meta._id)
 
-        Object.keys(req.body.meta).forEach(item => meta[item] = req.body.meta[item])
+        if (req.body.meta) Object.keys(req.body.meta).forEach(item => meta[item] = req.body.meta[item])
 
         // Remove the "meta" field (include: description, title, keyphrase) from "req.body" to prevent adding wrong data and getting validation error related to ObjectId  
         delete req.body.meta
