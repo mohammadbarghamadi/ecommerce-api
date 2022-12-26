@@ -13,3 +13,9 @@ export interface FilesNameErrorInt {
     status: boolean
     message?: string
 }
+
+export interface CartArrayInt {
+    prodId: string
+    quantity: number
+    price: number 
+}

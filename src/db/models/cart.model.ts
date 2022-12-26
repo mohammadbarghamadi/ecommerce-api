@@ -1,14 +1,13 @@
 import mongoose from "mongoose";
-import ProductModel from "./product.model";
 
 
 export interface CartSchemaInt {
     userId: mongoose.Types.ObjectId
-    list: [{
+    list: {
         prodId: mongoose.Types.ObjectId
         quantity: number
         price: number
-    }],
+    }[],
     amount: number
 }
 
@@ -43,8 +42,9 @@ const cartSchema = new mongoose.Schema<CartSchemaInt>({
 })
 
 cartSchema.pre('save', function () {
-    let amount = 
-    this.list.forEach(item => console.log(item))
+    let amount = 0
+    this.list.forEach(item => amount += item.price * item.quantity)
+    this.amount = amount
 })
 
 const CartModel = mongoose.model('carts', cartSchema)

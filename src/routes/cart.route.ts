@@ -14,8 +14,8 @@ import {
 
 router.route('/add').post(Auth, addCartCtr)
 router.route('/delete').delete(Auth, delCartCtr)
-router.route('/update').delete(Auth, updCartCtr)
-router.route('/view').delete(Auth, viwCartCtr)
+router.route('/update').patch(Auth, updCartCtr)
+router.route('/view').get(Auth, viwCartCtr)
 
 
 export default router
