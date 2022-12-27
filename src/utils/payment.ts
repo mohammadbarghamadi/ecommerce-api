@@ -1,7 +1,7 @@
 import { ZarinGatewayReqInt, PaymentOptionsInt } from "../types/types.js"
 import axios from "axios"
 
-type ZarinGatewayReq = (payment: PaymentOptionsInt) => Promise<string>
+type ZarinGatewayReq = (payment: PaymentOptionsInt) => Promise<{code: number, authority: 'string', message: 'string'}>
 
 export const ZarinGateway: ZarinGatewayReq = async (payment) => {
 
@@ -15,6 +15,5 @@ export const ZarinGateway: ZarinGatewayReq = async (payment) => {
     }
 
     const response = await axios.post(process.env.ZARIN_PAY_ADDRESS!, options)
-    console.log(response.data)
-    return response.data
+    return response.data.data
 }
