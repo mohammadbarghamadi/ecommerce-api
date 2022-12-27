@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { PaymentState } from "../../types/types.js";
 
 
 export interface CartSchemaInt {
@@ -7,7 +8,12 @@ export interface CartSchemaInt {
         prodId: mongoose.Types.ObjectId
         quantity: number
         price: number
-    }[],
+    }[]
+    payment: {
+        authority: string
+        code: number
+        state: PaymentState
+    }
     amount: number
 }
 
@@ -15,7 +21,8 @@ const cartSchema = new mongoose.Schema<CartSchemaInt>({
 
     userId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'users'
+        ref: 'users',
+        required: true
     },
     list: [{
         prodId: {
@@ -33,6 +40,19 @@ const cartSchema = new mongoose.Schema<CartSchemaInt>({
             default: 0
         }
     }],
+    payment: {
+        authority: {
+            type: String
+        },
+        code: {
+            type: Number
+        },
+        state: {
+            type: String,
+            required: true,
+            default: PaymentState.Ready
+        }
+    },
     amount: {
         type: Number,
         required: true,

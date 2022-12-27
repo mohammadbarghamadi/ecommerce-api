@@ -17,6 +17,7 @@ import cateRoute from './routes/category.route.js'
 import tagsRoute from './routes/tag.route.js'
 import fileRoute from './routes/file.route.js'
 import cartRoute from './routes/cart.route.js'
+import ordeRoute from './routes/order.route.js'
 
 // ordeRoute,
 // favoRoute
@@ -45,9 +46,8 @@ app.use('/api/cate', cateRoute)
 app.use('/api/tags', tagsRoute)
 app.use('/api/file', fileRoute)
 app.use('/api/cart', cartRoute)
+app.use('/api/orde', ordeRoute)
 
-// app.use('/api/cart',cartRoute)
-// app.use('/api/orde',ordeRoute)
 // app.use('/api/favo',favoRoute)
 
 

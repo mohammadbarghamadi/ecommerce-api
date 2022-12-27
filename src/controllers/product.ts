@@ -43,7 +43,7 @@ export const listProdCtr: RequestHandler = async (req, res, next) => {
 // add new product /api/prod/add
 export const addProdCtr: RequestHandler = async (req, res, next) => {
 
-    const isValidRB = isValidReq(req.body, ['title', 'excerpt', 'content', 'images', 'category', 'tag', 'meta', 'owner', 'url'])
+    const isValidRB = isValidReq(req.body, ['title', 'excerpt', 'content', 'images', 'category', 'tag', 'meta', 'price', 'owner', 'url'])
     if (!isValidRB) return next({ code: 400, message: 'Invalid Request' })
     try {
 

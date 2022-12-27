@@ -1,7 +1,24 @@
-import mongoose from "mongoose";
+import mongoose, { Types } from "mongoose";
+import { PaymentState } from "../../types/types.js";
 
 
-const orderSchema = new mongoose.Schema({
+interface OrderSchemaInt {
+    userId: Types.ObjectId,
+    list: {
+        prodId: Types.ObjectId
+        quantity: number
+        price: number
+    }[]
+    payment: {
+        authority: string
+        code: number
+        state: PaymentState
+    }
+    state: PaymentState
+    amount: number
+}
+
+const orderSchema = new mongoose.Schema<OrderSchemaInt>({
 
     userId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -11,30 +28,40 @@ const orderSchema = new mongoose.Schema({
     list: [{
         prodId: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'products',
             required: true
         },
-        count: {
+        quantity: {
             type: Number,
             required: true,
             default: 1
         },
-        title: {
-            type: String,
-            required: true
-        },
         price: {
             type: Number,
-            required: true
+            required: true,
+            default: 0
         }
     }],
-    price: {
+    payment: {
+        authority: {
+            type: String
+        },
+        code: {
+            type: Number
+        },
+        state: {
+            type: String,
+            required: true,
+            default: PaymentState.Ready
+        }
+    },
+    amount: {
         type: Number,
-        required: true
+        required: true,
+        default: 0
     }
 
 })
 
-const OrderModel = mongoose.model('carts',orderSchema)
+const OrderModel = mongoose.model('orders', orderSchema)
 
 export default OrderModel
