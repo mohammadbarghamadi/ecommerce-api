@@ -13,6 +13,7 @@ interface OrderSchemaInt {
         authority: string
         code: number
         state: PaymentState
+        date: Date
     }
     state: PaymentState
     amount: number

@@ -5,9 +5,12 @@ const router = Router()
 
 
 import {
+    CheckoutCtr,
     PayRequestCtr
 } from '../controllers/payment.js'
 
 router.route('/payment').post(Auth, PayRequestCtr)
+router.route('/checkout').post(Auth, CheckoutCtr)
+
 
 export default router

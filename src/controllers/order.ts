@@ -25,9 +25,10 @@ export const viewOrderCtr: RequestHandler = async (req, res, next) => {
     let order
 
     try {
-        if (req.user?.role! <= ROLES.Seller) order = await OrderModel.findOne({_id})
-        else order = await OrderModel.find({_id, userId: req.user?._id })
+        if (req.user?.role! <= ROLES.Seller) order = await OrderModel.findOne({_id}).populate({path: 'userId',select: 'name phone'})
+        else order = await OrderModel.findOne({_id, userId: req.user?._id }).populate({path: 'userId',select: 'name phone'})
         if (!order) return next({ code: 404, message: 'Order not found!' })
+        res.json({status: 200, data: order, message: 'Order found.'})
     } catch (e) {
         next(e)
     }

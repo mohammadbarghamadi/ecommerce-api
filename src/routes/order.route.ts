@@ -12,7 +12,7 @@ import {
 } from '../controllers/order.js'
 
 router.route('/list').get(Auth, listOrderCtr)
-router.route('/view').get(Auth, viewOrderCtr)
+router.route('/view/:orderId').get(Auth, viewOrderCtr)
 
 
 export default router

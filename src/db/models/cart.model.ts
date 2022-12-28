@@ -13,6 +13,7 @@ export interface CartSchemaInt {
         authority: string
         code: number
         state: PaymentState
+        date: number
     }
     amount: number
 }
@@ -51,6 +52,10 @@ const cartSchema = new mongoose.Schema<CartSchemaInt>({
             type: String,
             required: true,
             default: PaymentState.Ready
+        },
+        date: {
+            type: Number,
+            required: true
         }
     },
     amount: {
