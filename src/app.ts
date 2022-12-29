@@ -19,10 +19,7 @@ import fileRoute from './routes/file.route.js'
 import cartRoute from './routes/cart.route.js'
 import ordeRoute from './routes/order.route.js'
 import paymRoute from './routes/payment.route.js'
-
-
-// ordeRoute,
-// favoRoute
+import favoRoute from './routes/favourite.route.js'
 
 
 // configure environment variables
@@ -50,8 +47,7 @@ app.use('/api/file', fileRoute)
 app.use('/api/cart', cartRoute)
 app.use('/api/orde', ordeRoute)
 app.use('/api/paym', paymRoute)
-
-// app.use('/api/favo',favoRoute)
+app.use('/api/favo',favoRoute)
 
 
 // express error handler middleware

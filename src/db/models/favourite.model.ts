@@ -1,7 +1,14 @@
-import mongoose from "mongoose";
+import mongoose, { Types, Document, Model } from "mongoose";
 
 
-const favSchema = new mongoose.Schema({
+interface FavoriteSchemaInt extends Document {
+    userId: Types.ObjectId
+    list: {
+        prodId: Types.ObjectId
+    }[]
+}
+
+const favoSchema = new mongoose.Schema<FavoriteSchemaInt>({
 
     userId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -10,17 +17,14 @@ const favSchema = new mongoose.Schema({
     },
     list: [{
         prodId: {
-            type: mongoose.Schema.Types.ObjectId,
+            type: Types.ObjectId,
             ref: 'products',
             required: true
-        },
-        title: {
-            type: String    
         }
     }]
 
 })
 
-const FavModel = mongoose.model('favourites',favSchema)
+const FavoModel = mongoose.model('favourites', favoSchema)
 
-export default FavModel
+export default FavoModel
