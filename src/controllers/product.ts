@@ -6,7 +6,7 @@ import { queryHandler } from '../utils/filter.js'
 import { ROLES } from "../middlewares/role.js"
 
 
-// view a product /api/prod/view
+// view a product /api/prod/view/:productId:get
 export const viewProdCtr: RequestHandler = async (req, res, next) => {
     const _id = req.params.productId
     try {
@@ -21,7 +21,7 @@ export const viewProdCtr: RequestHandler = async (req, res, next) => {
 
 }
 
-// products list /api/prod/list
+// products list /api/prod/list:get
 export const listProdCtr: RequestHandler = async (req, res, next) => {
 
     const { createdAt, updatedAt, limit, skip, price } = queryHandler(req.query)
@@ -40,7 +40,7 @@ export const listProdCtr: RequestHandler = async (req, res, next) => {
 
 }
 
-// add new product /api/prod/add
+// add new product /api/prod/add:post
 export const addProdCtr: RequestHandler = async (req, res, next) => {
 
     const isValidRB = isValidReq(req.body, ['title', 'excerpt', 'content', 'images', 'category', 'tag', 'meta', 'price', 'owner', 'url'])
@@ -62,7 +62,7 @@ export const addProdCtr: RequestHandler = async (req, res, next) => {
 
 }
 
-// update a product /api/prod/update
+// update a product /api/prod/update/:productId:get
 export const updateProdCtr: RequestHandler = async (req, res, next) => {
     const _id = req.params.productId
     const element = Object.keys(req.body)
@@ -94,7 +94,7 @@ export const updateProdCtr: RequestHandler = async (req, res, next) => {
 
 }
 
-// delete a product /api/prod/delete
+// delete a product /api/prod/delete/:productId:get
 export const deleteProdCtr: RequestHandler = async (req, res, next) => {
     const _id = req.params.productId
     let product: any

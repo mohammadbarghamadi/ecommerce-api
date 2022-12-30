@@ -2,7 +2,7 @@ import { RequestHandler } from "express";
 import FavoModel from "../db/models/favourite.model.js";
 
 
-// add product to favorite list /api/favo/add :post
+// add product to favorite list /api/favo/add:post
 export const addFavoCtr: RequestHandler = async (req, res, next) => {
 
     const { prodId } = req.body
@@ -31,7 +31,7 @@ export const addFavoCtr: RequestHandler = async (req, res, next) => {
 
 }
 
-// clear favorite list /api/favo/clear :delete
+// clear favorite list /api/favo/clear:delete
 export const clsFavoCtr: RequestHandler = async (req, res, next) => {
 
     try {
@@ -46,7 +46,7 @@ export const clsFavoCtr: RequestHandler = async (req, res, next) => {
 
 }
 
-// get favorites list /api/favo/list
+// get favorites list /api/favo/list:get
 export const lisFavoCtr: RequestHandler = async (req, res, next) => {
 
     try {

@@ -6,7 +6,7 @@ import sendEmail from "../utils/nodemailer.js";
 import { ROLES } from "../middlewares/role.js";
 import { isValidReq } from "../utils/validate.js";
 
-// user signup controller /api/user/signup
+// user signup controller /api/user/signup:post
 export const userSignupCtr: RequestHandler = async (req, res, next) => {
 
     const isValidRB = isValidReq(req.body, ['name', 'username', 'email', 'address', 'phone', 'password'])
@@ -21,7 +21,7 @@ export const userSignupCtr: RequestHandler = async (req, res, next) => {
     }
 }
 
-// user signin controller /api/user/signin 
+// user signin controller /api/user/signin:post
 export const userSigninCtr: RequestHandler = async (req, res, next) => {
 
     const isValidRB = isValidReq(req.body, ['phone', 'email', 'password'])
@@ -39,7 +39,7 @@ export const userSigninCtr: RequestHandler = async (req, res, next) => {
     }
 }
 
-// user singout controller /api/user/signout
+// user singout controller /api/user/signout:post
 export const userSignoutCtr: RequestHandler = async (req, res, next) => {
 
     try {
@@ -52,7 +52,7 @@ export const userSignoutCtr: RequestHandler = async (req, res, next) => {
 
 }
 
-// user singout all controller /api/user/signoutall
+// user singout all controller /api/user/signoutall:post
 export const userSignoutAllCtr: RequestHandler = async (req, res, next) => {
 
     try {
@@ -65,7 +65,7 @@ export const userSignoutAllCtr: RequestHandler = async (req, res, next) => {
 
 }
 
-// user profile controller /api/user/profile
+// user profile controller /api/user/profile:get
 export const userProfiletr: RequestHandler = async (req, res, next) => {
 
     try {
@@ -76,7 +76,7 @@ export const userProfiletr: RequestHandler = async (req, res, next) => {
 
 }
 
-// user update controller /api/user/update
+// user update controller /api/user/update:patch
 export const userUpdateCtr: RequestHandler = async (req, res, next) => {
 
     const element = Object.keys(req.body)
@@ -94,7 +94,7 @@ export const userUpdateCtr: RequestHandler = async (req, res, next) => {
 
 }
 
-// user forgot password controller /api/user/forgot
+// user forgot password controller /api/user/forgot:post
 export const userForgetCtr: RequestHandler = async (req, res, next) => {
 
     if (!req.body.email) return next({ code: 400, message: 'Provide username or email address' })
@@ -115,7 +115,7 @@ export const userForgetCtr: RequestHandler = async (req, res, next) => {
 
 }
 
-// user password reset controller /api/user/reset
+// user password reset controller /api/user/reset:get
 export const userResetCtr: RequestHandler = async (req, res, next) => {
 
     const token = req.params.resetToken
@@ -132,7 +132,7 @@ export const userResetCtr: RequestHandler = async (req, res, next) => {
 
 }
 
-// user delete controller /api/user/delete
+// user delete controller /api/user/delete:delete
 export const userDeleteCtr: RequestHandler = async (req, res, next) => {
 
     try {
@@ -145,7 +145,7 @@ export const userDeleteCtr: RequestHandler = async (req, res, next) => {
 
 }
 
-// get user list by admins /api/user/list
+// get user list by admins /api/user/list:get
 export const userListCtr: RequestHandler = async (req, res, next) => {
     const { createdAt, updatedAt, limit, skip } = queryHandler(req.query)
     try {
@@ -156,7 +156,7 @@ export const userListCtr: RequestHandler = async (req, res, next) => {
     }
 }
 
-// search between users by admins /api/user/search
+// search between users by admins /api/user/search:get
 export const userSearchCtr: RequestHandler = async (req, res, next) => {
     const { createdAt, updatedAt, limit, skip, keyphrase } = queryHandler(req.query)
     try {
@@ -169,7 +169,7 @@ export const userSearchCtr: RequestHandler = async (req, res, next) => {
 }
 
 
-// create user by admins /api/user/create
+// create user by admins /api/user/create:post
 export const userCreateCtr: RequestHandler = async (req, res, next) => {
 
     const isValidRB = isValidReq(req.body, ['name', 'username', 'email', 'address', 'phone', 'password', 'role'])
@@ -189,7 +189,7 @@ export const userCreateCtr: RequestHandler = async (req, res, next) => {
 
 }
 
-// edit users by admins /api/user/edit/:userId
+// edit users by admins /api/user/edit/:userId:patch
 export const userEditCtr: RequestHandler = async (req, res, next) => {
 
     const element = Object.keys(req.body)
@@ -213,7 +213,7 @@ export const userEditCtr: RequestHandler = async (req, res, next) => {
 
 }
 
-// remove users by admins /api/user/remove/:userId
+// remove users by admins /api/user/remove/:userId:delete
 export const userRemoveCtr: RequestHandler = async (req, res, next) => {
 
     const _id = req.params.userId

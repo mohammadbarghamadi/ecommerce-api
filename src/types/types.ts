@@ -42,3 +42,12 @@ export interface PaymentOptionsInt {
     mobile?: string
     email?: string
 }
+
+export interface LoggerOptions {
+    ip: string
+    originalUrl: string
+    method: string
+    errorName?: string
+    errorMessage?: string,
+    status?: number
+}

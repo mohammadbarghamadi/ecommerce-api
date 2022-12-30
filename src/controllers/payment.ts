@@ -4,7 +4,7 @@ import OrderModel from "../db/models/order.model.js";
 import { ZarinGateway } from "../utils/payment.js";
 import { PaymentState } from "../types/types.js"
 
-// Payment request /api/paym/payment :post
+// Payment request /api/paym/payment:post
 export const PayRequestCtr: RequestHandler = async (req, res, next) => {
 
     try {
@@ -30,7 +30,7 @@ export const PayRequestCtr: RequestHandler = async (req, res, next) => {
 
 }
 
-// Checkout payment /api/paym/checkout :post
+// Checkout payment /api/paym/checkout:post
 export const CheckoutCtr: RequestHandler = async (req, res, next) => {
 
     const { Authority, Status } = req.body

@@ -5,7 +5,7 @@ import ProductModel from "../db/models/product.model.js"
 import { isValidReq } from "../utils/validate.js"
 
 
-// add to cart /api/cart/add :post
+// add to cart /api/cart/add:post
 export const addCartCtr: RequestHandler = async (req, res, next) => {
 
     const isValidRB = isValidReq(req.body, ['prodId', 'quantity'])
@@ -48,7 +48,7 @@ export const addCartCtr: RequestHandler = async (req, res, next) => {
 
 }
 
-// update cart /api/cart/update :patch
+// update cart /api/cart/update:patch
 export const updCartCtr: RequestHandler = async (req, res, next) => {
 
     let isValidRB = true
@@ -76,7 +76,7 @@ export const updCartCtr: RequestHandler = async (req, res, next) => {
 
 }
 
-// view cart /api/cart/view :view
+// view cart /api/cart/view:view
 export const viwCartCtr: RequestHandler = async (req, res, next) => {
 
     try {
@@ -89,7 +89,7 @@ export const viwCartCtr: RequestHandler = async (req, res, next) => {
 
 }
 
-// delete cart /api/cart/delete :delete
+// delete cart /api/cart/delete:delete
 export const delCartCtr: RequestHandler = async (req, res, next) => {
 
     try {

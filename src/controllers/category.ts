@@ -3,7 +3,7 @@ import CategoryModel from "../db/models/category.model.js";
 import ProductModel from "../db/models/product.model.js";
 import { isValidReq } from "../utils/validate.js";
 
-// add a category /api/cate/add
+// add a category /api/cate/add:post
 export const addCategoryCtr: RequestHandler = async (req, res, next) => {
 
     const isValidRB = isValidReq(req.body, ['name', 'url', 'meta'])
@@ -19,7 +19,7 @@ export const addCategoryCtr: RequestHandler = async (req, res, next) => {
 
 }
 
-// edit a category /api/cate/edit
+// edit a category /api/cate/edit/:categoryId:patch
 export const ediCategoryCtr: RequestHandler = async (req, res, next) => {
 
     const _id = req.params.categoryId
@@ -41,7 +41,7 @@ export const ediCategoryCtr: RequestHandler = async (req, res, next) => {
 
 }
 
-// view a category /api/cate/view
+// view a category /api/cate/view/:categoryId:get
 export const viwCategoryCtr: RequestHandler = async (req, res, next) => {
 
     try {
@@ -55,7 +55,7 @@ export const viwCategoryCtr: RequestHandler = async (req, res, next) => {
 
 }
 
-// delete a category /api/cate/delete
+// delete a category /api/cate/delete/:categoryId:delete
 export const delCategoryCtr: RequestHandler = async (req, res, next) => {
 
     const _id = req.params.categoryId
@@ -71,7 +71,7 @@ export const delCategoryCtr: RequestHandler = async (req, res, next) => {
 
 }
 
-// list categories /api/cate/list
+// list categories /api/cate/list:get
 export const LisCategoryCtr: RequestHandler = async (req, res, next) => {
 
     try {

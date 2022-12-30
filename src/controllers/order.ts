@@ -2,7 +2,7 @@ import { RequestHandler } from "express";
 import OrderModel from "../db/models/order.model.js";
 import { ROLES } from "../middlewares/role.js";
 
-// list orders /api/orde/list :get
+// list orders /api/orde/list:get
 export const listOrderCtr: RequestHandler = async (req, res, next) => {
 
     let orders
@@ -18,7 +18,7 @@ export const listOrderCtr: RequestHandler = async (req, res, next) => {
 
 }
 
-// view an order /api/orde/view/:orderId :get
+// view an order /api/orde/view/:orderId:get
 export const viewOrderCtr: RequestHandler = async (req, res, next) => {
 
     const _id = req.params.orderId

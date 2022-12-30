@@ -9,6 +9,7 @@ import './db/connect.js'
 
 // import express error handler
 import errorHandler from './middlewares/error.js'
+import { events } from './utils/logger.js'
 
 // import main routes
 import userRoute from './routes/user.route.js'
@@ -36,6 +37,7 @@ app.use(express.urlencoded({ extended: true })) // to parses urlencoded payloads
 app.use(express.json()) // to parses request body as json
 app.use(cookie()) // parse incoming cookies from header
 app.use(cors()) // let's frontend app to send api request without cors issues
+app.use(events)
 
 
 // here is I will import main apies routes
@@ -47,7 +49,7 @@ app.use('/api/file', fileRoute)
 app.use('/api/cart', cartRoute)
 app.use('/api/orde', ordeRoute)
 app.use('/api/paym', paymRoute)
-app.use('/api/favo',favoRoute)
+app.use('/api/favo', favoRoute)
 
 
 // express error handler middleware

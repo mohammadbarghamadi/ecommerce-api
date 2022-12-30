@@ -1,11 +1,16 @@
 import { ErrorRequestHandler } from "express";
 import ErrorResponse from "../utils/error.js";
+import { logger } from "../utils/logger.js";
 
 
 const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
 
+    const { ip, originalUrl, method } = req
+
     let error = { ...err }
     error.message = err.message
+
+    logger({ ip, originalUrl, method, errorName: err.name, errorMessage: err.message, status: err.code || 500 })
 
     console.log(err)
 

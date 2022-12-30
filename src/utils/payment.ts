@@ -3,6 +3,7 @@ import axios from "axios"
 
 type ZarinGatewayReq = (payment: PaymentOptionsInt) => Promise<{code: number, authority: 'string', message: 'string'}>
 
+// send payment request to zarinpal
 export const ZarinGateway: ZarinGatewayReq = async (payment) => {
 
     let options: ZarinGatewayReqInt = {

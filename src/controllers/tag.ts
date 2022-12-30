@@ -3,7 +3,7 @@ import TagModel from "../db/models/tag.model.js";
 import ProductModel from "../db/models/product.model.js";
 import { isValidReq } from "../utils/validate.js";
 
-// add a tag /api/tags/add
+// add a tag /api/tags/add:post
 export const addTagCtr: RequestHandler = async (req, res, next) => {
 
     const isValidRB = isValidReq(req.body, ['name', 'url', 'meta'])
@@ -19,7 +19,7 @@ export const addTagCtr: RequestHandler = async (req, res, next) => {
 
 }
 
-// edit a tag /api/tags/edit
+// edit a tag /api/tags/edit/:tagId:get
 export const ediTagCtr: RequestHandler = async (req, res, next) => {
 
     const _id = req.params.tagId
@@ -41,7 +41,7 @@ export const ediTagCtr: RequestHandler = async (req, res, next) => {
 
 }
 
-// view a tag /api/tags/view
+// view a tag /api/tags/view/tagId/:get
 export const viwTagCtr: RequestHandler = async (req, res, next) => {
 
     try {
@@ -55,7 +55,7 @@ export const viwTagCtr: RequestHandler = async (req, res, next) => {
 
 }
 
-// delete a tag /api/tags/delete
+// delete a tag /api/tags/delete/:tagId:delete
 export const delTagCtr: RequestHandler = async (req, res, next) => {
 
     const _id = req.params.tagId
@@ -71,7 +71,7 @@ export const delTagCtr: RequestHandler = async (req, res, next) => {
 
 }
 
-// list tags /api/tags/list
+// list tags /api/tags/list:get
 export const LisTagCtr: RequestHandler = async (req, res, next) => {
 
     try {

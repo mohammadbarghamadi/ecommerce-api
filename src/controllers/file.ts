@@ -27,7 +27,7 @@ export const fileUploadCtr: RequestHandler = async (req, res, next) => {
     }
 }
 
-// file update /api/file/update:patch
+// file update /api/file/update/:fileId:patch
 export const fileUpdateCtr: RequestHandler = async (req, res, next) => {
     const _id = req.params.fileId
     const element = Object.keys(req.body)
@@ -44,7 +44,7 @@ export const fileUpdateCtr: RequestHandler = async (req, res, next) => {
     }
 }
 
-// file delete /api/file/delete:delete
+// file delete /api/file/delete/:fileId:delete
 export const fileDeleteCtr: RequestHandler = async (req, res, next) => {
     const _id = req.params.fileId
 
@@ -57,7 +57,7 @@ export const fileDeleteCtr: RequestHandler = async (req, res, next) => {
     }
 }
 
-// file view /api/file/view:get
+// file view /api/file/view/:fileId:get
 export const fileViewCtr: RequestHandler = async (req, res, next) => {
     const _id = req.params.fileId
     try {
@@ -69,7 +69,7 @@ export const fileViewCtr: RequestHandler = async (req, res, next) => {
     }
 }
 
-// file list /api/file/list:get
+// file list /api/file/list/:fileId:get
 export const fileListCtr: RequestHandler = async (req, res, next) => {
 
     try {
