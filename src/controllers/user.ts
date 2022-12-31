@@ -32,7 +32,7 @@ export const userSigninCtr: RequestHandler = async (req, res, next) => {
         const user = await UserModel.findByCredentials(email, phone, password)
         if (user.error) return next({ message: 'Invalid Credentials!', code: 401 })
         const token = await user.genAuthToken()
-        res.cookie('authToken', token, { httpOnly: true, maxAge: 7 * 24 * 60 * 1000 })
+        res.cookie('authToken', token, { httpOnly: true, maxAge: 7 * 24 * 60 * 60 * 1000 })
         res.json({ status: 200, data: user, message: 'User signed in.' })
     } catch (e) {
         next(e)

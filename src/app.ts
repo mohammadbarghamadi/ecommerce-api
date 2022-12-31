@@ -37,7 +37,7 @@ app.use(express.urlencoded({ extended: true })) // to parses urlencoded payloads
 app.use(express.json()) // to parses request body as json
 app.use(cookie()) // parse incoming cookies from header
 app.use(cors()) // let's frontend app to send api request without cors issues
-app.use(events)
+app.use(events) // write event to disk
 
 
 // here is I will import main apies routes

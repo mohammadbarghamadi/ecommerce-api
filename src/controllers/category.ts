@@ -46,7 +46,10 @@ export const viwCategoryCtr: RequestHandler = async (req, res, next) => {
 
     try {
         const category = await CategoryModel.findById(req.params.categoryId)
-        const products = await ProductModel.find({ category: req.params.categoryId }).select('title ')
+        const products = await ProductModel.find({ category: req.params.categoryId }).select('title images.main url price').populate({
+            path: 'images.main',
+            select: 'filepath name'
+        })
         if (!category) return next({ code: 404, message: 'No category found!' })
         res.json({ status: 200, data: category, products })
     } catch (e) {

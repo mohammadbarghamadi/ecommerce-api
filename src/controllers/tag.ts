@@ -46,7 +46,10 @@ export const viwTagCtr: RequestHandler = async (req, res, next) => {
 
     try {
         const tag = await TagModel.findById(req.params.tagId)
-        const products = await ProductModel.find({ tag: req.params.tagId }).select('title ')
+        const products = await ProductModel.find({ tag: req.params.tagId }).select('title images.main url price').populate({
+            path: 'images.main',
+            select: 'filepath name'
+        })
         if (!tag) return next({ code: 404, message: 'No tag found!' })
         res.json({ status: 200, data: tag, products })
     } catch (e) {
