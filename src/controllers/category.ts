@@ -28,16 +28,17 @@ export const ediCategoryCtr: RequestHandler = async (req, res, next) => {
     if (!isValidRB || !_id) return next({ code: 400, message: 'Bad Request!' })
 
     try {
-
+        const data: { saved?: any, removed?: any, assigned?: any } = {}
         const category: any = await CategoryModel.findById(_id)
         if (!category) return next({ code: 404, message: 'No category found!' })
 
-        if (req.body.category) await CategoryModel.findByIdAndUpdate(category.category._id, { $pull: { children: category._id } })
-        if (req.body.category) await CategoryModel.findByIdAndUpdate({ _id: req.body.category }, { $push: { children: category._id } })
+        if (req.body.category) data.removed = await CategoryModel.findByIdAndUpdate(category.category, { $pull: { children: category._id } })
+        if (req.body.category !== 'none') data.assigned = await CategoryModel.findByIdAndUpdate(req.body.category, { $push: { children: category._id } })
 
+        if (req.body.category === 'none') req.body.category = undefined
         Object.keys(req.body).forEach(item => category[item] = req.body[item])
 
-        const data = await category.save()
+        data.saved = await category.save()
 
         res.json({ status: 200, data, message: 'Category has been updated!' })
     } catch (e) {
@@ -52,7 +53,7 @@ export const viwCategoryCtr: RequestHandler = async (req, res, next) => {
     try {
         const category = await CategoryModel.findById(req.params.categoryId)
         if (!category) return next({ code: 404, message: 'No category found!' })
-        const products = await ProductModel.find({ category: category._id }).select('title images.main url price').populate({
+        const products = await ProductModel.find({ category: { $in: [category._id, ...category.children] } }).select('title images.main url price').populate({
             path: 'images.main',
             select: 'filepath name'
         })
@@ -72,6 +73,8 @@ export const delCategoryCtr: RequestHandler = async (req, res, next) => {
     try {
         const category = await CategoryModel.findByIdAndDelete(_id)
         if (!category) return next({ code: 404, message: 'No category found!' })
+        if (category.category) await CategoryModel.findByIdAndUpdate(category.category, { $pull: { children: category._id } })
+        if (category.children.length) await CategoryModel.updateMany({ category: _id }, { $unset: { category: 1 } })
         res.json({ status: 200, message: 'Category has been deleted', data: category })
     } catch (e) {
         next(e)
