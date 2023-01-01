@@ -6,12 +6,13 @@ import { isValidReq } from "../utils/validate.js";
 // add a category /api/cate/add:post
 export const addCategoryCtr: RequestHandler = async (req, res, next) => {
 
-    const isValidRB = isValidReq(req.body, ['name', 'url', 'meta'])
+    const isValidRB = isValidReq(req.body, ['name', 'url', 'meta', 'category'])
     if (!isValidRB) return next({ code: 400, message: 'Invalid request!' })
 
     try {
-        const newCategory = new CategoryModel(req.body)
+        const newCategory = new CategoryModel({ ...req.body, category: req.body.category ? req.body.category : undefined })
         const category = await newCategory.save()
+        if (req.body.category) await CategoryModel.findOneAndUpdate({ _id: req.body.category }, { $push: { children: newCategory._id } })
         res.json({ status: 200, data: category, message: 'New category added!' })
     } catch (e) {
         next(e)
@@ -23,17 +24,21 @@ export const addCategoryCtr: RequestHandler = async (req, res, next) => {
 export const ediCategoryCtr: RequestHandler = async (req, res, next) => {
 
     const _id = req.params.categoryId
-    const isValidRB = isValidReq(req.body, ['name', 'url', 'meta'])
+    const isValidRB = isValidReq(req.body, ['name', 'url', 'meta', 'category'])
     if (!isValidRB || !_id) return next({ code: 400, message: 'Bad Request!' })
 
     try {
+
         const category: any = await CategoryModel.findById(_id)
         if (!category) return next({ code: 404, message: 'No category found!' })
-        const element = Object.keys(req.body)
-        element.forEach(item => category[item] = req.body[item])
+
+        if (req.body.category) await CategoryModel.findByIdAndUpdate(category.category._id, { $pull: { children: category._id } })
+        if (req.body.category) await CategoryModel.findByIdAndUpdate({ _id: req.body.category }, { $push: { children: category._id } })
+
+        Object.keys(req.body).forEach(item => category[item] = req.body[item])
+
         const data = await category.save()
-        // const update = {...category._doc, ...req.body}
-        // const data = await CategoryModel.findOneAndUpdate({_id},update,{new: true})
+
         res.json({ status: 200, data, message: 'Category has been updated!' })
     } catch (e) {
         next(e)
@@ -46,12 +51,12 @@ export const viwCategoryCtr: RequestHandler = async (req, res, next) => {
 
     try {
         const category = await CategoryModel.findById(req.params.categoryId)
-        const products = await ProductModel.find({ category: req.params.categoryId }).select('title images.main url price').populate({
+        if (!category) return next({ code: 404, message: 'No category found!' })
+        const products = await ProductModel.find({ category: category._id }).select('title images.main url price').populate({
             path: 'images.main',
             select: 'filepath name'
         })
-        if (!category) return next({ code: 404, message: 'No category found!' })
-        res.json({ status: 200, data: category, products })
+        res.json({ status: 200, data: { category, products }, message: 'Category and its products' })
     } catch (e) {
         next(e)
     }
@@ -62,13 +67,13 @@ export const viwCategoryCtr: RequestHandler = async (req, res, next) => {
 export const delCategoryCtr: RequestHandler = async (req, res, next) => {
 
     const _id = req.params.categoryId
-    if(!_id) return next({code: 400, message: 'Bad request!'})
+    if (!_id) return next({ code: 400, message: 'Bad request!' })
 
     try {
         const category = await CategoryModel.findByIdAndDelete(_id)
-        if(!category) return next({code: 404, message: 'No category found!'})
-        res.json({status: 200, message: 'Category has been deleted', data: category})
-    } catch(e) {
+        if (!category) return next({ code: 404, message: 'No category found!' })
+        res.json({ status: 200, message: 'Category has been deleted', data: category })
+    } catch (e) {
         next(e)
     }
 
@@ -79,8 +84,8 @@ export const LisCategoryCtr: RequestHandler = async (req, res, next) => {
 
     try {
         const categories = await CategoryModel.find()
-        if(categories.length < 1) return next({code: 404, message: 'No category found!'})
-        res.json({status: 200, message: 'Category found', data: categories})
+        if (categories.length < 1) return next({ code: 404, message: 'No category found!' })
+        res.json({ status: 200, message: 'Category found', data: categories })
     } catch (e) {
         next(e)
     }

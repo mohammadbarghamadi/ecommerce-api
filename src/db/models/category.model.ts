@@ -1,7 +1,17 @@
-import mongoose from "mongoose"
+import mongoose, { Types, Document, Model } from "mongoose"
+
+interface CategoryInt {
+    name: string
+    url: string
+    category: Types.ObjectId
+    children: Types.ObjectId[]
+    meta: Types.ObjectId
+}
 
 
-const categorySchema = new mongoose.Schema({
+interface CategorySchemaInt extends Document, CategoryInt { }
+
+const categorySchema = new mongoose.Schema<CategorySchemaInt>({
     name: {
         type: String,
         required: true
@@ -12,6 +22,13 @@ const categorySchema = new mongoose.Schema({
         unique: true,
         lowercase: true
     },
+    category: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'categories'
+    },
+    children: [{
+        type: mongoose.Schema.Types.ObjectId
+    }],
     meta: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'meta'
