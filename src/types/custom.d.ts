@@ -4,6 +4,7 @@ declare namespace Express {
          role: Number
          mobile?: string
          email?: string
+         name?: string
          tokens?: { token: string }[]
          _id: string
          save: () => Promise

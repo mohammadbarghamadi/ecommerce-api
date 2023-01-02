@@ -29,8 +29,7 @@ export const ediTagCtr: RequestHandler = async (req, res, next) => {
     try {
         const tag: any = await TagModel.findById(_id)
         if (!tag) return next({ code: 404, message: 'No tag found!' })
-        const element = Object.keys(req.body)
-        element.forEach(item => tag[item] = req.body[item])
+        Object.keys(req.body).forEach(item => tag[item] = req.body[item])
         const data = await tag.save()
         // const update = {...tag._doc, ...req.body}
         // const data = await TagModel.findOneAndUpdate({_id},update,{new: true})
@@ -41,7 +40,7 @@ export const ediTagCtr: RequestHandler = async (req, res, next) => {
 
 }
 
-// view a tag /api/tags/view/tagId/:get
+// view a tag /api/tags/view/:get
 export const viwTagCtr: RequestHandler = async (req, res, next) => {
 
     try {
