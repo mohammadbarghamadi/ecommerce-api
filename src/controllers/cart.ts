@@ -15,12 +15,12 @@ export const addCartCtr: RequestHandler = async (req, res, next) => {
     let message: string = ''
 
     try {
-        const oldCart = await CartModel.findOne({ userId: req.user?._id })
+        const oldCart = await CartModel.findOne({ userId: req.cred.user._id })
 
         if (!oldCart) {
             const product = await ProductModel.findById(req.body.prodId)
             if (!product) return next({ code: 404, message: 'No product found!' })
-            const newCart = new CartModel({ list: [{ prodId: product._id, price: product.price, quantity: req.body.quantity }], userId: req.user?._id, })
+            const newCart = new CartModel({ list: [{ prodId: product._id, price: product.price, quantity: req.body.quantity }], userId: req.cred.user._id, })
             data = await newCart.save()
             message = 'A new cart has been created.'
         } else {
@@ -58,7 +58,7 @@ export const updCartCtr: RequestHandler = async (req, res, next) => {
     if (!isValidRB) return next({ code: 400, message: 'Product quantity cannot be less than 1.' })
 
     try {
-        const oldCart = await CartModel.findOne({ userId: req.user?._id })
+        const oldCart = await CartModel.findOne({ userId: req.cred.user._id })
         if (!oldCart) return next({ code: 404, message: 'No cart found!' })
 
         oldCart.list.forEach(item => {
@@ -80,7 +80,7 @@ export const updCartCtr: RequestHandler = async (req, res, next) => {
 export const viwCartCtr: RequestHandler = async (req, res, next) => {
 
     try {
-        const cart = await CartModel.findOne({ userId: req.user?._id })
+        const cart = await CartModel.findOne({ userId: req.cred.user._id })
         if (!cart) return next({ code: 404, message: 'No cart found!' })
         res.json({ status: 200, data: cart, message: 'Cart found.' })
     } catch (e) {
@@ -93,7 +93,7 @@ export const viwCartCtr: RequestHandler = async (req, res, next) => {
 export const delCartCtr: RequestHandler = async (req, res, next) => {
 
     try {
-        const cart = await CartModel.findOneAndDelete({ userId: req.user?._id })
+        const cart = await CartModel.findOneAndDelete({ userId: req.cred.user._id })
         if (!cart) return next({ code: 200, message: 'Cart not found!' })
         res.json({ status: 200, message: 'Cart has been removed!' })
     } catch (e) {

@@ -8,14 +8,14 @@ import { PaymentState } from "../types/types.js"
 export const PayRequestCtr: RequestHandler = async (req, res, next) => {
 
     try {
-        const cart = await CartModel.findOne({ userId: req.user?._id })
+        const cart = await CartModel.findOne({ userId: req.cred.user._id })
         if (!cart) return next({ code: 400, message: 'No cart found' })
 
         const payment = {
             amount: cart.amount,
             description: req.body.description || 'Product payment.',
-            mobile: req.user?.mobile!,
-            email: req.user?.email!
+            mobile: req.cred.user.mobile!,
+            email: req.cred.user.email!
         }
 
         const { authority, code } = await ZarinGateway(payment)
@@ -36,7 +36,7 @@ export const CheckoutCtr: RequestHandler = async (req, res, next) => {
     const { Authority, Status } = req.body
 
     try {
-        const cart = await CartModel.findOne({ userId: req.user?._id, 'payment.authority': Authority, 'payment.state': PaymentState.Pending, 'payment.date': { $gte: Date.now() } })
+        const cart = await CartModel.findOne({ userId: req.cred.user._id, 'payment.authority': Authority, 'payment.state': PaymentState.Pending, 'payment.date': { $gte: Date.now() } })
 
 
         if (!cart) return next({ code: 404, message: 'Invalid Payment request, no cart found!' })

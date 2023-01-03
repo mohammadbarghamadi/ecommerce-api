@@ -43,8 +43,8 @@ export const userSigninCtr: RequestHandler = async (req, res, next) => {
 export const userSignoutCtr: RequestHandler = async (req, res, next) => {
 
     try {
-        req.user!.tokens = req.user?.tokens?.filter(item => item.token !== req.token)
-        await req.user!.save()
+        req.cred.user.tokens = req.cred.user.tokens?.filter(item => item.token !== req.cred.token)
+        await req.cred.user!.save()
         res.json({ status: 200, message: 'signout with success!' })
     } catch (e) {
         next(e)
@@ -56,8 +56,8 @@ export const userSignoutCtr: RequestHandler = async (req, res, next) => {
 export const userSignoutAllCtr: RequestHandler = async (req, res, next) => {
 
     try {
-        req.user!.tokens = req.user?.tokens?.filter(item => item.token === req.token)
-        await req.user!.save()
+        req.cred.user.tokens = req.cred.user.tokens?.filter(item => item.token === req.cred.token)
+        await req.cred.user!.save()
         res.json({ status: 200, message: 'Signed out from all devices!' })
     } catch (e) {
         next(e)
@@ -69,7 +69,7 @@ export const userSignoutAllCtr: RequestHandler = async (req, res, next) => {
 export const userProfiletr: RequestHandler = async (req, res, next) => {
 
     try {
-        res.json({ status: 200, data: req.user, message: 'User profile' })
+        res.json({ status: 200, data: req.cred.user, message: 'User profile' })
     } catch (e) {
         next(e)
     }
@@ -84,7 +84,7 @@ export const userUpdateCtr: RequestHandler = async (req, res, next) => {
     if (!isValidRB) return next({ code: 400, message: 'Invalid fields!' })
 
     try {
-        const user: any = req.user
+        const user: any = req.cred.user
         element.forEach(item => user[item] = req.body[item])
         const update = await user.save()
         res.json({ status: 200, data: update, message: 'User updated!' })
@@ -136,7 +136,7 @@ export const userResetCtr: RequestHandler = async (req, res, next) => {
 export const userDeleteCtr: RequestHandler = async (req, res, next) => {
 
     try {
-        const user = req.user?.delete()
+        const user = req.cred.user.delete()
         if (!user) return next({ code: 404, message: 'User not found!' })
         res.json({ status: 200, message: 'Your account has been removed!', data: user })
     } catch (e) {
@@ -175,8 +175,8 @@ export const userCreateCtr: RequestHandler = async (req, res, next) => {
     const isValidRB = isValidReq(req.body, ['name', 'username', 'email', 'address', 'phone', 'password', 'role'])
     if (!isValidRB) return next({ message: 'Invalid field', code: 400 })
 
-    if (req.user?.role !== ROLES.Root)
-        if (req.user?.role! >= req.body.role)
+    if (req.cred.user.role !== ROLES.Root)
+        if (req.cred.user.role! >= req.body.role)
             return next({ code: 403, message: `You have insufficient permission!` })
 
     try {
@@ -200,8 +200,8 @@ export const userEditCtr: RequestHandler = async (req, res, next) => {
         const user: any = await UserModel.findById(req.params.userId)
         if (!user) return next({ code: 404, message: 'User not found!' })
 
-        if (req.user?.role !== ROLES.Root)
-            if (req.user?.role! >= user.role)
+        if (req.cred.user.role !== ROLES.Root)
+            if (req.cred.user.role! >= user.role)
                 return next({ code: 403, message: `You have insufficient permission!` })
 
         element.forEach(item => user[item] = req.body[item])
@@ -223,8 +223,8 @@ export const userRemoveCtr: RequestHandler = async (req, res, next) => {
         const user = await UserModel.findOne({ _id })
         if (!user) return next({ code: 404, message: 'No user found!' })
 
-        if (req.user?.role !== ROLES.Root)
-            if (req.user?.role! >= user.role)
+        if (req.cred.user.role !== ROLES.Root)
+            if (req.cred.user.role! >= user.role)
                 return next({ code: 403, message: `You have insufficient permission!` })
 
         await user.remove()

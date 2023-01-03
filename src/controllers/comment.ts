@@ -23,11 +23,11 @@ export const viwCommentCtr: RequestHandler = async (req, res, next) => {
 export const lisCommentCtr: RequestHandler = async (req, res, next) => {
 
     const { createdAt, limit, skip, keyphrase } = queryHandler(req.query)
-    
+
     try {
         let comments
-        if (req.user?.role! <= ROLES.Seller && req.body.admin === true) comments = await CommentModel.find({}).limit(limit).skip(skip).sort({ createdAt })
-        else comments = await CommentModel.find({ authorId: req.user?._id }).limit(limit).skip(skip).sort({ createdAt })
+        if (req.cred.user.role! <= ROLES.Seller && req.body.admin === true) comments = await CommentModel.find({}).limit(limit).skip(skip).sort({ createdAt })
+        else comments = await CommentModel.find({ authorId: req.cred.user._id }).limit(limit).skip(skip).sort({ createdAt })
         if (!comments.length) return res.status(404).json({ status: 404, message: 'No comment found!' })
         res.json({ status: 200, data: comments, message: 'Comments found.' })
     } catch (e) { next(e) }
@@ -57,7 +57,7 @@ export const addCommentCtr: RequestHandler = async (req, res, next) => {
 
     try {
         let newComment
-        if (req.user?.isAuthenticated) newComment = new CommentModel({ ...req.body, name: req.user?.name, email: req.user?.email, authorId: req.user._id })
+        if (req.cred.isAuthenticated && req.cred.user) newComment = new CommentModel({ ...req.body, name: req.cred.user.name, email: req.cred.user.email, authorId: req.cred.user._id })
         else newComment = new CommentModel(req.body)
         const comment = await newComment.save()
         res.json({ status: 200, data: comment, message: 'New comment added.' })

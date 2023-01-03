@@ -9,10 +9,10 @@ export const addFavoCtr: RequestHandler = async (req, res, next) => {
     let favorite
     let message = 'Item added to favorites.'
     try {
-        const favoList = await FavoModel.findOne({ userId: req.user?._id })
+        const favoList = await FavoModel.findOne({ userId: req.cred.user._id })
 
         if (!favoList) {
-            const newFavo = new FavoModel({ userId: req.user?._id, list: [{ prodId }] })
+            const newFavo = new FavoModel({ userId: req.cred.user._id, list: [{ prodId }] })
             favorite = await newFavo.save() // need fix / doesn't return any message to favorite var
         } else if (favoList) {
             let prodIdFound = false
@@ -35,7 +35,7 @@ export const addFavoCtr: RequestHandler = async (req, res, next) => {
 export const clsFavoCtr: RequestHandler = async (req, res, next) => {
 
     try {
-        const favoList = await FavoModel.findOne({ userId: req.user?._id })
+        const favoList = await FavoModel.findOne({ userId: req.cred.user._id })
         if (!favoList) return next({ code: 404, message: 'No favorite list found!' })
         favoList.list = []
         const favorite = await favoList.save()
@@ -50,7 +50,7 @@ export const clsFavoCtr: RequestHandler = async (req, res, next) => {
 export const lisFavoCtr: RequestHandler = async (req, res, next) => {
 
     try {
-        const favoList = await FavoModel.findOne({ userId: req.user?._id }).populate({
+        const favoList = await FavoModel.findOne({ userId: req.cred.user._id }).populate({
             path: 'list.prodId',
             select: 'title price url images.main'
         })

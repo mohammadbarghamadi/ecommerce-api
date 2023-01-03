@@ -14,8 +14,8 @@ export enum Access {
 
 export const Role = (role: ROLES, access: Access = Access.Higher) =>
     (req: Request, res: Response, next: NextFunction) => {
-        if (access === Access.Higher) if (req.user?.role! <= role) return next()
-        if (access === Access.Lower) if (req.user?.role! >= role) return next()
-        if (access === Access.Just) if (req.user?.role! === role) return next()
+        if (access === Access.Higher) if (req.cred.user.role! <= role) return next()
+        if (access === Access.Lower) if (req.cred.user.role! >= role) return next()
+        if (access === Access.Just) if (req.cred.user.role! === role) return next()
         next({ status: 403, message: 'You have insufficient permission!' })
     }

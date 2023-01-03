@@ -17,7 +17,7 @@ export const fileUploadCtr: RequestHandler = async (req, res, next) => {
             mv(filepath, (err: Error) => {
                 if (err) return next({ code: 500, message: `Error while wrting file to disk! ${name}` })
             })
-            items.push({ name, md5, size, mimetype, encoding, filepath, userId: req.user?._id })
+            items.push({ name, md5, size, mimetype, encoding, filepath, userId: req.cred.user._id })
         })
         const newFiles = await FileModel.insertMany(items)
 
@@ -34,7 +34,7 @@ export const fileUpdateCtr: RequestHandler = async (req, res, next) => {
     const isValidRB = isValidReq(req.body, ['name'])
     if (!isValidRB) return next({ code: 400, message: 'Bad request!' })
     try {
-        const file: any = await FileModel.findOne({ _id, userId: req.user?._id })
+        const file: any = await FileModel.findOne({ _id, userId: req.cred.user._id })
         if (!file) return next({ code: 404, message: 'No file found!' })
         element.forEach(item => file[item] = req.body[item])
         await file.save()
@@ -49,7 +49,7 @@ export const fileDeleteCtr: RequestHandler = async (req, res, next) => {
     const _id = req.params.fileId
 
     try {
-        const file = await FileModel.findOneAndDelete({ _id, userId: req.user?._id })
+        const file = await FileModel.findOneAndDelete({ _id, userId: req.cred.user._id })
         if (!file) return next({ code: 400, message: 'No file found' })
         res.json({ status: 200, data: file, message: 'File deleted!' })
     } catch (e) {
@@ -61,7 +61,7 @@ export const fileDeleteCtr: RequestHandler = async (req, res, next) => {
 export const fileViewCtr: RequestHandler = async (req, res, next) => {
     const _id = req.params.fileId
     try {
-        const file = await FileModel.findOne({ _id, userId: req.user?._id })
+        const file = await FileModel.findOne({ _id, userId: req.cred.user._id })
         if (!file) return next({ code: 404, message: 'File not found!' })
         res.json({ status: 200, data: file, message: 'File found.' })
     } catch (e) {
@@ -73,7 +73,7 @@ export const fileViewCtr: RequestHandler = async (req, res, next) => {
 export const fileListCtr: RequestHandler = async (req, res, next) => {
 
     try {
-        const files = await FileModel.find({ userId: req.user?._id })
+        const files = await FileModel.find({ userId: req.cred.user._id })
         if (!files.length) return next({ code: 404, message: 'No file found!' })
         res.json({ status: 200, data: files, message: 'Files retrived.' })
     } catch (e) {
