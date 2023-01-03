@@ -21,7 +21,7 @@ import cartRoute from './routes/cart.route.js'
 import ordeRoute from './routes/order.route.js'
 import paymRoute from './routes/payment.route.js'
 import favoRoute from './routes/favourite.route.js'
-
+import cmntRoute from './routes/comment.route.js'
 
 // configure environment variables
 dotenv.config()
@@ -50,6 +50,7 @@ app.use('/api/cart', cartRoute)
 app.use('/api/orde', ordeRoute)
 app.use('/api/paym', paymRoute)
 app.use('/api/favo', favoRoute)
+app.use('/api/cmnt', cmntRoute)
 
 
 // express error handler middleware

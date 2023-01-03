@@ -5,6 +5,7 @@ declare namespace Express {
          mobile?: string
          email?: string
          name?: string
+         isAuthenticated?: boolean
          tokens?: { token: string }[]
          _id: string
          save: () => Promise

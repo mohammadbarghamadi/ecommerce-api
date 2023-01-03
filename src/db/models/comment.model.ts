@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { CommentStatus } from "../../types/types.js";
 
 
 const commentSchema = new mongoose.Schema({
@@ -16,12 +17,15 @@ const commentSchema = new mongoose.Schema({
     },
     prodId: {
         type: mongoose.Schema.Types.ObjectId,
+        required: true
     },
     replayTo: {
         type: mongoose.Schema.Types.ObjectId,
     },
     rating: {
-        type: Number
+        type: Number,
+        min: [1,'Min number is 1'],
+        max: [5, 'max number is 5']
     },
     title: {
         type: String,
@@ -31,6 +35,11 @@ const commentSchema = new mongoose.Schema({
     description: {
         type: String,
         required: true
+    },
+    status: {
+        type: String,
+        required: true,
+        default: CommentStatus.Pending
     }
 }, { timestamps: true })
 

@@ -17,7 +17,7 @@ export interface FilesNameErrorInt {
 export interface CartArrayInt {
     prodId: string
     quantity: number
-    price: number 
+    price: number
 }
 
 export enum PaymentState {
@@ -25,6 +25,20 @@ export enum PaymentState {
     Pending = 'PEDNDING',
     Success = 'SUCCESS',
     Cancel = 'CANCEL'
+}
+
+export enum CommentStatus {
+    Pending = 'PENDING',
+    Approved = 'APPROVED',
+    Rejected = 'REJECTED'
+}
+
+export enum CommentRating {
+    VeryBad = 1,
+    Bad = 2,
+    Ok = 3,
+    Good = 4,
+    VeryGood = 5
 }
 
 export interface ZarinGatewayReqInt {
