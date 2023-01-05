@@ -1,29 +1,77 @@
 import mongoose from "mongoose";
 
-
-const addressSchema = new mongoose.Schema({
-    country: {
+// countires
+const countrySchema = new mongoose.Schema({
+    name: {
         type: String,
         required: true
     },
-    provience: {
-        type: String,
-        required: true
-    },
-    city: {
-        type: String,
-        required: true
-    },
-    address: {
-        type: String,
-        required: true
-    },
-    zip: {
+    url: {
         type: String,
         required: true
     }
 })
 
-const AddressModel = mongoose.model('addresses',addressSchema)
+// provinces and states
+const provStateSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true
+    },
+    url: {
+        type: String,
+        required: true
+    },
+    parent: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'countries'
+    }
+})
+
+// cities
+const citySchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true
+    },
+    url: {
+        type: String,
+        required: true
+    },
+    parent: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'provstates'
+    }
+})
+
+// addresses
+const addressSchema = new mongoose.Schema({
+    country: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true
+    },
+    provState: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true
+    },
+    city: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true
+    },
+    street: {
+        type: String,
+        required: true
+    },
+    postalcode: {
+        type: String,
+        required: true
+    }
+})
+
+export const CountryModel = mongoose.model('countries', countrySchema)
+export const ProvStateModel = mongoose.model('provstates', provStateSchema)
+export const CityModel = mongoose.model('cities', citySchema)
+
+const AddressModel = mongoose.model('addresses', addressSchema)
 
 export default AddressModel
