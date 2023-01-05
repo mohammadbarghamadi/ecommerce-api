@@ -22,6 +22,9 @@ import ordeRoute from './routes/order.route.js'
 import paymRoute from './routes/payment.route.js'
 import favoRoute from './routes/favourite.route.js'
 import cmntRoute from './routes/comment.route.js'
+import locaRoute from './routes/location.route.js'
+import addrRoute from './routes/address.route.js'
+
 
 // configure environment variables
 dotenv.config()
@@ -51,7 +54,8 @@ app.use('/api/orde', ordeRoute)
 app.use('/api/paym', paymRoute)
 app.use('/api/favo', favoRoute)
 app.use('/api/cmnt', cmntRoute)
-
+app.use('/api/loca', locaRoute)
+app.use('/api/addr', addrRoute)
 
 // express error handler middleware
 app.use(errorHandler)
