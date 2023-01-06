@@ -8,7 +8,10 @@ const countrySchema = new mongoose.Schema({
     },
     url: {
         type: String,
-        required: true
+        required: true,
+        unique: true,
+        trim: true,
+        lowercase: true
     }
 })
 
@@ -20,7 +23,10 @@ const provStateSchema = new mongoose.Schema({
     },
     url: {
         type: String,
-        required: true
+        required: true,
+        unique: true,
+        trim: true,
+        lowercase: true
     },
     parent: {
         type: mongoose.Schema.Types.ObjectId,
@@ -36,7 +42,10 @@ const citySchema = new mongoose.Schema({
     },
     url: {
         type: String,
-        required: true
+        required: true,
+        unique: true,
+        trim: true,
+        lowercase: true
     },
     parent: {
         type: mongoose.Schema.Types.ObjectId,

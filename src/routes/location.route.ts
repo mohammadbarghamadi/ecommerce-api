@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { Auth } from "../middlewares/auth";
-import { Role, ROLES } from "../middlewares/role";
+import { Auth } from "../middlewares/auth.js";
+import { Role, ROLES } from "../middlewares/role.js";
 
 const router = Router()
 
@@ -15,7 +15,7 @@ import {
 } from '../controllers/location.js'
 
 
-router.route('/get').get(getLocationCtr)
+router.route('/get/:locationId').get(getLocationCtr)
 router.route('/add').post(Auth, Role(ROLES.Admin), addLocationCtr)
 router.route('/edit').post(Auth, Role(ROLES.Admin), ediLocationCtr)
 router.route('/remove').delete(Auth, Role(ROLES.Admin), remLocationCtr)

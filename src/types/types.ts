@@ -33,6 +33,12 @@ export enum CommentStatus {
     Rejected = 'REJECTED'
 }
 
+export enum LocationType {
+    Country = 'COUNTRY',
+    ProvState = 'PROVESTATE',
+    City = 'CITY'
+}
+
 export enum CommentRating {
     VeryBad = 1,
     Bad = 2,
