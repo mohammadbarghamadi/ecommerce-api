@@ -74,6 +74,10 @@ const addressSchema = new mongoose.Schema({
     postalcode: {
         type: String,
         required: true
+    },
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true
     }
 })
 

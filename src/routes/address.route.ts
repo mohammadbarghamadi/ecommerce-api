@@ -14,10 +14,10 @@ import {
 } from '../controllers/address.js'
 
 
-router.route('/get').get(Auth, getAddressCtr)
 router.route('/add').post(Auth, addAddressCtr)
-router.route('/edit').patch(Auth, ediAddressCtr)
-router.route('/remove').post(Auth, remAddressCtr)
+router.route('/get/:addressId').get(Auth, getAddressCtr)
+router.route('/edit/:addressId').patch(Auth, ediAddressCtr)
+router.route('/delete/:addressId').delete(Auth, remAddressCtr)
 
 
 export default router
