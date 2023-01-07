@@ -40,7 +40,7 @@ export const ediCategoryCtr: RequestHandler = async (req, res, next) => {
 
         data.saved = await category.save()
 
-        res.json({ status: 200, data, message: 'Category has been updated!' })
+        res.json({ status: 200, data, message: 'Category updated!' })
     } catch (e) {
         next(e)
     }
@@ -75,7 +75,7 @@ export const delCategoryCtr: RequestHandler = async (req, res, next) => {
         if (!category) return next({ code: 404, message: 'No category found!' })
         if (category.category) await CategoryModel.findByIdAndUpdate(category.category, { $pull: { children: category._id } })
         if (category.children.length) await CategoryModel.updateMany({ category: _id }, { $unset: { category: 1 } })
-        res.json({ status: 200, message: 'Category has been deleted', data: category })
+        res.json({ status: 200, message: 'Category deleted', data: category })
     } catch (e) {
         next(e)
     }

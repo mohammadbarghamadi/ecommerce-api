@@ -91,7 +91,7 @@ export const delCommentCtr: RequestHandler = async (req, res, next) => {
     try {
         const comment = await CommentModel.findByIdAndDelete(_id)
         if (!comment) return res.status(404).json({ status: 404, message: 'Comment not found!.' })
-        res.json({ status: 200, data: comment, message: 'Comment has been deleted.' })
+        res.json({ status: 200, data: comment, message: 'Comment deleted.' })
     } catch (e) { next(e) }
 
 }

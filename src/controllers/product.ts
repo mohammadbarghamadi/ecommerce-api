@@ -87,7 +87,7 @@ export const updateProdCtr: RequestHandler = async (req, res, next) => {
 
         await meta.save()
         await product.save()
-        res.json({ status: 200, data: product, message: 'Your product has been updated.' })
+        res.json({ status: 200, data: product, message: 'Your product updated.' })
     } catch (e) {
         next(e)
     }
@@ -102,7 +102,7 @@ export const deleteProdCtr: RequestHandler = async (req, res, next) => {
         if (req.cred.user.role! <= ROLES.Admin) product = await ProductModel.findOneAndDelete({ _id })
         else product = await ProductModel.findOneAndDelete({ _id, owner: req.cred.user._id })
         if (!product) return next({ code: 404, message: 'No product found!' })
-        res.json({ status: 200, message: 'The product has been deleted!', data: product })
+        res.json({ status: 200, message: 'The product deleted!', data: product })
     } catch (e) {
         next(e)
     }

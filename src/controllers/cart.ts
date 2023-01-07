@@ -22,7 +22,7 @@ export const addCartCtr: RequestHandler = async (req, res, next) => {
             if (!product) return next({ code: 404, message: 'No product found!' })
             const newCart = new CartModel({ list: [{ prodId: product._id, price: product.price, quantity: req.body.quantity }], userId: req.cred.user._id, })
             data = await newCart.save()
-            message = 'A new cart has been created.'
+            message = 'A new cart created.'
         } else {
             let isSameProdId = false
             const product = await ProductModel.findById(req.body.prodId)
@@ -69,7 +69,7 @@ export const updCartCtr: RequestHandler = async (req, res, next) => {
 
         const updated = await oldCart.save({ validateBeforeSave: true })
 
-        res.json({ status: 200, data: updated, message: 'Cart has been updated.' })
+        res.json({ status: 200, data: updated, message: 'Cart updated.' })
     } catch (e) {
         next(e)
     }
@@ -95,7 +95,7 @@ export const delCartCtr: RequestHandler = async (req, res, next) => {
     try {
         const cart = await CartModel.findOneAndDelete({ userId: req.cred.user._id })
         if (!cart) return next({ code: 200, message: 'Cart not found!' })
-        res.json({ status: 200, message: 'Cart has been removed!' })
+        res.json({ status: 200, message: 'Cart removed!' })
     } catch (e) {
         next(e)
     }

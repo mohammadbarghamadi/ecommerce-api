@@ -33,7 +33,7 @@ export const ediTagCtr: RequestHandler = async (req, res, next) => {
         const data = await tag.save()
         // const update = {...tag._doc, ...req.body}
         // const data = await TagModel.findOneAndUpdate({_id},update,{new: true})
-        res.json({ status: 200, data, message: 'Tag has been updated!' })
+        res.json({ status: 200, data, message: 'Tag updated!' })
     } catch (e) {
         next(e)
     }
@@ -66,7 +66,7 @@ export const delTagCtr: RequestHandler = async (req, res, next) => {
     try {
         const tag = await TagModel.findByIdAndDelete(_id)
         if(!tag) return next({code: 404, message: 'No tag found!'})
-        res.json({status: 200, message: 'tag has been deleted', data: tag})
+        res.json({status: 200, message: 'tag deleted', data: tag})
     } catch(e) {
         next(e)
     }

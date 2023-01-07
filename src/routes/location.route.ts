@@ -7,6 +7,7 @@ const router = Router()
 
 import {
 
+    countryListCtr,
     addLocationCtr,
     remLocationCtr,
     ediLocationCtr,
@@ -14,11 +15,11 @@ import {
 
 } from '../controllers/location.js'
 
-
+router.route('/list').get(countryListCtr)
 router.route('/get/:locationId').get(getLocationCtr)
 router.route('/add').post(Auth, Role(ROLES.Admin), addLocationCtr)
-router.route('/edit').post(Auth, Role(ROLES.Admin), ediLocationCtr)
-router.route('/remove').delete(Auth, Role(ROLES.Admin), remLocationCtr)
+router.route('/edit/:locationId').post(Auth, Role(ROLES.Admin), ediLocationCtr)
+router.route('/remove/:locationId').delete(Auth, Role(ROLES.Admin), remLocationCtr)
 
 
 

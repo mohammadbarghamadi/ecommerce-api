@@ -125,7 +125,7 @@ export const userResetCtr: RequestHandler = async (req, res, next) => {
     try {
         const user = await UserModel.resetPassword(token, password)
         if (!user) return next({ code: 401, message: 'Invalid request!' })
-        res.json({ status: 200, message: 'Your password has been changed!' })
+        res.json({ status: 200, message: 'Your password changed!' })
     } catch (e) {
         next(e)
     }
@@ -138,7 +138,7 @@ export const userDeleteCtr: RequestHandler = async (req, res, next) => {
     try {
         const user = req.cred.user.delete()
         if (!user) return next({ code: 404, message: 'User not found!' })
-        res.json({ status: 200, message: 'Your account has been removed!', data: user })
+        res.json({ status: 200, message: 'Your account removed!', data: user })
     } catch (e) {
         next(e)
     }
@@ -229,7 +229,7 @@ export const userRemoveCtr: RequestHandler = async (req, res, next) => {
 
         await user.remove()
 
-        res.json({ status: 200, data: user, message: 'User has been removed!' })
+        res.json({ status: 200, data: user, message: 'User removed!' })
     } catch (e) {
         next(e)
     }
