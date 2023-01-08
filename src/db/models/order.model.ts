@@ -13,7 +13,7 @@ interface OrderSchemaInt {
         authority: string
         code: number
         state: PaymentState
-        date: Date
+        date: number
     }
     state: PaymentState
     amount: number
@@ -53,6 +53,9 @@ const orderSchema = new mongoose.Schema<OrderSchemaInt>({
             type: String,
             required: true,
             default: PaymentState.Ready
+        },
+        date: {
+            type: Number
         }
     },
     amount: {
@@ -61,7 +64,7 @@ const orderSchema = new mongoose.Schema<OrderSchemaInt>({
         default: 0
     }
 
-})
+}, { timestamps: true })
 
 const OrderModel = mongoose.model('orders', orderSchema)
 

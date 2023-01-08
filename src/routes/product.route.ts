@@ -9,7 +9,7 @@ import {
     addProdCtr,
     deleteProdCtr,
     updateProdCtr,
-    viewProdCtr,
+    getProdCtr,
     listProdCtr
 
 } from "../controllers/product.js"
@@ -18,7 +18,7 @@ import {
 router.route('/add').post(Auth, Role(ROLES.Seller, Access.Higher), addProdCtr)
 router.route('/delete/:productId').delete(Auth, deleteProdCtr)
 router.route('/update/:productId').patch(Auth, updateProdCtr)
-router.route('/view/:productId').get(viewProdCtr)
+router.route('/get/:productId').get(getProdCtr)
 router.route('/list').get(listProdCtr)
 
 export default router

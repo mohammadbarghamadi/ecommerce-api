@@ -8,13 +8,13 @@ const router = Router()
 import {
     addCategoryCtr,
     ediCategoryCtr,
-    viwCategoryCtr,
+    getCategoryCtr,
     delCategoryCtr,
     LisCategoryCtr
 } from '../controllers/category.js'
 
 
-router.route('/view/:categoryId').get(viwCategoryCtr)
+router.route('/get/:categoryId').get(getCategoryCtr)
 router.route('/list').get(LisCategoryCtr)
 router.route('/add').post(Auth, Role(ROLES.Admin, Access.Higher), addCategoryCtr)
 router.route('/edit/:categoryId').patch(Auth, Role(ROLES.Admin, Access.Higher), ediCategoryCtr)

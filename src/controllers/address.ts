@@ -28,7 +28,7 @@ export const getAddressCtr: RequestHandler = async (req, res, next) => {
         let address
         if (req.cred.user.role <= ROLES.Seller) address = await AddressModel.findById(_id)
         else address = await AddressModel.findOne({ _id, userId: req.cred.user._id })
-        if (!address) return res.status(400).json({ status: 400, message: 'No address found!' })
+        if (!address) return res.status(404).json({ status: 404, message: `This address id:${_id} not found!` })
         res.json({ status: 200, data: address, message: 'Address found.' })
 
     } catch (e) { next(e) }

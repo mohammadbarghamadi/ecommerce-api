@@ -10,7 +10,11 @@ const metaSchema = new mongoose.Schema({
         type: String,
         trim: true
     },
-    keyphrase: [String]
+    keyphrase: [String],
+    link: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true
+    }
 })
 
 const MetaModel = mongoose.model('metas', metaSchema)

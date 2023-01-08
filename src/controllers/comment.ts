@@ -34,7 +34,7 @@ export const lisCommentCtr: RequestHandler = async (req, res, next) => {
 
 }
 
-// show comment /api/cmnt/list:get
+// show comment /api/cmnt/show:commentId:get
 export const shwCommentCtr: RequestHandler = async (req, res, next) => {
 
     const { limit, skip } = queryHandler(req.query)

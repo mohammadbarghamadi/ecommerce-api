@@ -51,11 +51,10 @@ export const addCartCtr: RequestHandler = async (req, res, next) => {
 // update cart /api/cart/update:patch
 export const updCartCtr: RequestHandler = async (req, res, next) => {
 
-    let isValidRB = true
-    req.body.list.forEach((item: CartArrayInt) => {
-        if (item.quantity < 1) isValidRB = false
-    })
-    if (!isValidRB) return next({ code: 400, message: 'Product quantity cannot be less than 1.' })
+    const isValidRB = isValidReq(req.body, ['list'])
+    
+    if (!isValidRB || !Array.isArray(req.body.list))
+        return next({ code: 400, message: 'Bad request sent!' })
 
     try {
         const oldCart = await CartModel.findOne({ userId: req.cred.user._id })
@@ -67,6 +66,7 @@ export const updCartCtr: RequestHandler = async (req, res, next) => {
             })
         })
 
+        oldCart.list = oldCart.list.filter(item => item.quantity !== 0)
         const updated = await oldCart.save({ validateBeforeSave: true })
 
         res.json({ status: 200, data: updated, message: 'Cart updated.' })
@@ -77,7 +77,7 @@ export const updCartCtr: RequestHandler = async (req, res, next) => {
 }
 
 // view cart /api/cart/view:view
-export const viwCartCtr: RequestHandler = async (req, res, next) => {
+export const getCartCtr: RequestHandler = async (req, res, next) => {
 
     try {
         const cart = await CartModel.findOne({ userId: req.cred.user._id })
@@ -94,7 +94,7 @@ export const delCartCtr: RequestHandler = async (req, res, next) => {
 
     try {
         const cart = await CartModel.findOneAndDelete({ userId: req.cred.user._id })
-        if (!cart) return next({ code: 200, message: 'Cart not found!' })
+        if (!cart) return next({ code: 200, message: 'No cart found!' })
         res.json({ status: 200, message: 'Cart removed!' })
     } catch (e) {
         next(e)

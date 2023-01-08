@@ -8,14 +8,14 @@ import {
     addCartCtr,
     delCartCtr,
     updCartCtr,
-    viwCartCtr
+    getCartCtr
 
 } from '../controllers/cart.js'
 
 router.route('/add').post(Auth, addCartCtr)
 router.route('/delete').delete(Auth, delCartCtr)
 router.route('/update').patch(Auth, updCartCtr)
-router.route('/view').get(Auth, viwCartCtr)
+router.route('/get').get(Auth, getCartCtr)
 
 
 export default router

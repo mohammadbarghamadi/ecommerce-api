@@ -1,6 +1,7 @@
 import { RequestHandler } from "express";
 import CategoryModel from "../db/models/category.model.js";
 import ProductModel from "../db/models/product.model.js";
+import MetaModel from "../db/models/meta.model.js";
 import { isValidReq } from "../utils/validate.js";
 
 // add a category /api/cate/add:post
@@ -9,15 +10,22 @@ export const addCategoryCtr: RequestHandler = async (req, res, next) => {
     const isValidRB = isValidReq(req.body, ['name', 'url', 'meta', 'category'])
     if (!isValidRB) return next({ code: 400, message: 'Invalid request!' })
 
+    let categoryMeta
+    if (req.body.meta) categoryMeta = req.body.meta
+
     try {
+        delete req.body.meta
         const newCategory = new CategoryModel({ ...req.body, category: req.body.category ? req.body.category : undefined })
+        const newMeta = new MetaModel({ ...categoryMeta, link: newCategory._id })
+        newCategory.meta = newMeta._id
+
         const category = await newCategory.save()
+        const meta = await newMeta.save()
         if (req.body.category) await CategoryModel.findOneAndUpdate({ _id: req.body.category }, { $push: { children: newCategory._id } })
-        res.json({ status: 200, data: category, message: 'New category added!' })
+        res.json({ status: 200, data: { category, meta }, message: 'New category added!' })
     } catch (e) {
         next(e)
     }
-
 }
 
 // edit a category /api/cate/edit/:categoryId:patch
@@ -48,10 +56,15 @@ export const ediCategoryCtr: RequestHandler = async (req, res, next) => {
 }
 
 // view a category /api/cate/view/:categoryId:get
-export const viwCategoryCtr: RequestHandler = async (req, res, next) => {
+export const getCategoryCtr: RequestHandler = async (req, res, next) => {
+
+    const _id = req.params.categoryId
 
     try {
-        const category = await CategoryModel.findById(req.params.categoryId)
+        const category = await CategoryModel.findById(_id).populate({
+            path: 'meta',
+            select: 'title description keyprase'
+        })
         if (!category) return next({ code: 404, message: 'No category found!' })
         const products = await ProductModel.find({ category: { $in: [category._id, ...category.children] } }).select('title images.main url price').populate({
             path: 'images.main',

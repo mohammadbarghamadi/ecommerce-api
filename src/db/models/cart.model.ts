@@ -33,7 +33,8 @@ const cartSchema = new mongoose.Schema<CartSchemaInt>({
         quantity: {
             type: Number,
             required: true,
-            default: 1
+            default: 1,
+            min: 1
         },
         price: {
             type: Number,
@@ -55,7 +56,8 @@ const cartSchema = new mongoose.Schema<CartSchemaInt>({
         },
         date: {
             type: Number,
-            required: true
+            required: true,
+            default: Date.now()
         }
     },
     amount: {

@@ -31,7 +31,7 @@ const categorySchema = new mongoose.Schema<CategorySchemaInt>({
     }],
     meta: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'meta'
+        ref: 'metas'
     }
 })
 

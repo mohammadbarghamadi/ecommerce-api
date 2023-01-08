@@ -7,7 +7,7 @@ import { ROLES } from "../middlewares/role.js"
 
 
 // view a product /api/prod/view/:productId:get
-export const viewProdCtr: RequestHandler = async (req, res, next) => {
+export const getProdCtr: RequestHandler = async (req, res, next) => {
     const _id = req.params.productId
     try {
         const product = await ProductModel.findById(_id).populate({
