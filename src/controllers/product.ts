@@ -65,29 +65,31 @@ export const addProdCtr: RequestHandler = async (req, res, next) => {
 // update a product /api/prod/update/:productId:get
 export const updateProdCtr: RequestHandler = async (req, res, next) => {
     const _id = req.params.productId
-    const element = Object.keys(req.body)
     let product: any
     const isValidRB = isValidReq(req.body, ['title', 'excerpt', 'content', 'price', 'url', 'images', 'category', 'tag', 'meta', 'owner'])
     if (!isValidRB) return next({ code: 400, message: 'Invalid field!' })
     try {
         if (req.cred.user.role! <= ROLES.Admin) product = await ProductModel.findOne({ _id })
         else product = await ProductModel.findOne({ _id, owner: req.cred.user._id })
-
         if (!product) return next({ code: 404, message: 'No product found!' })
-        const meta: any = await MetaModel.findById(product.meta._id)
 
-        if (req.body.meta) Object.keys(req.body.meta).forEach(item => meta[item] = req.body.meta[item])
-
-        // Remove the "meta" field (include: description, title, keyphrase) from "req.body" to prevent adding wrong data and getting validation error related to ObjectId  
+        let meta: any
+        meta = await MetaModel.findById(product.meta._id)
+        
+        if (meta && req.body.meta) Object.keys(req.body.meta).forEach(item => meta[item] = req.body.meta[item])
+        
+        if (!meta && req.body.meta) {
+            meta = new MetaModel({...req.body.meta, link: product._id})
+            product.meta = meta._id
+        }
+        
         delete req.body.meta
-        // Add meta ObjectId to the product to prevent losing the meta field from the product.
-        req.body.meta = meta._id
-
-        element.forEach(item => product[item] = req.body[item])
-
+        
+        Object.keys(req.body).forEach(item => product[item] = req.body[item])
+        
         await meta.save()
         await product.save()
-        res.json({ status: 200, data: product, message: 'Your product updated.' })
+        res.json({ status: 200, data: { product, meta }, message: 'Your product updated.' })
     } catch (e) {
         next(e)
     }

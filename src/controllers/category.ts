@@ -35,18 +35,35 @@ export const ediCategoryCtr: RequestHandler = async (req, res, next) => {
     const isValidRB = isValidReq(req.body, ['name', 'url', 'meta', 'category'])
     if (!isValidRB || !_id) return next({ code: 400, message: 'Bad Request!' })
 
+    let categoryMeta: any
+    if (req.body.meta) {
+        categoryMeta = req.body.meta
+        delete req.body.meta
+    }
+
     try {
-        const data: { saved?: any, removed?: any, assigned?: any } = {}
+        const data: { saved?: any, meta?: any, removed?: any, assigned?: any } = {}
         const category: any = await CategoryModel.findById(_id)
         if (!category) return next({ code: 404, message: 'No category found!' })
 
-        if (req.body.category) data.removed = await CategoryModel.findByIdAndUpdate(category.category, { $pull: { children: category._id } })
+        let meta: any
+        meta = await MetaModel.findById(category.meta)
+        
+        if (categoryMeta && meta) Object.keys(categoryMeta).forEach(item => meta[item] = categoryMeta[item])
+        
+        if (!meta && categoryMeta) {
+            meta = new MetaModel({ categoryMeta, link: category._id })
+            category.meta = meta._id
+        }
+
+        if (req.body.category || req.body.category === 'none') data.removed = await CategoryModel.findByIdAndUpdate(category.category, { $pull: { children: category._id } })
         if (req.body.category !== 'none') data.assigned = await CategoryModel.findByIdAndUpdate(req.body.category, { $push: { children: category._id } })
 
         if (req.body.category === 'none') req.body.category = undefined
         Object.keys(req.body).forEach(item => category[item] = req.body[item])
 
         data.saved = await category.save()
+        if (categoryMeta && meta) data.meta = await meta.save()
 
         res.json({ status: 200, data, message: 'Category updated!' })
     } catch (e) {
@@ -86,9 +103,10 @@ export const delCategoryCtr: RequestHandler = async (req, res, next) => {
     try {
         const category = await CategoryModel.findByIdAndDelete(_id)
         if (!category) return next({ code: 404, message: 'No category found!' })
+        const meta = await MetaModel.findByIdAndDelete(category.meta)
         if (category.category) await CategoryModel.findByIdAndUpdate(category.category, { $pull: { children: category._id } })
         if (category.children.length) await CategoryModel.updateMany({ category: _id }, { $unset: { category: 1 } })
-        res.json({ status: 200, message: 'Category deleted', data: category })
+        res.json({ status: 200, data: { category, meta }, message: 'Category deleted' })
     } catch (e) {
         next(e)
     }

@@ -8,13 +8,13 @@ const router = Router()
 import {
     addTagCtr,
     ediTagCtr,
-    viwTagCtr,
+    getTagCtr,
     delTagCtr,
     LisTagCtr
 } from '../controllers/tag.js'
 
 
-router.route('/view/:tagId').get(viwTagCtr)
+router.route('/get/:tagId').get(getTagCtr)
 router.route('/list').get(LisTagCtr)
 router.route('/add').post(Auth, Role(ROLES.Admin, Access.Higher), addTagCtr)
 router.route('/edit/:tagId').patch(Auth, Role(ROLES.Admin, Access.Higher), ediTagCtr)

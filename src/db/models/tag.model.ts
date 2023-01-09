@@ -16,7 +16,7 @@ const tagSchema = new mongoose.Schema({
     },
     meta: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'meta'
+        ref: 'metas'
     }
 })
 
