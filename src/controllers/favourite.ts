@@ -36,7 +36,7 @@ export const clsFavoCtr: RequestHandler = async (req, res, next) => {
 
     try {
         const favoList = await FavoModel.findOne({ userId: req.cred.user._id })
-        if (!favoList) return next({ code: 404, message: 'No favorite list found!' })
+        if (!favoList) return next({ code: 404, message: 'No favorite list was found!' })
         favoList.list = []
         const favorite = await favoList.save()
         res.json({ status: 200, data: favorite, message: 'Favorite list emptied' })
@@ -54,7 +54,7 @@ export const lisFavoCtr: RequestHandler = async (req, res, next) => {
             path: 'list.prodId',
             select: 'title price url images.main'
         })
-        if (!favoList) return next({ code: 404, message: 'No favorite list found!' })
+        if (!favoList) return next({ code: 404, message: 'list found!' })
         res.json({ status: 200, data: favoList, message: 'Favorite list' })
     } catch (e) {
         next(e)

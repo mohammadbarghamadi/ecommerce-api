@@ -33,7 +33,7 @@ export const ediTagCtr: RequestHandler = async (req, res, next) => {
 
     try {
         const tag: any = await TagModel.findById(_id)
-        if (!tag) return next({ code: 404, message: 'No tag found!' })
+        if (!tag) return next({ code: 404, message: 'No tag was found!' })
 
         let meta: any
         meta = await MetaModel.findById(tag.meta)
@@ -71,7 +71,7 @@ export const getTagCtr: RequestHandler = async (req, res, next) => {
             path: 'images.main',
             select: 'filepath name'
         })
-        if (!tag) return next({ code: 404, message: 'No tag found!' })
+        if (!tag) return next({ code: 404, message: 'No tag was found!' })
         res.json({ status: 200, data: tag, products })
     } catch (e) {
         next(e)
@@ -86,7 +86,7 @@ export const delTagCtr: RequestHandler = async (req, res, next) => {
 
     try {
         const tag = await TagModel.findByIdAndDelete(_id)
-        if (!tag) return next({ code: 404, message: 'No tag found!' })
+        if (!tag) return next({ code: 404, message: 'No tag was found!' })
         let meta
         if (tag.meta) meta = await MetaModel.findByIdAndRemove(tag.meta)
         const products = await ProductModel.updateMany({ tag: tag._id }, { $pull: { tag: tag._id } })
@@ -102,7 +102,7 @@ export const LisTagCtr: RequestHandler = async (req, res, next) => {
 
     try {
         const tags = await TagModel.find()
-        if (tags.length < 1) return next({ code: 404, message: 'No tag found!' })
+        if (tags.length < 1) return next({ code: 404, message: 'No tag was found!' })
         res.json({ status: 200, message: 'Tag found', data: tags })
     } catch (e) {
         next(e)

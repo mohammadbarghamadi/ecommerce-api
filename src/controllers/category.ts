@@ -44,7 +44,7 @@ export const ediCategoryCtr: RequestHandler = async (req, res, next) => {
     try {
         const data: { saved?: any, meta?: any, removed?: any, assigned?: any } = {}
         const category: any = await CategoryModel.findById(_id)
-        if (!category) return next({ code: 404, message: 'No category found!' })
+        if (!category) return next({ code: 404, message: 'No category was found!' })
 
         let meta: any
         meta = await MetaModel.findById(category.meta)
@@ -82,7 +82,7 @@ export const getCategoryCtr: RequestHandler = async (req, res, next) => {
             path: 'meta',
             select: 'title description keyprase'
         })
-        if (!category) return next({ code: 404, message: 'No category found!' })
+        if (!category) return next({ code: 404, message: 'No category was found!' })
         const products = await ProductModel.find({ category: { $in: [category._id, ...category.children] } }).select('title images.main url price').populate({
             path: 'images.main',
             select: 'filepath name'
@@ -102,7 +102,7 @@ export const delCategoryCtr: RequestHandler = async (req, res, next) => {
 
     try {
         const category = await CategoryModel.findByIdAndDelete(_id)
-        if (!category) return next({ code: 404, message: 'No category found!' })
+        if (!category) return next({ code: 404, message: 'No category was found!' })
         const meta = await MetaModel.findByIdAndDelete(category.meta)
         if (category.category) await CategoryModel.findByIdAndUpdate(category.category, { $pull: { children: category._id } })
         if (category.children.length) await CategoryModel.updateMany({ category: _id }, { $unset: { category: 1 } })
@@ -118,7 +118,7 @@ export const LisCategoryCtr: RequestHandler = async (req, res, next) => {
 
     try {
         const categories = await CategoryModel.find()
-        if (categories.length < 1) return next({ code: 404, message: 'No category found!' })
+        if (categories.length < 1) return next({ code: 404, message: 'No category was found!' })
         res.json({ status: 200, message: 'Category found', data: categories })
     } catch (e) {
         next(e)

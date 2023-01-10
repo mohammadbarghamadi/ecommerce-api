@@ -14,7 +14,7 @@ import {
 } from '../controllers/comment.js'
 
 
-router.route('/view/:commentId').get(Auth, viwCommentCtr)
+router.route('/get/:commentId').get(Auth, viwCommentCtr)
 router.route('/add').post(NoAuth, addCommentCtr)
 router.route('/show/:prodId').get(shwCommentCtr)
 router.route('/list').get(Auth, Role(ROLES.Customer), lisCommentCtr)

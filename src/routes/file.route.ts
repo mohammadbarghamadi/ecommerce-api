@@ -25,7 +25,7 @@ router.route('/upload').post(
 )
 router.route('/update/:fileId').patch(Auth, Role(ROLES.Seller, Access.Higher), fileUpdateCtr)
 router.route('/delete/:fileId').delete(Auth, Role(ROLES.Seller, Access.Higher), fileDeleteCtr)
-router.route('/view/:fileId').get(Auth, Role(ROLES.Seller, Access.Higher), fileViewCtr)
+router.route('/get/:fileId').get(Auth, Role(ROLES.Seller, Access.Higher), fileViewCtr)
 router.route('/list').get(Auth, Role(ROLES.Seller, Access.Higher), fileListCtr)
 
 

@@ -13,7 +13,7 @@ export const getProdCtr: RequestHandler = async (req, res, next) => {
         const product = await ProductModel.findById(_id).populate({
             path: 'images.main images.gallery category tag meta'
         })
-        if (!product) return next({ code: 404, message: "No product found!" })
+        if (!product) return next({ code: 404, message: "No product was found!" })
         res.json({ status: 200, data: product, message: "Product found." })
     } catch (e) {
         next(e)
@@ -27,11 +27,11 @@ export const listProdCtr: RequestHandler = async (req, res, next) => {
     const { createdAt, updatedAt, limit, skip, price } = queryHandler(req.query)
     try {
         const products = await ProductModel.find().populate({
-            path: 'images.main category tag',
+            path: 'images.main images.gallery category tag comments',
             select: 'filepath name url'
 
         }).limit(limit).skip(skip).sort({ price }).sort({ createdAt })
-        if (!products.length) return next({ code: 404, message: 'No product found!' })
+        if (!products.length) return next({ code: 404, message: 'No product was found!' })
         res.json({ status: 200, data: products, message: 'Products found' })
 
     } catch (e) {
@@ -45,12 +45,13 @@ export const addProdCtr: RequestHandler = async (req, res, next) => {
 
     const isValidRB = isValidReq(req.body, ['title', 'excerpt', 'content', 'images', 'category', 'tag', 'meta', 'price', 'owner', 'url'])
     if (!isValidRB) return next({ code: 400, message: 'Invalid Request' })
+
     try {
 
-        const newMeta = new MetaModel(req.body.meta)
+        const newMeta = new MetaModel({...req.body.meta})
         delete req.body.meta
-
         const newProduct = new ProductModel({ ...req.body, owner: req.cred.user._id, meta: newMeta._id })
+        newMeta.link = newProduct._id
 
         const meta = await newMeta.save()
         const product = await newProduct.save()
@@ -71,7 +72,7 @@ export const updateProdCtr: RequestHandler = async (req, res, next) => {
     try {
         if (req.cred.user.role! <= ROLES.Admin) product = await ProductModel.findOne({ _id })
         else product = await ProductModel.findOne({ _id, owner: req.cred.user._id })
-        if (!product) return next({ code: 404, message: 'No product found!' })
+        if (!product) return next({ code: 404, message: 'No product was found!' })
 
         let meta: any
         meta = await MetaModel.findById(product.meta._id)
@@ -103,7 +104,7 @@ export const deleteProdCtr: RequestHandler = async (req, res, next) => {
     try {
         if (req.cred.user.role! <= ROLES.Admin) product = await ProductModel.findOneAndDelete({ _id })
         else product = await ProductModel.findOneAndDelete({ _id, owner: req.cred.user._id })
-        if (!product) return next({ code: 404, message: 'No product found!' })
+        if (!product) return next({ code: 404, message: 'No product was found!' })
         res.json({ status: 200, message: 'The product deleted!', data: product })
     } catch (e) {
         next(e)

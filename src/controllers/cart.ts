@@ -19,14 +19,14 @@ export const addCartCtr: RequestHandler = async (req, res, next) => {
 
         if (!oldCart) {
             const product = await ProductModel.findById(req.body.prodId)
-            if (!product) return next({ code: 404, message: 'No product found!' })
+            if (!product) return next({ code: 404, message: 'No product was found!' })
             const newCart = new CartModel({ list: [{ prodId: product._id, price: product.price, quantity: req.body.quantity }], userId: req.cred.user._id, })
             data = await newCart.save()
             message = 'A new cart created.'
         } else {
             let isSameProdId = false
             const product = await ProductModel.findById(req.body.prodId)
-            if (!product) return next({ code: 404, message: 'No product found!' })
+            if (!product) return next({ code: 404, message: 'No product was found!' })
 
             oldCart.list = oldCart.list.filter(item => {
                 if (product._id.equals(item.prodId)) {

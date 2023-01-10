@@ -9,7 +9,7 @@ type FileSizeLimit = () => void
 // look for file pay exist
 export const fpExist: RequestHandler = (req, res, next) => {
 
-    if (!req.files) return res.json({ status: 404, message: 'No file found!' })
+    if (!req.files) return res.json({ status: 404, message: 'No file was found!' })
     next()
 
 }
