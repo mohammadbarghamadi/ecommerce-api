@@ -7,12 +7,12 @@ const router = Router()
 import {
 
     listOrderCtr,
-    viewOrderCtr
+    getOrderCtr
 
 } from '../controllers/order.js'
 
 router.route('/list').get(Auth, listOrderCtr)
-router.route('/view/:orderId').get(Auth, viewOrderCtr)
+router.route('/get/:orderId').get(Auth, getOrderCtr)
 
 
 export default router

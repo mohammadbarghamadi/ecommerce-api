@@ -19,7 +19,7 @@ export const listOrderCtr: RequestHandler = async (req, res, next) => {
 }
 
 // view an order /api/orde/view/:orderId:get
-export const viewOrderCtr: RequestHandler = async (req, res, next) => {
+export const getOrderCtr: RequestHandler = async (req, res, next) => {
 
     const _id = req.params.orderId
     let order
