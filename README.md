@@ -220,3 +220,52 @@ POST: http://localhost:8000/api/user/signup
     "message": "New user created!"
 }
 ```
+
+### ورود به برنامه
+
+برای ورود به برنامه به آدرس زیر با متد Post ریکوست ارسال کنید:
+
+POST: http://localhost:8000/api/user/signin
+
+
+| فیلد | نوع | توضیحات |
+| :---:  | :---:  |  ---: |
+| username | string | آدرس ایمیل یا شماره موبایل کاربر ثبت نام شده |
+| password | string | رمز عبور حساب کاربر |
+
+
+نمونه ریکوست:
+
+```
+{
+    "phone": "9304551004",
+    "password": "83d43c6e56bb7af02962ce0f"
+}
+```
+
+### مقدار بازگشتی:
+
+در صورتیکه فرایند ورود به برنامه موفقیت آمیز باشد همراه با پاسخ یک توکن در هدر به سمت کاربر ارسال میشود که نام آن authToken است و برای ارسال ریکویست های بعدی (احراز هویت شده) میتوانید از این توکن استفاده کنید.
+```
+{
+    "status": 200,
+    "data": {
+        "_id": "63bfba9f3c79dfd0eb8d0dae",
+        "name": "Mohammad Barghamadi",
+        "email": "mohammadbarghamadi@gmail.com",
+        "phone": "9304551004",
+        "role": 2000,
+        "createdAt": "2023-01-12T07:45:35.044Z",
+        "updatedAt": "2023-01-12T08:15:44.581Z",
+        "__v": 1
+    },
+    "message": "User signed in."
+}
+```
+در صورت اشتباه بودن نام کاربری یا رمز عبور مقدار بازگشتی به صورت زیر میشود:
+```
+{
+    "success": false,
+    "error": "Invalid Credentials!"
+}
+```
