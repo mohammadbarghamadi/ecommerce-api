@@ -111,5 +111,65 @@
 - ویرایش آدرس
 - حذف آدرس
 
-# مستندات ارسال ریکوست
+## مستندات ارسال ریکوست
 
+برای اجرا و استفاده از Ecommerce API مستندات مذکور در این بخش را به صورت کامل مطالعه کرده و طبق دستورالعمل پیش روید.
+
+### اجرای برنامه در سیستم شخصی
+برای اجرای برنامه در سیستم شخصی باید نرم افزار ها و ماژول های زیر را در سیستم خود نصب داشته باشید و یا آنها را نصب کنید:
+```
+Node.js ==> https://nodejs.org/en
+TypeScript ==> https://www.typescriptlang.org/download
+Mongodb ==> https://www.mongodb.com
+NPM ==> https://www.npmjs.com/
+```
+```
+bcrypt: 5.1.0
+cookie-parser: 1.4.6
+cors: 2.8.5
+express: 4.18.2
+express-fileupload: 1.4.0
+jsonwebtoken: 8.5.1
+mongoose: .8.0
+nodemailer: 6.8.0
+dotenv: 16.0.3
+```
+در صورتیکه برنامه Nodejs را در سیستم خود نصب داشته باشید با اجرای دستور زیر در پوشه پروژه کلیه ماژولهای مورد نیاز به صورت خودکار نصب خواهند شد:
+```
+npm install
+```
+برای نصب TypeScript میتوانید از دستور زیر استفاده کنید:
+```
+npm install typescript
+```
+### تنظیم متغیر های محیطی
+
+بعد از نصب برنامه ها و ماژول های مورد نیاز یک فایل با نام .env در پوشه اصلی پروژه ایجاد کنید و متغیر های زیر را در آن ایجاد کنید:
+```
+PORT=8000
+# پورت دسترسی به برنامه
+DB_URI=mongodb://127.0.0.1:27017/
+# آدرس دسترسی به سرور Mongodb میتواند Mongodb Atlas یا Local Database باشد
+DB_NAM=ecommerce
+# نام پایگاه داده
+JWT_SECRET_KEY=7b51677da05da7ebcd4be6499ea87cfe31f5a7af9552ad234e2b52dd934ec
+# یک مقدار تصادفی 30 بایتی برای متد ساین JWT
+
+EMAIL_USER=email@example.com
+EMAIL_PASS=password
+EMAIL_SERV=mail.example.com
+# آدرس ایمیل و رمز عبور و میل سرور خود را در این سه فیلد به ترتیب وارد کنید.
+
+ZARIN_PAY_MERCHANT=merchantId
+ZARIN_PAY_ADDRESS=https://api.zarinpal.com/pg/v4/payment/request.json
+ZARIN_PAY_PGSTART=https://www.zarinpal.com/pg/StartPay/
+PAYMENT_CALLBACK_URL=http://localhost:3000/checkout
+# در این بخش اطلاعات درگاه پرداخت را باید پر کنید که در حال حاضر فقط درگاه پرداخت زرین پال قابل استفاده است.
+```
+### اجرای بک اند
+
+بعد از نصب برنامه ها و ماژول های مورد نیاز و تنظیم متغیر های محیطی در فایل .env نوبت به اجرای ایکامرس ای پی آی میرسد. برای این منظور کافیست از دستورات زیر استفاده کنید:
+tsc -w
+npm run dev
+دستور tsc فایلهای تایپ اسکریپت را به JavaScript تبدیل میکند و آنها را در پوشه dist ذخیره میکند. سپس دستور npm run dev برنامه را در حالت توسعه اجرا میکند.
+نکته: برای اجرای برنامه به صورت عادی میتوانید از npm start استفاده کنید.
