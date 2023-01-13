@@ -138,7 +138,7 @@ export const userDeleteCtr: RequestHandler = async (req, res, next) => {
     try {
         const user = req.cred.user.delete()
         if (!user) return next({ code: 404, message: 'User not found!' })
-        res.json({ status: 200, message: 'Your account removed!', data: user })
+        res.json({ status: 200, message: 'Your account removed!' })
     } catch (e) {
         next(e)
     }
