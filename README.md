@@ -197,7 +197,7 @@ POST: {{URL}}/api/user/signup
 | role | number | غیر قابل انتخاب (پیشفرض مشتری) |
 
 نمونه ریکوست:
-```
+``` json
 {
     "name": "Mohammad Barghamadi",
     "email": "mohammadbarghamadi@gmail.com",
@@ -208,7 +208,7 @@ POST: {{URL}}/api/user/signup
 مقدار بازگشتی:
 
 اگر فرایند ثبت نام به صورت صحیح و درست انجام شود خروجی مقدار بازگشتی به صورت زیر میباشد:
-```
+``` json
 {
     "status": 200,
     "data": {
@@ -278,7 +278,7 @@ POST: {{URL}}/api/user/signin
 
 برای خروج از برنامه با متد Post به آدرس زیر ریکوست ارسال کنید، به طور پیشفرض توکن احراز هویت که به صورت HttpOnly در Cookie ذخیره شده به برنامه ارسال می‌شود.
 
-Post: {{URL}}/api/user/signout
+POST: {{URL}}/api/user/signout
 
 نکته: با ارسال این ریکوست توکن از حساب کاربری در پایگاه داده حذف شده و فاقد اعتبار میشود.
 
@@ -294,7 +294,7 @@ Post: {{URL}}/api/user/signout
 
 برای خروج از همه دستگاه ها بجز دستگاه فعلی که با آن به برنامه وارد شده اید میبایست به آدرس زیر با متد Post ریکوست ارسال کنید:
 
-Post: {{URL}}/api/user/signoutall
+POST: {{URL}}/api/user/signoutall
 
 مقدار بازگشتی:
 ``` json
@@ -307,7 +307,7 @@ Post: {{URL}}/api/user/signoutall
 
 برای دریافت پروفایل کاربر به آدرس زیر با متد Get ریکوست ارسال کنید.
 
-Get: {{URL}}/api/user/profile
+GET: {{URL}}/api/user/profile
 
 مقدار بازگشتی:
 ``` json
@@ -330,7 +330,7 @@ Get: {{URL}}/api/user/profile
 
 بای بروز رسانی پروفایل کاربر به آدرس زیر با متد Patch ریکوست ارسال کنید:
 
-Patch: {{URL}}/api/user/update
+PATCH: {{URL}}/api/user/update
 
 | فیلد | نوع | توضیحات |
 | :---:  | :---:  |  ---: |
@@ -341,7 +341,7 @@ Patch: {{URL}}/api/user/update
 | role | number | غیر قابل تغییر (فقط مدیر میتواند تغییر دهد) |
 
 نمونه ریکوست:
-```
+``` json
 {
     "password": "mynewpassword"
 }
@@ -375,7 +375,7 @@ Patch: {{URL}}/api/user/update
 
 در صورت فراموشی رمز عبور به آدرس زیر با متد Post ریکوست ارسال کنید:
 
-Post: {{URL}}/api/user/forgot
+POST: {{URL}}/api/user/forgot
 
 | فیلد | نوع | توضیحات |
 | :---:  | :---:  |  ---: |
@@ -397,7 +397,7 @@ Post: {{URL}}/api/user/forgot
 
 برای بازیابی رمز عبور ریکوست خود را به آدرس زیر با متد Post ارسال کنید.
 
-Post: {{URL}}/api/user/reset/4447f4ea8917250b4bdf3f3d1946f42f977
+POST: {{URL}}/api/user/reset/4447f4ea8917250b4bdf3f3d1946f42f977
 
 | فیلد | نوع | توضیحات |
 | :---:  | :---:  |  ---: |
@@ -431,12 +431,216 @@ Post: {{URL}}/api/user/reset/4447f4ea8917250b4bdf3f3d1946f42f977
 
 برای حذف حساب کاربری با متد Delete یک ریکوست به آدرس زیر بفرستید:
 
-Delete: {{URL}}/user/delete
+DELETE: {{URL}}/user/delete
 
 مقدار بازگشتی:
 ``` json
 {
     "status": 200,
     "message": "Your account removed!"
+}
+```
+
+### فهرست گیری از کاربران
+
+برای فهرست گرفتن کاربران ثبت نام شده باید به آدرس زیر با متد Get ریکوست ارسال کنید:
+
+POST: {{URL}}/user/list
+
+کوئری های قابل استفاده:
+
+| کلید | مقدار | توضیحات |
+| :---:  | :---:  |  ---: |
+| csort | asc\dsc | مقدار dsc کاربران را بر اساس تاریخ ثبت نام منظم میکند |
+| limit | N | عدد مورد نظر برای محدود کردن تعداد دیتاهای بازگشتی |
+| skip | N | عدد مورد نظر برای رد شدن از دیتاهای بازگشتی |
+
+نمونه ریکوست:
+
+{{URL}}/user/list?csort=dsc&limit=10&skip=10
+
+نمونه پاسخ:
+
+``` json
+{
+    "status": 200,
+    "data": [
+        {
+            "_id": "63c235facb76f81556b2df72",
+            "name": "Deyl Karnegi",
+            "email": "deylkarnegi@gmail.com",
+            "phone": "9304551013",
+            "role": 2000,
+            "createdAt": "2023-01-14T04:56:26.124Z",
+            "updatedAt": "2023-01-14T04:56:26.124Z",
+            "__v": 0
+        },
+        {
+            "_id": "63c23625cb76f81556b2df74",
+            "name": "Esther Hicks",
+        },
+        {
+            "_id": "63c2364bcb76f81556b2df76",
+            "name": "Jerry Hicks",
+        }
+    ]
+}
+```
+### جستجو در کاربران
+
+برای جستجو در بین کاربران به آدرس زیر با متد Get یک ریکوست ارسال کنید:
+
+GET: {{URL}}/user/search
+
+
+| کلید | مقدار | توضیحات |
+| :---:  | :---:  |  ---: |
+| keyphrase | string | در جلوی کلیدواژه مقدار مورد نظر خود را جستجو کنید. |
+| csort | asc\dsc | مقدار dsc کاربران را بر اساس تاریخ ثبت نام منظم میکند |
+| limit | N | عدد مورد نظر برای محدود کردن تعداد دیتاهای بازگشتی |
+| skip | N | عدد مورد نظر برای رد شدن از دیتاهای بازگشتی |
+
+نمونه ریکوست:
+
+{{URL}}/user/search?keyphrase=mohammad
+
+مقدار بازگشتی:
+
+``` json
+{
+    "status": 200,
+    "data": [
+        {
+            "_id": "63c23094cb76f81556b2df3a",
+            "name": "Mohammad Barghamadi",
+            "email": "mohammadbarghamadi@gmail.com",
+            "phone": "9304551004",
+            "role": 1100,
+            "createdAt": "2023-01-14T04:33:24.124Z",
+            "updatedAt": "2023-01-14T04:33:26.712Z",
+            "__v": 1
+        }
+    ]
+}
+```
+نکته: اگر چیزی یافت نشود مقدار دیتا خالی باز میگردد.
+
+
+ساخت حساب کاربری
+برای ساخت حساب کاربری در برنامه به آدرس زیر با متد Post ریکوست ارسال کنید:
+
+POST: {{URL}}/user/create
+
+
+| فیلد | نوع | توضیحات |
+| :---:  | :---:  |  ---: |
+| name* | string | نام و نام خانوادگی کاربر |
+| email* | string | آدرس ایمیل کاربر |
+| phone | string | شماره موبایل کاربر |
+| password* | string | رمز عبور کاربر |
+| role | number | رووت: 1000 ادمین: 1100 فروشنده: 1500 مشتری: 2000 |
+
+
+نکته: اگر سطح دسترسی شما پایین تر از مدیریت باشد نمی‌توانید به این بخش ریکوست ارسال کنید و همچنین فقط مدیر اصلی (1000) میتواند حساب کاربری مدیر اصلی (1000) را ایجاد کند.
+
+حساب های مدیریت (1100) میتوانند حساب مدیرت و حساب های فروشنده و مشتری را ایجاد و ویرایش کنند.
+
+نمونه ریکوست: 
+
+``` json
+{
+    "name": "Rhonda Byrne",
+    "email": "rhondabyrne@gmail.com",
+    "phone": "9304551016",
+    "password": "themagicsecret",
+    "role": 1500
+}
+```
+نمونه پاسخ:
+
+``` json
+{
+    "status": 200,
+    "data": {
+        "name": "Rhonda Byrne",
+        "email": "rhondabyrne@gmail.com",
+        "phone": "9304551016",
+        "role": 1500,
+        "_id": "63c24c0f2d0db7ae22d57b89",
+        "createdAt": "2023-01-14T06:30:39.910Z",
+        "updatedAt": "2023-01-14T06:30:39.910Z",
+        "__v": 0
+    },
+    "message": "New user created!"
+}
+```
+### ویرایش حساب کاربری
+
+برای ویرایش حساب های کاربری با متد Patch به آدرس زیر ریکوست ارسال کنید:
+
+PATCH: {{URL}}/user/edit/userId
+
+| فیلد | نوع | توضیحات |
+| :---:  | :---:  |  ---: |
+| name* | string | نام و نام خانوادگی کاربر |
+| email* | string | آدرس ایمیل کاربر |
+| phone | string | شماره موبایل کاربر |
+| password* | string | رمز عبور کاربر |
+| role | number | رووت: 1000 ادمین: 1100 فروشنده: 1500 مشتری: 2000 |
+
+نکته: فرایند تغییر نقش کاربر همانند ایجاد کاربر میباشد. یعنی حساب Root دسترسی کامل در تغییر کاربران دارد و حساب ادمین فقط میتواند سطح خود و فروشنده ها و مشتری ها را تا به سطح ادمین افزایش دهد.
+نمونه ریکوست:
+
+PATCH: {{URL}}/user/edit/63c24c0f2d0db7ae22d57b89
+
+``` json
+{
+    "role": 1100
+}
+```
+مقدار بازگشتی:
+
+``` json
+{
+    "status": 200,
+    "data": {
+        "_id": "63c24c0f2d0db7ae22d57b89",
+        "name": "Rhonda Byrne",
+        "email": "rhondabyrne@gmail.com",
+        "phone": "9304551016",
+        "role": 1100,
+        "createdAt": "2023-01-14T06:30:39.910Z",
+        "updatedAt": "2023-01-14T07:41:16.935Z",
+        "__v": 0
+    },
+    "message": "User updated!"
+}
+```
+### حذف حساب کاربری
+
+برای حذف یک حساب کاربری به آدرس زیر با متد Delete ریکوست ارسال کنید:
+
+DELETE: {{URL}}/user/remove/userId
+
+نمونه ریکوست:
+
+{{URL}}/user/remove/63c23409cb76f81556b2df60
+
+نمونه پاسخ:
+
+``` json
+{
+    "status": 200,
+    "data": {
+        "_id": "63c23409cb76f81556b2df60",
+        "name": "Jack Cherry",
+        "email": "jackcherry@gmail.com",
+        "phone": "9304551005",
+        "role": 2000,
+        "createdAt": "2023-01-14T04:48:09.351Z",
+        "updatedAt": "2023-01-14T04:48:09.351Z",
+        "__v": 0
+    },
+    "message": "User removed!"
 }
 ```
