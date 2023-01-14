@@ -87,6 +87,8 @@ const userSchema: Schema<UserSchemaInt> = new mongoose.Schema({
     timestamps: true
 })
 
+userSchema.index({ name: 'text', email: 'text' })
+
 
 // remove password and tokens field to prevent user information exposure
 userSchema.methods.toJSON = function () {

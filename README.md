@@ -240,7 +240,7 @@ POST: {{URL}}/api/user/signin
 
 نمونه ریکوست:
 
-```
+``` json
 {
     "phone": "9304551004",
     "password": "83d43c6e56bb7af02962ce0f"
@@ -250,7 +250,7 @@ POST: {{URL}}/api/user/signin
 مقدار بازگشتی:
 
 در صورتیکه فرایند ورود به برنامه موفقیت آمیز باشد همراه با پاسخ یک توکن در هدر به سمت کاربر ارسال میشود که نام آن authToken است و برای ارسال ریکویست های بعدی (احراز هویت شده) میتوانید از این توکن استفاده کنید.
-```
+``` json
 {
     "status": 200,
     "data": {
@@ -267,7 +267,7 @@ POST: {{URL}}/api/user/signin
 }
 ```
 در صورت اشتباه بودن نام کاربری یا رمز عبور مقدار بازگشتی به صورت زیر میشود:
-```
+``` json
 {
     "success": false,
     "error": "Invalid Credentials!"
@@ -283,7 +283,7 @@ Post: {{URL}}/api/user/signout
 نکته: با ارسال این ریکوست توکن از حساب کاربری در پایگاه داده حذف شده و فاقد اعتبار میشود.
 
 مقدار بازگشتی:
-```
+``` json
 {
     "status": 200,
     "message": "signout with success!"
@@ -297,7 +297,7 @@ Post: {{URL}}/api/user/signout
 Post: {{URL}}/api/user/signoutall
 
 مقدار بازگشتی:
-```
+``` json
 {
     "status": 200,
     "message": "Signed out from all devices!"
@@ -310,7 +310,7 @@ Post: {{URL}}/api/user/signoutall
 Get: {{URL}}/api/user/profile
 
 مقدار بازگشتی:
-```
+``` json
 {
     "status": 200,
     "data": {
@@ -348,7 +348,7 @@ Patch: {{URL}}/api/user/update
 ```
 
 مقدار بازگشتی:
-```
+``` json
 {
     "status": 200,
     "data": {
@@ -365,7 +365,7 @@ Patch: {{URL}}/api/user/update
 }
 ```
 خطای بازگشتی در صورت ارسال فیلد نامرتبط:
-```
+``` json
 {
     "success": false,
     "error": "Invalid fields!"
@@ -382,7 +382,7 @@ Post: {{URL}}/api/user/forgot
 | email | string | آدرس ایمیل کاربر |
 
 نمونه ریکوست:
-```
+``` json
 {
     "email": "mohammadbarghamadi@gmail.com"
 }
@@ -404,7 +404,7 @@ Post: {{URL}}/api/user/reset/4447f4ea8917250b4bdf3f3d1946f42f977
 | password | string | رمز عبور جدید کاربر را وارد کنید |
 
 نمونه ریکوست:
-```
+``` json
 {
     "password": "mynewpass"
 }
@@ -413,14 +413,14 @@ Post: {{URL}}/api/user/reset/4447f4ea8917250b4bdf3f3d1946f42f977
 نکته: برای منقضی نشدن توکن حداکثر 10 دقیقه زمان برای کلیک بر روی لینک بازیابی رمز عبور و ارسال رمز عبور دارید.
 
 مقدار بازگشتی:
-```
+``` json
 {
     "status": 200,
     "message": "Your password changed!"
 }
 ```
 مقدار بازگشتی در صورت بروز خطا:
-```
+``` json
 {
     "success": false,
     "error": "Invalid request!"
@@ -434,7 +434,7 @@ Post: {{URL}}/api/user/reset/4447f4ea8917250b4bdf3f3d1946f42f977
 Delete: {{URL}}/user/delete
 
 مقدار بازگشتی:
-```
+``` json
 {
     "status": 200,
     "message": "Your account removed!"
