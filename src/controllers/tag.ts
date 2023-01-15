@@ -43,8 +43,9 @@ export const ediTagCtr: RequestHandler = async (req, res, next) => {
         if (!meta && req.body.meta) {
             meta = new MetaModel({ ...req.body.meta, link: tag._id })
             tag.meta = meta._id
-            delete req.body.meta
         }
+
+        delete req.body.meta
 
         Object.keys(req.body).forEach(item => tag[item] = req.body[item])
 

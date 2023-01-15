@@ -1043,3 +1043,234 @@ DELETE: {{URL}}/cate/delete/categoryId
     "message": "Category deleted"
 }
 ```
+
+### افزودن برچسب
+
+برای افزودن برچسب به آدرس زیر با متد Post ریکوست ارسال کنید:
+
+POST: {{URL}}/tags/add
+
+| فیلد | نوع | توضیحات |
+| :---:  | :---:  |  ---: |
+| name* | string | نام برچسب |
+| url* | string | لینک برچسب |
+| meta | meta | شامل: title – description – keyphrase |
+
+نمونه ریکوست:
+``` json
+{
+    "name": "Node.js",
+    "url": "nodejs",
+    "meta": {
+        "title": "Nodejs Tag",
+        "description": "Latest Nodejs videos and courses and news",
+        "keyphrase": [
+            "nodejs",
+            "node"
+        ]
+    }
+}
+```
+نمونه پاسخ:
+
+``` json
+{
+    "status": 200,
+    "data": {
+        "tag": {
+            "name": "Node.js",
+            "url": "nodejs",
+            "_id": "63c3aee04c7daae474b9b65c",
+            "meta": "63c3aee04c7daae474b9b65d",
+            "__v": 0
+        },
+        "meta": {
+            "title": "Nodejs Tag",
+            "description": "Latest Nodejs videos and courses and news",
+            "keyphrase": [
+                "nodejs",
+                "node"
+            ],
+            "link": "63c3aee04c7daae474b9b65c",
+            "_id": "63c3aee04c7daae474b9b65d",
+            "__v": 0
+        }
+    },
+    "message": "New tag added!"
+}
+```
+### نمایش فهرست برچسب ها
+
+برای گرفتن فهرست کلیه برچسب ها به آدرس زیر با متد Get ریکوست ارسال کنید:
+
+GET: {{URL}}/tags/list
+
+نمونه پاسخ:
+``` json
+{
+    "status": 200,
+    "message": "Tag found",
+    "data": [
+        {
+            "_id": "63bbb75d9753a93e0e9dbaa3",
+            "name": "React.js",
+            "url": "reactjs",
+            "meta": "63bbb75d9753a93e0e9dbaa4",
+            "__v": 0
+        },
+        {
+            "_id": "63bbbe58bae680a81673f7cd",
+            "name": "ReduxJs Posts",
+            "url": "redux",
+            "meta": "63bbbe58bae680a81673f7ce",
+            "__v": 0
+        },
+        {
+            "_id": "63c3aee04c7daae474b9b65c",
+            "name": "Node.js",
+            "url": "nodejs",
+            "meta": "63c3aee04c7daae474b9b65d",
+            "__v": 0
+        }
+    ]
+}
+```
+### نمایش محتوای برچسب
+
+برای دریافت کلیه محصولات افزوده شده به برچسب به آدرس زیر با متد Get ریکوست ارسال کنید:
+
+GET: {{URL}}/tags/get/tagId
+
+نمونه ریکوست:
+``` json
+{
+    "status": 200,
+    "data": {
+        "_id": "63bbb75d9753a93e0e9dbaa3",
+        "name": "React.js",
+        "url": "reactjs",
+        "meta": {
+            "_id": "63bbb75d9753a93e0e9dbaa4",
+            "title": "React.js Archive - Ecommerce API",
+            "description": "Here is some info about React.js and if you want to learn this stuf you have to follow me",
+            "keyphrase": []
+        },
+        "__v": 0
+    },
+    "products": [
+        {
+            "images": {
+                "main": null
+            },
+            "_id": "63aaa7dc465015f29b89fee1",
+            "title": "Frontend dev with React",
+            "price": 98000,
+            "url": "frontend-dev-with-react-68465-1672128476128"
+        },
+        {
+            "images": {
+                "main": null
+            },
+            "_id": "63bcf64ece90d6dbda7696c4",
+            "title": "HTML & CSS Elementry",
+            "price": 124000,
+            "url": "html-css-guide"
+        }
+    ]
+}
+```
+### ویرایش برچسب
+
+برای ویرایش برچسب ها به آدرس زیر با متد Patch ریکوست ارسال کنید:
+
+Patch: {{URL}}/tags/edit/tagId
+
+| فیلد | نوع | توضیحات |
+| :---:  | :---:  |  ---: |
+| name* | string | نام برچسب |
+| url* | string | لینک برچسب |
+| meta | meta | شامل: title – description – keyphrase |
+
+نمونه ریکوست:
+
+{{URL}}/tags/edit/63bbbe58bae680a81673f7cd
+``` json
+{
+    "name": "ReduxJs Posts",
+    "meta": {
+        "title": "Redux js products",
+        "description": "Here is you can find all reduxjs posts and content"
+    }
+}
+```
+نمونه پاسخ:
+
+``` json
+{
+    "status": 200,
+    "data": {
+        "updatedTag": {
+            "_id": "63c3aee04c7daae474b9b65c",
+            "name": "Nodejs Posts",
+            "url": "nodejs",
+            "meta": "63c3aee04c7daae474b9b65d",
+            "__v": 0
+        },
+        "meta": {
+            "_id": "63c3aee04c7daae474b9b65d",
+            "title": "Node.js products",
+            "description": "Here is you can find all nodejs posts and content",
+            "keyphrase": [
+                "nodejs",
+                "node"
+            ],
+            "link": "63c3aee04c7daae474b9b65c",
+            "__v": 0
+        }
+    },
+    "message": "Tag updated!"
+}
+```
+
+### حذف برچسب
+
+برای حذف یک برچسب به آدرس زیر با متد Delete ریکوست ارسال کنید:
+
+DELETE: {{URL}}/tags/delete/tagId
+
+نمونه ریکوست:
+
+{{URL}}/tags/delete/63bbb75d9753a93e0e9dbaa3
+
+نمونه پاسخ:
+
+``` json
+{
+    "status": 200,
+    "data": {
+        "tag": {
+            "_id": "63bbb75d9753a93e0e9dbaa3",
+            "name": "React.js",
+            "url": "reactjs",
+            "meta": "63bbb75d9753a93e0e9dbaa4",
+            "__v": 0
+        },
+        "meta": {
+            "_id": "63bbb75d9753a93e0e9dbaa4",
+            "title": "React.js Archive - Ecommerce API",
+            "description": "Here is some info about React.js and if you want to learn this stuf you have to follow me",
+            "keyphrase": [],
+            "link": "63bbb75d9753a93e0e9dbaa3",
+            "__v": 0
+        },
+        "products": {
+            "acknowledged": true,
+            "modifiedCount": 2,
+            "upsertedId": null,
+            "upsertedCount": 0,
+            "matchedCount": 2
+        }
+    },
+    "message": "tag deleted"
+}
+```
