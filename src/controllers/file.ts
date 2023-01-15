@@ -32,10 +32,11 @@ export const fileUploadCtr: RequestHandler = async (req, res, next) => {
 export const fileUpdateCtr: RequestHandler = async (req, res, next) => {
     const _id = req.params.fileId
     const element = Object.keys(req.body)
-    const isValidRB = isValidReq(req.body, ['name'])
+    const isValidRB = isValidReq(req.body, ['name','userId'])
     if (!isValidRB) return next({ code: 400, message: 'Bad request!' })
+    if (req.cred.user.role > ROLES.Admin && req.body.userId) return next({code: 401, message: 'You have insufficient permission!'}) 
     try {
-        let file:any
+        let file: any
         if (req.cred.user.role <= ROLES.Admin) file = await FileModel.findOne({ _id })
         else file = await FileModel.findOne({ _id, userId: req.cred.user._id })
         if (!file) return next({ code: 404, message: 'No file was found!' })
@@ -84,7 +85,7 @@ export const fileListCtr: RequestHandler = async (req, res, next) => {
         if (req.cred.user.role <= ROLES.Admin) files = await FileModel.find({})
         else files = await FileModel.find({ userId: req.cred.user._id })
         if (!files.length) return next({ code: 404, message: 'No file was found!' })
-        res.json({ status: 200, data: files, message: 'Files retrived.' })
+        res.json({ status: 200, data: files, message: 'Files retrieved.' })
     } catch (e) {
         next(e)
     }

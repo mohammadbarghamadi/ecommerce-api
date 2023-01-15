@@ -176,7 +176,7 @@ export const userCreateCtr: RequestHandler = async (req, res, next) => {
     if (!isValidRB) return next({ message: 'Invalid field', code: 400 })
 
     if (req.cred.user.role !== ROLES.Root)
-        if (req.cred.user.role! >= req.body.role)
+        if (req.cred.user.role >= req.body.role)
             return next({ code: 403, message: `You have insufficient permission!` })
 
     try {
@@ -201,7 +201,7 @@ export const userEditCtr: RequestHandler = async (req, res, next) => {
         if (!user) return next({ code: 404, message: 'User not found!' })
 
         if (req.cred.user.role !== ROLES.Root)
-            if (req.cred.user.role! >= user.role)
+            if (req.cred.user.role >= user.role)
                 return next({ code: 403, message: `You have insufficient permission!` })
 
         element.forEach(item => user[item] = req.body[item])

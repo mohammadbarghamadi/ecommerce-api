@@ -644,3 +644,402 @@ DELETE: {{URL}}/user/remove/userId
     "message": "User removed!"
 }
 ```
+
+### بارگذاری فایل
+
+برای بارگذاری فایل به آدرس زیر با متد Post ریکوست ارسال کنید.
+
+POST: {{URL}}/file/upload
+
+نمونه پاسخ:
+``` json
+{
+    "status": 200,
+    "data": [
+        {
+            "name": "mbp16-silver-gallery2-202110.jpeg",
+            "encoding": "7bit",
+            "size": "208874",
+            "filepath": "dist/files/images/2023/1/15/1673757892069-157159.jpg",
+            "mimetype": "image/jpeg",
+            "md5": "84dc87e1cfb4850cb4bddd75a75997f1",
+            "userId": "63c23094cb76f81556b2df3a",
+            "_id": "63c384c44c7daae474b9b611",
+            "__v": 0
+        }
+    ]
+}
+```
+بارگذاری فایل ها بر اساس تاریخ و نوع فایل میباشد. یعنی اگر فرمت فایل jpg باشد یک پوشه با نام images ایجاد شده و زیر مجموع آن بر اساس تاریخ سال و ماه و روز پوشه ساخته میشود و در نهایت فایل با نام تصادفی و تاریخ همان روز ذخیره میشود. برای مثال:
+
+/files/images/2023/1/15/1673757892069-157159.jpg
+
+به صورت پیشفرض فقط پسوند های jpg,jpeg,png,mpeg با حداکثر حجم 2 مگابایت قابل بارگذاری هستند.
+فایل بارگذاری شده متعلق به کاربری میباشد که آنرا بارگذاری کرده است و دیگر کاربران نمیتوانند به آن دسترسی داشته باشند اما مدیران برنامه میتوانند به کلیه فایل های بارگذاری شده دسترسی داشته باشند.
+
+### فهرست گیری از فایلها
+
+برای فهرست گیری از فایل ها به آدرس زیر با متد Get ریکوست ارسال کنید:
+
+GET: {{URL}}/file/list
+
+نمونه پاسخ:
+
+``` json
+{
+    "status": 200,
+    "data": [
+        {
+            "_id": "63aaa7110c832c33351fb79e",
+            "name": "Image16.jpg",
+            "encoding": "7bit",
+            "size": "652006",
+            "filepath": "/dist/files/images/2022/12/27/1672128273496-997340.jpg",
+            "mimetype": "image/jpeg",
+            "md5": "0a0e1ef9b26931a856852ed90f12aa62",
+            "userId": "63aaa69e0c832c33351fb77e",
+            "__v": 0
+        },
+        {
+            "_id": "63c388b34c7daae474b9b615",
+            "name": "6183d38056d48692be8226c6be39f063.png",
+            "encoding": "7bit",
+            "size": "1605859",
+            "filepath": "/dist/files/images/2023/1/15/1673758899966-6809644.png",
+            "mimetype": "image/png",
+            "md5": "01f092bd23c85e7b2c9166e3aa807ed5",
+            "userId": "63c23094cb76f81556b2df3a",
+            "__v": 0
+        }
+    ],
+    "message": "Files retrived."
+}
+```
+### دریافت یک فایل
+
+برای دریافت یک فایل شناسه آنرا با متد Get به آدرس زیر ارسال کنید:
+
+GET: {{URL}}/file/get/fileId
+
+نمونه ریکوست:
+
+{{URL}}/file/get/63aaa7110c832c33351fb79e
+
+نمونه پاسخ:
+
+``` json
+{
+    "status": 200,
+    "data": {
+        "_id": "63aaa7110c832c33351fb79e",
+        "name": "Image16.jpg",
+        "encoding": "7bit",
+        "size": "652006",
+        "filepath": "/dist/files/images/2022/12/27/1672128273496-997340.jpg",
+        "mimetype": "image/jpeg",
+        "md5": "0a0e1ef9b26931a856852ed90f12aa62",
+        "userId": "63aaa69e0c832c33351fb77e",
+        "__v": 0
+    },
+    "message": "File found."
+}
+```
+### بروز رسانی فایل
+
+برای ویرایش نام یا تغییر مالک فایل میتوانید به آدرس زیر با متد Patch ریکوست ارسال کنید:
+
+PATCH: {{URL}}/file/update/fileId
+
+| فیلد | نوع | توضیحات |
+| :---:  | :---:  |  ---: |
+| name | string | نام جدید فایل |
+| userId | string | شناسه مالک جدید |
+
+فقط حساب های مدیریت میتوانند مالک یک فایل را تغییر دهند.
+
+نمونه ریکوست:
+
+{{URL}}/file/update/63aaa7110c832c33351fb79e
+
+نمونه پاسخ:
+``` json
+{
+    "status": 200,
+    "data": {
+        "_id": "63bcf356ce90d6dbda7696b0",
+        "name": "Apple Laptop",
+        "encoding": "7bit",
+        "size": "208874",
+        "filepath": "/dist/files/images/2023/1/10/1673327446389-6649813.jpeg",
+        "mimetype": "image/jpeg",
+        "md5": "84dc87e1cfb4850cb4bddd75a75997f1",
+        "userId": "63b51152f7daee2dfbd6d28a",
+        "__v": 0
+    },
+    "message": "File updated."
+}
+```
+### حذف یک فایل
+
+برای حذف یک فایل باید به آدرس زیر با متد Delete ریکوست ارسال کنید:
+
+DELETE: {{URL}}/file/delete/fileId
+
+نمونه ریکوست:
+
+{{URL}}/file/delete/63aaa7110c832c33351fb79d
+
+نمونه پاسخ:
+
+``` json
+{
+    "status": 200,
+    "data": {
+        "_id": "63bcf356ce90d6dbda7696b0",
+        "name": "Apple Laptop",
+        "encoding": "7bit",
+        "size": "208874",
+        "filepath": "/home/mohammad/Practice/MERN/ECommerece/dist/files/images/2023/1/10/1673327446389-6649813.jpeg",
+        "mimetype": "image/jpeg",
+        "md5": "84dc87e1cfb4850cb4bddd75a75997f1",
+        "userId": "63b51152f7daee2dfbd6d28a",
+        "__v": 0
+    },
+    "message": "File deleted!"
+}
+```
+
+### افزودن دسته
+
+برای افزودن دسته به آدرس زیر با متد Post ریکوست ارسال کنید:
+
+POST: {{URL}}/cate/add
+
+| فیلد | نوع | توضیحات |
+| :---:  | :---:  |  ---: |
+| name* | string | نام دسته |
+| url* | string | لینک دسته |
+| category | string | شناسه دسته والد |
+| meta | meta | شامل: title – description – keyphrase |
+
+نمونه ریکوست:
+``` json
+{
+    "name": "Backend Development",
+    "url": "backend-dev",
+    "meta": {
+        "title": "Backend Archive - Ecommerce-API",
+        "description": "If you want to learn Backend you should understand its basic and here you can find much good information.",
+        "keyphrase": [
+            "backend",
+            "backend development",
+            "server side"
+        ]
+    }
+}
+```
+نمونه پاسخ:
+``` json
+{
+    "status": 200,
+    "data": {
+        "category": {
+            "name": "Backend Development",
+            "url": "backend-dev",
+            "children": [],
+            "_id": "63c398914c7daae474b9b637",
+            "meta": "63c398914c7daae474b9b638",
+            "__v": 0
+        },
+        "meta": {
+            "title": "Backend Archive - Ecommerce-API",
+            "description": "If you want to learn Backend you should understand its basic and here you can find much good information.",
+            "keyphrase": [
+                "backend",
+                "backend development",
+                "server side"
+            ],
+            "link": "63c398914c7daae474b9b637",
+            "_id": "63c398914c7daae474b9b638",
+            "__v": 0
+        }
+    },
+    "message": "New category added!"
+}
+```
+### فهرست گیری از دسته ها
+
+
+برای فهرست گرفتن از دسته ها به آدرس زیر با متد Get ریکوست ارسال کنید:
+
+GET: {{URL}}/cate/list
+
+نمونه پاسخ:
+``` json
+{
+    "status": 200,
+    "message": "Category found",
+    "data": [
+        {
+            "_id": "63b12f67ff0cf3e6dcfd1d79",
+            "name": "Frontend Dev",
+            "url": "frontend",
+            "children": [
+                "63ba7b18af12483d41a1e454"
+            ],
+            "__v": 0,
+            "meta": "63bbaa15e2459b34c12fa2b0"
+        },
+        {
+            "_id": "63ba7b18af12483d41a1e454",
+            "name": "Javascript",
+            "url": "javascript",
+            "children": [],
+            "meta": "63ba7b18af12483d41a1e455",
+            "__v": 0,
+            "category": "63b12f67ff0cf3e6dcfd1d79"
+        },
+        {
+            "_id": "63c398914c7daae474b9b637",
+            "name": "Backend Development",
+            "url": "backend-dev",
+            "children": [],
+            "meta": "63c398914c7daae474b9b638",
+            "__v": 0
+        }
+    ]
+}
+```
+### نمایش محتوای یک دسته
+
+برای دیدن محتوای یک دسته و محصولات زیر مجموع آن به آدرس زیر با متد Get ریکوست ارسال کنید:
+
+GET: {{URL}}/cate/get/categoryId
+
+نمونه ریکوست:
+
+{{URL}}/cate/get/63b12f67ff0cf3e6dcfd1d79
+
+نمونه پاسخ:
+
+``` json
+{
+    "status": 200,
+    "data": {
+        "category": {
+            "_id": "63b12f67ff0cf3e6dcfd1d79",
+            "name": "Frontend Dev",
+            "url": "frontend",
+            "children": [
+                "63ba7b18af12483d41a1e454"
+            ],
+            "__v": 0,
+            "meta": {
+                "_id": "63bbaa15e2459b34c12fa2b0",
+                "title": "Frontend development - Ecommerce API",
+                "description": "Do you want to become a frontend development? here is the best resources you can use on you path."
+            }
+        },
+        "products": [
+            {
+                "images": {
+                    "main": null
+                },
+                "_id": "63bcf64ece90d6dbda7696c4",
+                "title": "HTML & CSS Elementry",
+                "price": 124000,
+                "url": "html-css-guide"
+            }
+        ]
+    },
+    "message": "Category and its products"
+}
+```
+### ویرایش دسته
+
+برای ویرایش یک دسته به آدرس زیر با متد Patch ریکوست ارسال کنید:
+
+PATCH: {{URL}}/cate/edit/categoryId
+
+| فیلد | نوع | توضیحات |
+| :---:  | :---:  |  ---: |
+| name* | string | نام دسته |
+| url* | string | لینک دسته |
+| category | string | شناسه دسته والد |
+| meta | meta | شامل: title – description – keyphrase |
+
+نمونه ریکوست:
+
+{{URL}}/cate/edit/63b12fb1ff0cf3e6dcfd1d8f
+``` json
+{
+    "category": "63c398914c7daae474b9b637"
+}
+```
+نمونه پاسخ:
+
+``` json
+{
+    "status": 200,
+    "data": {
+        "removed": null,
+        "assigned": {
+            "_id": "63c398914c7daae474b9b637",
+            "name": "Backend Development",
+            "url": "backend-dev",
+            "children": [],
+            "meta": "63c398914c7daae474b9b638",
+            "__v": 0
+        },
+        "saved": {
+            "_id": "63b12fb1ff0cf3e6dcfd1d8f",
+            "name": "GraphQL",
+            "url": "graphql",
+            "children": [],
+            "__v": 0,
+            "category": "63c398914c7daae474b9b637"
+        }
+    },
+    "message": "Category updated!"
+}
+```
+در مثال بالا دسته 63b12fb1ff0cf3e6dcfd1d8f به زیر مجموعه دسته 63c398914c7daae474b9b637 اضافه شد.
+
+### حذف دسته
+
+برای حذف یک دسته به آدرس زیر با متد Delete ریکوست ارسال کنید:
+
+DELETE: {{URL}}/cate/delete/categoryId
+
+نمونه ریکوست:
+
+{{URL}}/cate/delete/63bbaa7ee2459b34c12fa2b7
+
+نمونه پاسخ:
+``` json
+{
+    "status": 200,
+    "data": {
+        "category": {
+            "_id": "63bbaa7ee2459b34c12fa2b7",
+            "name": "Backend Development",
+            "url": "backend-dev",
+            "children": [
+                "63b12f89ff0cf3e6dcfd1d83",
+                "63b12fb1ff0cf3e6dcfd1d8f"
+            ],
+            "meta": "63bbaa7ee2459b34c12fa2b8",
+            "__v": 0
+        },
+        "meta": {
+            "_id": "63bbaa7ee2459b34c12fa2b8",
+            "title": "Backend Archive - Ecommerce-API",
+            "description": "If you want to learn Backend you should understand its basic and here you can find much good information.",
+            "keyphrase": [],
+            "link": "63bbaa7ee2459b34c12fa2b7",
+            "__v": 0
+        }
+    },
+    "message": "Category deleted"
+}
+```
