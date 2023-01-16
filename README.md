@@ -1659,6 +1659,238 @@ PATCH: {{URL}}/prod/update/prodId
 }
 ```
 
+
+
+### افزودن مکان
+
+برای افزودن مکان، (کشور/ایالت|استان/شهر) به آدرس زیر با متد Post ریکوست ارسال کنید:
+
+POST: {{URL}}loca/add
+
+| فیلد | نوع | توضیحات |
+| :---:  | :---:  |  ---: |
+| type* | string | میتواند: COUNTRY – PROVESTATE - CITY |
+| name | string | نام کشور یا استان/ایالت یا شهر |
+| url | string | لینک و یا آدرس |
+| parent | ObjectId | برای انواع CITY و PROVESTATE باید مقدار والد را مشخص کنید |
+
+
+نکته: برای ایجاد کشور مقدار COUNTRY باید وارد شود، برای ایجاد ایالت یا استان باید مقدار PROVESTATE وارد شود و برای ایجاد شهر باید مقدار CITY وارد شود. (فقط حروف بزرگ)
+
+به جز کشور برای استان ها و یا ایالت ها و شهر ها باید مقدار والد آنرا مشخص کنید. مثلا برای ایجاد شهر باید شناسه استان والد آن شهر را وارد کنید و یا برای استان باید شناسه کشور والد آن استان را مشخص کنید.
+
+نمونه ریکوست افزودن کشور:
+
+``` json
+{
+    "type": "COUNTRY",
+    "name": "Iran",
+    "url": "iran"
+}
+```
+نمونه پاسخ:
+
+``` json
+{
+    "status": 200,
+    "data": {
+        "name": "Iran",
+        "url": "iran",
+        "_id": "63c503de7940e7743cce895d",
+        "__v": 0
+    },
+    "message": "Location added."
+}
+```
+نمونه ریکوست افزودن استان:
+
+``` json
+{
+    "type": "PROVESTATE",
+    "name": "Golestan",
+    "url": "golestan",
+    "parent": "63c503de7940e7743cce895d"
+}
+```
+نمونه پاسخ:
+
+``` json
+{
+    "status": 200,
+    "data": {
+        "name": "Golestan",
+        "url": "golestan",
+        "parent": "63c503de7940e7743cce895d",
+        "_id": "63c5048e7940e7743cce8961",
+        "__v": 0
+    },
+    "message": "Location added."
+}
+```
+نمونه ریکوست افزودن شهر:
+
+``` json
+{
+    "type": "CITY",
+    "name": "Gorgan",
+    "url": "gorgan",
+    "parent": "63c5048e7940e7743cce8961"
+}
+```
+نمونه پاسخ:
+
+``` json
+{
+    "status": 200,
+    "data": {
+        "name": "Gorgan",
+        "url": "gorgan",
+        "parent": "63c5048e7940e7743cce8961",
+        "_id": "63c505047940e7743cce8965",
+        "__v": 0
+    },
+    "message": "Location added."
+}
+```
+فهرست گیری از کشور ها:
+
+برای فهرست گرفتن از کلیه کشور ها به آدرس زیر با متد Get ریکوست ارسال کنید:
+
+GET: {{URL}}/loca/list
+
+``` json
+{
+    "status": 200,
+    "data": [
+        {
+            "_id": "63b7d68507808f0582fe2000",
+            "name": "USA",
+            "url": "usa",
+            "__v": 0
+        },
+        {
+            "_id": "63c503de7940e7743cce895d",
+            "name": "Iran",
+            "url": "iran",
+            "__v": 0
+        }
+    ],
+    "message": "Country found."
+}
+```
+
+### نمایش مکان
+
+برای دریافت جزئیات و استان ها و شهر های زیر مجموع یک مکان به آدرس زیر با متد Get ریکوست ارسال کنید:
+
+GET: {{URL}}/loca/get/locationId
+
+| فیلد | نوع | توضیحات |
+| :---:  | :---:  |  ---: |
+| type* | string | میتواند: COUNTRY – PROVESTATE - CITY |
+
+نمونه ریکوست:
+
+{{URL}}/loca/get/63c503de7940e7743cce895d
+
+``` json
+{
+    "type": "COUNTRY"
+}
+```
+نمونه پاسخ:
+
+``` json
+{
+    "status": 200,
+    "data": {
+        "country": {
+            "_id": "63c503de7940e7743cce895d",
+            "name": "Iran",
+            "url": "iran",
+            "__v": 0
+        },
+        "provState": [
+            {
+                "_id": "63c5048e7940e7743cce8961",
+                "name": "Golestan",
+                "url": "golestan",
+                "parent": "63c503de7940e7743cce895d",
+                "__v": 0
+            }
+        ]
+    },
+    "message": "Country found"
+}
+```
+### بروز رسانی یک مکان
+
+برای ویرایش و بروز رسانی یک مکان به آدرس زیر با متد Patch یک ریکوست ارسال کنید:
+
+PATCH: {{URL}}/loca/edit/locationId
+
+| فیلد | نوع | توضیحات |
+| :---:  | :---:  |  ---: |
+| type* | string | میتواند: COUNTRY – PROVESTATE - CITY |
+| name | string | نام کشور یا استان/ایالت یا شهر |
+| url | string | لینک و یا آدرس |
+| parent | ObjectId | برای انواع CITY و PROVESTATE باید مقدار والد را مشخص کنید |
+
+نمونه ریکوست:
+
+{{URL}}/loca/edit/63c505047940e7743cce8965
+
+``` json
+{
+    "type": "CITY",
+    "url": "gorgan",
+    "parent": "63c5048e7940e7743cce8961"
+}
+```
+نمونه پاسخ:
+
+``` json
+{
+    "status": 200,
+    "data": {
+        "_id": "63c505047940e7743cce8965",
+        "name": "Gorgan",
+        "url": "gorgan",
+        "parent": "63c5048e7940e7743cce8961",
+        "__v": 0
+    },
+    "message": "Location updated."
+}
+```
+
+### حذف یک مکان
+
+برای حذف یک مکان به آدرس زیر با متد Delete ریکوست ارسال کنید:
+
+DELETE: {{URL}}/loca/remove/locationId
+
+| فیلد | نوع | توضیحات |
+| :---:  | :---:  |  ---: |
+| type* | string | میتواند: COUNTRY – PROVESTATE - CITY |
+
+نمونه ریکوست:
+
+{{URL}}/loca/remove/63b90bdbe496b54dcbb636f2
+
+``` json
+{
+    "status": 200,
+    "data": {
+        "_id": "63b90bdbe496b54dcbb636f2",
+        "name": "Isfahan",
+        "url": "isfahan",
+        "parent": "63b7d6bf663b803a8b3c9f79",
+        "__v": 0
+    },
+    "message": "This location id: 63b90bdbe496b54dcbb636f2 deleted!"
+}
+```
+
 ### حذف محصول
 
 برای حذف یک محصول به آدرس زیر با متد Delete ریکوست ارسال کنید:
@@ -1701,7 +1933,6 @@ DELETE: {{URL}}/prod/delete/prodId
     }
 }
 ```
-
 
 ### افزودن به سبد خرید
 

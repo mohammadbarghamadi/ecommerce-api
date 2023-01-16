@@ -13,7 +13,7 @@ export const countryListCtr: RequestHandler = async (req, res, next) => {
 
 }
 
-// get country,state/province,city /api/loca/get:localtionId:get
+// get country,state/province,city /api/loca/get:locationId:get
 export const getLocationCtr: RequestHandler = async (req, res, next) => {
 
     const _id = req.params.locationId
@@ -68,10 +68,10 @@ export const addLocationCtr: RequestHandler = async (req, res, next) => {
 
 }
 
-// edit country,state/province,city /api/loca/edit:localtionId:patch
+// edit country,state/province,city /api/loca/edit:locationId:patch
 export const ediLocationCtr: RequestHandler = async (req, res, next) => {
 
-    const _id = req.params.localtionId
+    const _id = req.params.locationId
 
     const isValidRB = isValidReq(req.body, ['name', 'url', 'parent', 'type'])
     if (!isValidRB) return res.status(400).json({ status: 400, message: 'Invalid field!' })
@@ -83,7 +83,7 @@ export const ediLocationCtr: RequestHandler = async (req, res, next) => {
         let location: any
         if (req.body.type === LocationType.Country) location = await CountryModel.findById(_id)
         else if (req.body.type === LocationType.ProvState) location = await ProvStateModel.findById(_id)
-        else if (req.body.type === LocationType.City) location = await CountryModel.findById(_id)
+        else if (req.body.type === LocationType.City) location = await CityModel.findById(_id)
         else return res.status(400).json({ status: 400, message: 'Invalid request!' })
 
         if (!location) return res.status(404).json({ status: 404, message: `This location id: ${_id} not found!` })
@@ -95,10 +95,10 @@ export const ediLocationCtr: RequestHandler = async (req, res, next) => {
 
 }
 
-// remove country,state/province,city /api/loca/remove:localtionId:delete
+// remove country,state/province,city /api/loca/remove:locationId:delete
 export const remLocationCtr: RequestHandler = async (req, res, next) => {
 
-    const _id = req.params.localtionId
+    const _id = req.params.locationId
 
     try {
         let location: any

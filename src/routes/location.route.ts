@@ -18,7 +18,7 @@ import {
 router.route('/list').get(countryListCtr)
 router.route('/get/:locationId').get(getLocationCtr)
 router.route('/add').post(Auth, Role(ROLES.Admin), addLocationCtr)
-router.route('/edit/:locationId').post(Auth, Role(ROLES.Admin), ediLocationCtr)
+router.route('/edit/:locationId').patch(Auth, Role(ROLES.Admin), ediLocationCtr)
 router.route('/remove/:locationId').delete(Auth, Role(ROLES.Admin), remLocationCtr)
 
 
