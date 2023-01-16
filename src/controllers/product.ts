@@ -27,7 +27,7 @@ export const listProdCtr: RequestHandler = async (req, res, next) => {
     const { createdAt, updatedAt, limit, skip, price } = queryHandler(req.query)
     try {
         const products = await ProductModel.find().populate({
-            path: 'images.main images.gallery category tag comments',
+            path: 'images.main images.gallery category tag',
             select: 'filepath name url'
 
         }).limit(limit).skip(skip).sort({ price }).sort({ createdAt })

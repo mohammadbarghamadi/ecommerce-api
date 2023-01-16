@@ -1274,3 +1274,430 @@ DELETE: {{URL}}/tags/delete/tagId
     "message": "tag deleted"
 }
 ```
+
+
+
+
+
+
+
+### افزودن محصول
+
+برای ایجاد یا افزودن محصول به آدرس زیر با متد Post ریکوست ارسال کنید:
+
+POST: {{URL}}/prod/add
+
+| فیلد | نوع | توضیحات |
+| :---:  | :---:  |  ---: |
+| title | string | عنوان محصول |
+| excerpt | string | توضیحات مختصر درباره محصول |
+| content |  string| توضیحات کامل محصول به همراه جزئیات |
+| price | number | قیمت محصول |
+| url | string | آدرس لینک مستقیم محصول |
+| images | ObjectId | شامل: تصویر اصلی (main) و گالری تصاویر ([]Gallery) |
+| category | []ObjectId | آرایه ای از شناسه دسته ها |
+| tag | []ObjectId | آرایه ای از شناسه برچسب ها |
+| owner | ObjectId | شناسه مالک محصول (به صورت پیشفرض شخص سازنده است) |
+| meta |  meta| شامل: title – description – keyphrase |
+
+نمونه ریکوست:
+
+``` json
+{
+    "title": "Reactjs Study Guide",
+    "excerpt": "short description to introduce this product",
+    "content": "complete description and detail about this product",
+    "price": 124000,
+    "url": "reactjs-guide",
+    "images": {
+        "main": "63aaa7110c832c33351fb79e",
+        "gallery": [
+            "63c388b34c7daae474b9b615",
+            "63aaa7110c832c33351fb79e"
+        ]
+    },
+    "category": [
+        "63b12f67ff0cf3e6dcfd1d79"
+    ],
+    "tag": [
+        "63bbbe58bae680a81673f7cd",
+        "63c3aee04c7daae474b9b65c"
+    ],
+    "meta": {
+        "title": "Reactjs Study Guide",
+        "description": "If you want to learn Reactjs here I will teach you how you can build a frontend app"
+    }
+}
+```
+نمونه پاسخ:
+``` json
+{
+    "status": 200,
+    "message": "New product added.",
+    "data": {
+        "meta": {
+            "title": "Reactjs Study Guide",
+            "description": "If you want to learn Reactjs here I will teach you how you can build a frontend app",
+            "keyphrase": [],
+            "_id": "63c4dc6213d8575602ccf5de",
+            "link": "63c4dc6213d8575602ccf5df",
+            "__v": 0
+        },
+        "product": {
+            "title": "Reactjs Study Guide",
+            "excerpt": "short description to introduce this product",
+            "content": "complete description and detail about this product",
+            "price": 124000,
+            "url": "reactjs-guide",
+            "images": {
+                "main": "63aaa7110c832c33351fb79e",
+                "gallery": [
+                    "63c388b34c7daae474b9b615",
+                    "63aaa7110c832c33351fb79e"
+                ]
+            },
+            "category": [
+                "63b12f67ff0cf3e6dcfd1d79"
+            ],
+            "tag": [
+                "63bbbe58bae680a81673f7cd",
+                "63c3aee04c7daae474b9b65c"
+            ],
+            "meta": "63c4dc6213d8575602ccf5de",
+            "owner": "63c23094cb76f81556b2df3a",
+            "_id": "63c4dc6213d8575602ccf5df",
+            "createdAt": "2023-01-16T05:10:58.314Z",
+            "updatedAt": "2023-01-16T05:10:58.314Z",
+            "__v": 0
+        }
+    }
+}
+```
+### نمایش محتوای محصول
+
+برای دیدن جزئیات یک محصول میتوانید به آدرس زیر با متد Get ریکوست ارسال کنید:
+
+GET: {{URL}}/prod/get/prodId
+
+نمونه ریکوست:
+
+{{URL}}/prod/get/63c4dc6213d8575602ccf5df
+
+نمونه پاسخ:
+
+``` json
+{
+    "status": 200,
+    "data": {
+        "images": {
+            "main": {
+                "_id": "63aaa7110c832c33351fb79e",
+                "name": "Image16.jpg",
+                "encoding": "7bit",
+                "size": "652006",
+                "filepath": "/home/mohammad/Practice/MERN/ECommerece/dist/files/images/2022/12/27/1672128273496-997340.jpg",
+                "mimetype": "image/jpeg",
+                "md5": "0a0e1ef9b26931a856852ed90f12aa62",
+                "userId": "63aaa69e0c832c33351fb77e",
+                "__v": 0
+            },
+            "gallery": [
+                {
+                    "_id": "63c388b34c7daae474b9b615",
+                    "name": "6183d38056d48692be8226c6be39f063.png",
+                    "encoding": "7bit",
+                    "size": "1605859",
+                    "filepath": "/home/mohammad/Practice/MERN/ECommerece/dist/files/images/2023/1/15/1673758899966-6809644.png",
+                    "mimetype": "image/png",
+                    "md5": "01f092bd23c85e7b2c9166e3aa807ed5",
+                    "userId": "63c23094cb76f81556b2df3a",
+                    "__v": 0
+                },
+                {
+                    "_id": "63aaa7110c832c33351fb79e",
+                    "name": "Image16.jpg",
+                    "encoding": "7bit",
+                    "size": "652006",
+                    "filepath": "/home/mohammad/Practice/MERN/ECommerece/dist/files/images/2022/12/27/1672128273496-997340.jpg",
+                    "mimetype": "image/jpeg",
+                    "md5": "0a0e1ef9b26931a856852ed90f12aa62",
+                    "userId": "63aaa69e0c832c33351fb77e",
+                    "__v": 0
+                }
+            ]
+        },
+        "_id": "63c4dc6213d8575602ccf5df",
+        "title": "Reactjs Study Guide",
+        "excerpt": "short description to introduce this product",
+        "content": "complete description and detail about this product",
+        "price": 124000,
+        "url": "reactjs-guide",
+        "category": [
+            {
+                "_id": "63b12f67ff0cf3e6dcfd1d79",
+                "name": "Frontend Dev",
+                "url": "frontend",
+                "children": [
+                    "63ba7b18af12483d41a1e454"
+                ],
+                "__v": 0,
+                "meta": "63bbaa15e2459b34c12fa2b0"
+            }
+        ],
+        "tag": [
+            {
+                "_id": "63bbbe58bae680a81673f7cd",
+                "name": "ReduxJs Posts",
+                "url": "redux",
+                "meta": "63bbbe58bae680a81673f7ce",
+                "__v": 0
+            },
+            {
+                "_id": "63c3aee04c7daae474b9b65c",
+                "name": "Nodejs Posts",
+                "url": "nodejs",
+                "meta": "63c3aee04c7daae474b9b65d",
+                "__v": 0
+            }
+        ],
+        "meta": {
+            "_id": "63c4dc6213d8575602ccf5de",
+            "title": "Reactjs Study Guide",
+            "description": "If you want to learn Reactjs here I will teach you how you can build a frontend app",
+            "keyphrase": [],
+            "link": "63c4dc6213d8575602ccf5df",
+            "__v": 0
+        },
+        "owner": "63c23094cb76f81556b2df3a",
+        "createdAt": "2023-01-16T05:10:58.314Z",
+        "updatedAt": "2023-01-16T05:10:58.314Z",
+        "__v": 0
+    },
+    "message": "Product found."
+}
+```
+
+### فهرست گرفتن از محصولات
+
+برای فهرست گرفتن از کلیه محصولات به آدرس زیر با متد Get ریکوست ارسال کنید:
+
+GET: {{URL}}/prod/list
+
+نمونه ریکوست:
+
+``` json
+{
+    "status": 200,
+    "data": [
+        {
+            "images": {
+                "main": {
+                    "_id": "63aaa7110c832c33351fb79e",
+                    "name": "Image16.jpg",
+                    "filepath": "/dist/files/images/2022/12/27/1672128273496-997340.jpg"
+                },
+                "gallery": [
+                    {
+                        "_id": "63aaa7110c832c33351fb79e",
+                        "name": "Image16.jpg",
+                        "filepath": "/dist/files/images/2022/12/27/1672128273496-997340.jpg"
+                    }
+                ]
+            },
+            "_id": "63ad11e3d7261f57cfbb4566",
+            "title": "Backend dev with Nodejs",
+            "excerpt": "You will learn how to use some advanced tools such as Nodejs work",
+            "content": "Here is I have to describe tutorial detail",
+            "price": 98000,
+            "category": [
+                {
+                    "_id": "63b12fb1ff0cf3e6dcfd1d8f",
+                    "name": "GraphQL",
+                    "url": "graphql"
+                }
+            ],
+            "tag": [],
+            "meta": "63ad11e3d7261f57cfbb4565",
+            "owner": "63aaa69e0c832c33351fb77e",
+            "comments": [],
+            "createdAt": "2022-12-29T04:04:51.815Z",
+            "updatedAt": "2023-01-01T09:45:09.732Z",
+            "url": "backend-dev-with-nodejs-58949-1672286691815",
+            "__v": 4
+        },
+        {
+            "images": {
+                "main": {
+                    "_id": "63aaa7110c832c33351fb79e",
+                    "name": "Image16.jpg",
+                    "filepath": "/dist/files/images/2022/12/27/1672128273496-997340.jpg"
+                },
+                "gallery": [
+                    {
+                        "_id": "63c388b34c7daae474b9b615",
+                        "name": "6183d38056d48692be8226c6be39f063.png",
+                        "filepath": "/dist/files/images/2023/1/15/1673758899966-6809644.png"
+                    },
+                    {
+                        "_id": "63aaa7110c832c33351fb79e",
+                        "name": "Image16.jpg",
+                        "filepath": "/dist/files/images/2022/12/27/1672128273496-997340.jpg"
+                    }
+                ]
+            },
+            "_id": "63c4dc6213d8575602ccf5df",
+            "title": "Reactjs Study Guide",
+            "excerpt": "short description to introduce this product",
+            "content": "complete description and detail about this product",
+            "price": 124000,
+            "url": "reactjs-guide",
+            "category": [
+                {
+                    "_id": "63b12f67ff0cf3e6dcfd1d79",
+                    "name": "Frontend Dev",
+                    "url": "frontend"
+                }
+            ],
+            "tag": [
+                {
+                    "_id": "63bbbe58bae680a81673f7cd",
+                    "name": "ReduxJs Posts",
+                    "url": "redux"
+                },
+                {
+                    "_id": "63c3aee04c7daae474b9b65c",
+                    "name": "Nodejs Posts",
+                    "url": "nodejs"
+                }
+            ],
+            "meta": "63c4dc6213d8575602ccf5de",
+            "owner": "63c23094cb76f81556b2df3a",
+            "createdAt": "2023-01-16T05:10:58.314Z",
+            "updatedAt": "2023-01-16T05:10:58.314Z",
+            "__v": 0
+        }
+    ],
+    "message": "Products found"
+}
+```
+### ویرایش محصول
+
+برای ویرایش و بروز رسانی یک محصول به آدرس زیر با متد Patch ریکوست ارسال کنید:
+
+PATCH: {{URL}}/prod/update/prodId
+
+| فیلد | نوع | توضیحات |
+| :---:  | :---:  |  ---: |
+| title | string | عنوان محصول |
+| excerpt | string | توضیحات مختصر درباره محصول |
+| content |  string| توضیحات کامل محصول به همراه جزئیات |
+| price | number | قیمت محصول |
+| url | string | آدرس لینک مستقیم محصول |
+| images | ObjectId | شامل: تصویر اصلی (main) و گالری تصاویر ([]Gallery) |
+| category | []ObjectId | آرایه ای از شناسه دسته ها |
+| tag | []ObjectId | آرایه ای از شناسه برچسب ها |
+| owner | ObjectId | شناسه مالک جدید |
+| meta |  meta| شامل: title – description – keyphrase |
+
+
+نمونه ریکوست:
+
+{{URL}}/prod/update/63aaa7dc465015f29b89fee1
+
+``` json
+{
+    "title": "Backend Dev with Nodejs",
+    "content":"Complete description and detail about Nodejs and backend development",
+    "images": {
+        "main": "63bcf356ce90d6dbda7696b0",
+        "gallery": [
+            "63aaa7110c832c33351fb79e"
+        ]
+    },
+    "url":"nodejs-backend-dev"
+}
+```
+
+نمونه پاسخ:
+
+``` json
+{
+    "status": 200,
+    "data": {
+        "product": {
+            "images": {
+                "main": "63bcf356ce90d6dbda7696b0",
+                "gallery": [
+                    "63aaa7110c832c33351fb79e"
+                ]
+            },
+            "_id": "63aaa7dc465015f29b89fee1",
+            "title": "Backend Dev with Nodejs",
+            "excerpt": "You will learn how to use some advanced tools such as Nodejs work",
+            "content": "Complete description and detail about Nodejs and backend development",
+            "price": 98000,
+            "category": [
+                "63b12f89ff0cf3e6dcfd1d83"
+            ],
+            "tag": [],
+            "meta": "63bbcec3ee1416b96dbf8f53",
+            "owner": "63aaa69e0c832c33351fb77e",
+            "comments": [],
+            "createdAt": "2022-12-27T08:07:56.128Z",
+            "updatedAt": "2023-01-16T05:28:21.863Z",
+            "url": "nodejs-backend-dev",
+            "__v": 2
+        },
+        "meta": {
+            "_id": "63bbcec3ee1416b96dbf8f53",
+            "keyphrase": [],
+            "link": "63aaa7dc465015f29b89fee1",
+            "__v": 0
+        }
+    },
+    "message": "Your product updated."
+}
+```
+
+### حذف محصول
+
+برای حذف یک محصول به آدرس زیر با متد Delete ریکوست ارسال کنید:
+
+DELETE: {{URL}}/prod/delete/prodId
+
+نمونه ریکوست:
+
+{{URL}}/prod/delete/63aaa7dc465015f29b89fee1
+
+نمونه پاسخ:
+
+``` json
+{
+    "status": 200,
+    "message": "The product deleted!",
+    "data": {
+        "images": {
+            "main": "63bcf356ce90d6dbda7696b0",
+            "gallery": [
+                "63aaa7110c832c33351fb79e"
+            ]
+        },
+        "_id": "63aaa7dc465015f29b89fee1",
+        "title": "Backend Dev with Nodejs",
+        "excerpt": "You will learn how to use some advanced tools such as Nodejs work",
+        "content": "Complete description and detail about Nodejs and backend development",
+        "price": 98000,
+        "category": [
+            "63b12f89ff0cf3e6dcfd1d83"
+        ],
+        "tag": [],
+        "meta": "63bbcec3ee1416b96dbf8f53",
+        "owner": "63aaa69e0c832c33351fb77e",
+        "comments": [],
+        "createdAt": "2022-12-27T08:07:56.128Z",
+        "updatedAt": "2023-01-16T05:28:21.863Z",
+        "url": "nodejs-backend-dev",
+        "__v": 2
+    }
+}
+```
