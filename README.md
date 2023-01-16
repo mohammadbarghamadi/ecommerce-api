@@ -799,7 +799,7 @@ DELETE: {{URL}}/file/delete/fileId
         "name": "Apple Laptop",
         "encoding": "7bit",
         "size": "208874",
-        "filepath": "/home/mohammad/Practice/MERN/ECommerece/dist/files/images/2023/1/10/1673327446389-6649813.jpeg",
+        "filepath": "/dist/files/images/2023/1/10/1673327446389-6649813.jpeg",
         "mimetype": "image/jpeg",
         "md5": "84dc87e1cfb4850cb4bddd75a75997f1",
         "userId": "63b51152f7daee2dfbd6d28a",
@@ -1395,7 +1395,7 @@ GET: {{URL}}/prod/get/prodId
                 "name": "Image16.jpg",
                 "encoding": "7bit",
                 "size": "652006",
-                "filepath": "/home/mohammad/Practice/MERN/ECommerece/dist/files/images/2022/12/27/1672128273496-997340.jpg",
+                "filepath": "/dist/files/images/2022/12/27/1672128273496-997340.jpg",
                 "mimetype": "image/jpeg",
                 "md5": "0a0e1ef9b26931a856852ed90f12aa62",
                 "userId": "63aaa69e0c832c33351fb77e",
@@ -1407,7 +1407,7 @@ GET: {{URL}}/prod/get/prodId
                     "name": "6183d38056d48692be8226c6be39f063.png",
                     "encoding": "7bit",
                     "size": "1605859",
-                    "filepath": "/home/mohammad/Practice/MERN/ECommerece/dist/files/images/2023/1/15/1673758899966-6809644.png",
+                    "filepath": "/dist/files/images/2023/1/15/1673758899966-6809644.png",
                     "mimetype": "image/png",
                     "md5": "01f092bd23c85e7b2c9166e3aa807ed5",
                     "userId": "63c23094cb76f81556b2df3a",
@@ -1418,7 +1418,7 @@ GET: {{URL}}/prod/get/prodId
                     "name": "Image16.jpg",
                     "encoding": "7bit",
                     "size": "652006",
-                    "filepath": "/home/mohammad/Practice/MERN/ECommerece/dist/files/images/2022/12/27/1672128273496-997340.jpg",
+                    "filepath": "/dist/files/images/2022/12/27/1672128273496-997340.jpg",
                     "mimetype": "image/jpeg",
                     "md5": "0a0e1ef9b26931a856852ed90f12aa62",
                     "userId": "63aaa69e0c832c33351fb77e",
@@ -1699,5 +1699,157 @@ DELETE: {{URL}}/prod/delete/prodId
         "url": "nodejs-backend-dev",
         "__v": 2
     }
+}
+```
+
+
+### افزودن به سبد خرید
+
+برای اضافه کردن یک محصول بع سبد خرید باید شناسه محصول را با متد Post به آدرس زیر ارسال کنید:
+
+POST: {{URL}}/cart/add
+
+| فیلد | نوع | توضیحات |
+| :---:  | :---:  |  ---: |
+| prodId | string | شناسه محصول |
+
+نمونه ریکوست:
+``` json
+{
+    "prodId": "63aaa7dc465015f29b89fee1"
+}
+```
+نمونه پاسخ:
+
+``` json
+{
+    "status": 200,
+    "data": {
+        "userId": "63c23094cb76f81556b2df3a",
+        "list": [
+            {
+                "prodId": "63c4dc6213d8575602ccf5df",
+                "quantity": 1,
+                "price": 124000,
+                "_id": "63c4eef60257c81a33d4269e"
+            }
+        ],
+        "payment": {
+            "state": "READY",
+            "date": 1673846143351
+        },
+        "amount": 124000,
+        "_id": "63c4eef60257c81a33d4269d",
+        "__v": 0
+    },
+    "message": "A new cart created."
+}
+```
+نکته: با تکرار ارسال یک ریکوست تکراری فقط تعداد Quantity همان محصول در سبد خرید افزایش پیدا میکند.
+
+### نمایش محتوای سبد خرید
+
+برای مشاهده محصولات افزوده شده به سبد خرید به آدرس زیر با متد Get ریکوست ارسال کنید:
+
+GET: {{URL}}/cart/get
+
+نمونه پاسخ:
+
+``` json
+{
+    "status": 200,
+    "data": {
+        "payment": {
+            "state": "READY",
+            "date": 1673846143351
+        },
+        "_id": "63c4eef60257c81a33d4269d",
+        "userId": "63c23094cb76f81556b2df3a",
+        "list": [
+            {
+                "prodId": "63c4dc6213d8575602ccf5df",
+                "quantity": 1,
+                "price": 124000,
+                "_id": "63c4eef60257c81a33d4269e"
+            }
+        ],
+        "amount": 124000,
+        "__v": 0
+    },
+    "message": "Cart found."
+}
+```
+### بروز رسانی سبد خرید
+
+برای بروز رسانی سبد خرید به آدرس زیر با متد Patch ریکوست ارسال کنید:
+
+PATCH: {{URL}}/cart/update
+
+| فیلد | نوع | توضیحات |
+| :---:  | :---:  |  ---: |
+| list | array | شامل محصولات سبد خرید: شناسه محصول prodId و تعداد محصول quantity |
+
+نکته: ریکوست ارسالی شامل یک آرایه از کلیه محصولات به همراه مقادیر جدول بالا میباشد.
+
+نمونه ریکوست:
+
+``` json
+{
+    "list": [
+        {
+            "prodId": "63c4dc6213d8575602ccf5df",
+            "quantity": 1
+        },
+        {
+            "prodId": "63ad11e3d7261f57cfbb4566",
+            "quantity": 2
+        }
+    ]
+}
+```
+نمونه پاسخ:
+
+``` json
+{
+    "status": 200,
+    "data": {
+        "payment": {
+            "state": "READY",
+            "date": 1673846143351
+        },
+        "_id": "63c4eef60257c81a33d4269d",
+        "userId": "63c23094cb76f81556b2df3a",
+        "list": [
+            {
+                "prodId": "63c4dc6213d8575602ccf5df",
+                "quantity": 1,
+                "price": 124000,
+                "_id": "63c4eef60257c81a33d4269e"
+            },
+            {
+                "prodId": "63ad11e3d7261f57cfbb4566",
+                "quantity": 2,
+                "price": 98000,
+                "_id": "63c4f1870257c81a33d426a9"
+            }
+        ],
+        "amount": 320000,
+        "__v": 1
+    },
+    "message": "Cart updated."
+}
+```
+### حذف سبد خرید
+
+برای خالی کردن سبد خرید به آدرس زیر با متد Delete ریکوست ارسال کنید:
+
+DELET: {{URL}}/cart/delete
+
+نمونه پاسخ:
+
+``` json
+{
+    "status": 200,
+    "message": "Cart removed!"
 }
 ```
