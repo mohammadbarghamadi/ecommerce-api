@@ -2084,3 +2084,391 @@ DELET: {{URL}}/cart/delete
     "message": "Cart removed!"
 }
 ```
+
+### پرداخت آنلاین
+
+برای پرداخت آنلاین به آدرس زیر با متد Post ریکوست ارسال کنید:
+
+POST: {{URL}}/paym/payment
+
+نمونه پاسخ:
+
+``` json
+{
+    "status": 200,
+    "data": {
+        "info": {
+            "payment": {
+                "authority": "A00000000000000000000000000403047345",
+                "code": 100,
+                "state": "PEDNDING",
+                "date": 1674015932872
+            },
+            "_id": "63c62325447dd312c35662fd",
+            "userId": "63c23094cb76f81556b2df3a",
+            "list": [
+                {
+                    "prodId": "63ad11e3d7261f57cfbb4566",
+                    "quantity": 1,
+                    "price": 98000,
+                    "_id": "63c62325447dd312c35662fe"
+                }
+            ],
+            "amount": 98000,
+            "__v": 0
+        },
+        "redirect": "https://www.zarinpal.com/pg/StartPay/A00000000000000000000000000403047345"
+    }
+}
+```
+
+بعد از دریافت پاسخ، کاربر را به مقدار ریدایرکت منتقل کنید. در صورت موفق بودن تراکنش مقدار Status مساوی OK میشود و در غیر این صورت مقدار آن NOK باز می‌گردد.
+
+نمونه تراکنش موفق که کاربر از طرف درگاه پرداخت به فرانت منتقل شده است:
+
+{{URL}}?Authority=A00000000000000000000000000403047345&Status=OK
+
+نمونه تراکنش ناموفق که کاربر از طرف درگاه پرداخت به فرانت منتقل شده است:
+
+{{URL}}?Authority=A00000000000000000000000000403047345&Status=NOK
+
+نکته: در حال حاضر تنها درگاه پرداخت تنظیم شده زرین پال می‌باشد.
+
+در صورت خالی بودن سبد خرید:
+
+
+تایید پرداخت
+
+برای بررسی پرداخت انجام شده به آدرس زیر ریکوست خود را با متد POST ارسال کنید:
+
+POST: {{URL}}/paym/checkout
+
+| فیلد | نوع | توضیحات |
+| :---:  | :---:  |  ---: |
+| Authority | string | شناسه پرداخت |
+| Status | string | مقدار OK یا NOK |
+
+در صورت دریافت OK مقدار OK را بازگردانید و در صورت دریافت مقدار NOK همان را بازگردانید.
+
+ریکوست نمونه:
+
+``` json
+{
+    "Authority":"A00000000000000000000000000401330946",
+    "Status":"OK"
+}
+
+نمونه پاسخ:
+
+``` json
+{
+    "status": 200,
+    "data": {
+        "userId": "63c23094cb76f81556b2df3a",
+        "list": [
+            {
+                "prodId": "63ad11e3d7261f57cfbb4566",
+                "quantity": 1,
+                "price": 98000,
+                "_id": "63c62325447dd312c35662fe"
+            }
+        ],
+        "payment": {
+            "authority": "A00000000000000000000000000403047345",
+            "code": 100,
+            "state": "SUCCESS",
+            "date": 1674015932872
+        },
+        "amount": 98000,
+        "_id": "63c6289f447dd312c3566309",
+        "createdAt": "2023-01-17T04:48:31.741Z",
+        "updatedAt": "2023-01-17T04:48:31.741Z",
+        "__v": 0
+    },
+    "message": "The payment is done."
+}
+```
+
+### فهرست گیری از سفارش ها
+
+برای فهرست گیری از کلیه سفارش های انجام شده به آدرس زیر با متد Get ریکوست ارسال کنید:
+
+GET: {{URL}}/orde/list
+
+نمونه پاسخ:
+
+``` json
+{
+    "status": 200,
+    "data": [
+        {
+            "payment": {
+                "authority": "A00000000000000000000000000398323748",
+                "code": 100,
+                "state": "SUCCESS"
+            },
+            "_id": "63abdcc007c4f8af45cf4a0d",
+            "userId": "63aaa69e0c832c33351fb77e",
+            "list": [
+                {
+                    "prodId": "63aaa7dc465015f29b89fee1",
+                    "quantity": 2,
+                    "price": 98000,
+                    "_id": "63aaa87bff14249bda05adfb"
+                }
+            ],
+            "amount": 196000,
+            "__v": 0
+        },
+        {
+            "payment": {
+                "authority": "A00000000000000000000000000401330946",
+                "code": 100,
+                "state": "SUCCESS",
+                "date": 1673425068471
+            },
+            "_id": "63bd2029c9927249907a709d",
+            "userId": "63b51152f7daee2dfbd6d28a",
+            "list": [
+                {
+                    "prodId": "63ad11e3d7261f57cfbb4566",
+                    "quantity": 1,
+                    "price": 98000,
+                    "_id": "63ba6b5bce97ace49c2afa1b"
+                },
+                {
+                    "prodId": "63aaa7dc465015f29b89fee1",
+                    "quantity": 1,
+                    "price": 98000,
+                    "_id": "63ba6b5ece97ace49c2afa22"
+                }
+            ],
+            "amount": 196000,
+            "createdAt": "2023-01-10T08:22:01.895Z",
+            "updatedAt": "2023-01-10T08:22:01.895Z",
+            "__v": 0
+        }
+    ],
+    "message": "Orders found"
+}
+```
+
+### دریافت جزئیات سفارش
+
+برای دریافت جزئیات سفارش به آدرس زیر با متد Get ریکوست ارسال کنید:
+
+GET: {{GET}}/orde/get/orderId
+
+نمونه ریکوست:
+
+{{URL}}/orde/get/63c6289f447dd312c3566309
+
+نمونه پاسخ:
+
+``` json
+{
+    "status": 200,
+    "data": {
+        "payment": {
+            "authority": "A00000000000000000000000000403047345",
+            "code": 100,
+            "state": "SUCCESS",
+            "date": 1674015932872
+        },
+        "_id": "63c6289f447dd312c3566309",
+        "userId": {
+            "_id": "63c23094cb76f81556b2df3a",
+            "name": "Mohammad Barghamadi",
+            "phone": "9304551004"
+        },
+        "list": [
+            {
+                "prodId": "63ad11e3d7261f57cfbb4566",
+                "quantity": 1,
+                "price": 98000,
+                "_id": "63c62325447dd312c35662fe"
+            }
+        ],
+        "amount": 98000,
+        "createdAt": "2023-01-17T04:48:31.741Z",
+        "updatedAt": "2023-01-17T04:48:31.741Z",
+        "__v": 0
+    },
+    "message": "Order found."
+}
+```
+
+### ایجاد یا افزودن آدرس
+
+برای افزودن آدرس پستی مشتری به آدرس زیر با متد Post ریکوست ارسال کنید:
+
+POST: {{URL}}/addr/add
+
+| فیلد | نوع | توضیحات |
+| :---:  | :---:  |  ---: |
+| country | ObjectId | شناسه کشور انتخاب شده |
+| Status | string | مقدار OK یا NOK |
+| proveState | ObjectId | شناسه استان انتخاب شده |
+| city | ObjectId | شناسه شهر انتخاب شده |
+| address | string | جزئیات آدرس: خیابان – محله – کوچه |
+| postalcode | string | کد پستی دریافت کننده محصول |
+
+نمونه ریکوست:
+
+``` json
+{
+    "country": "63c503de7940e7743cce895d",
+    "provState": "63c5048e7940e7743cce8961",
+    "city": "63c505047940e7743cce8965",
+    "address": "Soroush 6 entehayeh kheyaban",
+    "postalcode": "49187245365"
+}
+```
+
+نمونه پاسخ:
+
+``` json
+{
+    "status": 200,
+    "data": {
+        "country": "63c503de7940e7743cce895d",
+        "provState": "63c5048e7940e7743cce8961",
+        "city": "63c505047940e7743cce8965",
+        "address": "Soroush 6 entehayeh kheyaban",
+        "postalcode": "49187245365",
+        "userId": "63c23094cb76f81556b2df3a",
+        "_id": "63c639c0634ef0881f9a3567",
+        "__v": 0
+    },
+    "message": "Address added."
+}
+```
+
+### فهرست گیری از آدرس‌ها
+
+برای فهرست گیری از آدرس های پستی خریدار به آدرس زیر با متد Get ریکوست ارسال کنید:
+
+GET: {{URL}}/addr/list
+
+نمونه ریکوست:
+
+``` json
+{
+    "status": 200,
+    "data": [
+        {
+            "_id": "63c639c0634ef0881f9a3567",
+            "address": "Soroush 6 entehayeh kheyaban"
+        }
+    ],
+    "message": "Address found."
+}
+```
+
+### دریافت جزئیات آدرس
+
+برای دریافت جزئیات آدرس پستی یک کاربر به ادرس زیر با متد Get ریکوست ارسال کنید:
+
+GET: {{URL}}/addr/get/addressId
+
+نمونه ریکوست:
+
+{{URL}}/addr/get/63c639c0634ef0881f9a3567
+
+نمونه پاسخ:
+
+``` json
+{
+    "status": 200,
+    "data": {
+        "_id": "63c639c0634ef0881f9a3567",
+        "country": {
+            "_id": "63c503de7940e7743cce895d",
+            "name": "Iran"
+        },
+        "provState": {
+            "_id": "63c5048e7940e7743cce8961",
+            "name": "Golestan"
+        },
+        "city": {
+            "_id": "63c505047940e7743cce8965",
+            "name": "Gorgan"
+        },
+        "address": "Soroush 6 entehayeh kheyaban",
+        "postalcode": "49187245365",
+        "userId": "63c23094cb76f81556b2df3a",
+        "__v": 0
+    },
+    "message": "Address found."
+}
+```
+### ویرایش آدرس
+
+برای ویرایش آدرس پستی مشتری به آدرس زیر با متد Patch ریکوست ارسال کنید:
+
+PATCH: {{URL}}/addr/edit/addressId
+
+| فیلد | نوع | توضیحات |
+| :---:  | :---:  |  ---: |
+| country | ObjectId | شناسه کشور انتخاب شده |
+| Status | string | مقدار OK یا NOK |
+| proveState | ObjectId | شناسه استان انتخاب شده |
+| city | ObjectId | شناسه شهر انتخاب شده |
+| address | string | جزئیات آدرس: خیابان – محله – کوچه |
+| postalcode | string | کد پستی دریافت کننده محصول |
+
+نمونه ریکوست:
+
+{{URL}}/addr/edit/63c639c0634ef0881f9a3567
+``` json
+{
+    "postalcode": "471665892"
+}
+```
+
+نمونه پاسخ:
+
+``` json
+{
+    "status": 200,
+    "data": {
+        "_id": "63c639c0634ef0881f9a3567",
+        "country": "63c503de7940e7743cce895d",
+        "provState": "63c5048e7940e7743cce8961",
+        "city": "63c505047940e7743cce8965",
+        "address": "Soroush 6 entehayeh kheyaban",
+        "postalcode": "471665892",
+        "userId": "63c23094cb76f81556b2df3a",
+        "__v": 0
+    },
+    "message": "Address updated."
+}
+```
+### حذف آدرس پستی
+
+برای حذف آدرس پستی مشتری به آدرس زیر با متد Delete ریکوست ارسال کنید:
+
+DELETE: {{URL}}/addr/delete/addressId
+
+نمونه ریکوست:
+
+{{URL}}/addr/delete/63c639c0634ef0881f9a3567
+
+نمونه پاسخ:
+
+``` json
+{
+    "status": 200,
+    "data": {
+        "_id": "63c639c0634ef0881f9a3567",
+        "country": "63c503de7940e7743cce895d",
+        "provState": "63c5048e7940e7743cce8961",
+        "city": "63c505047940e7743cce8965",
+        "address": "Soroush 6 entehayeh kheyaban",
+        "postalcode": "471665892",
+        "userId": "63c23094cb76f81556b2df3a",
+        "__v": 0
+    },
+    "message": "Address deleted."
+}
+```

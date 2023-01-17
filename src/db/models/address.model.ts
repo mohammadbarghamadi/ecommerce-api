@@ -57,17 +57,20 @@ const citySchema = new mongoose.Schema({
 const addressSchema = new mongoose.Schema({
     country: {
         type: mongoose.Schema.Types.ObjectId,
+        ref: 'countries',
         required: true
     },
     provState: {
         type: mongoose.Schema.Types.ObjectId,
+        ref: 'provstates',
         required: true
     },
     city: {
         type: mongoose.Schema.Types.ObjectId,
+        ref:'cities',
         required: true
     },
-    street: {
+    address: {
         type: String,
         required: true
     },
