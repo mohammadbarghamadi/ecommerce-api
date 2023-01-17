@@ -54,7 +54,7 @@ export const addCommentCtr: RequestHandler = async (req, res, next) => {
 
     const isValidRB = isValidReq(req.body, ['name', 'email', 'replayTo', 'prodId', 'authorId', 'rating', 'title', 'description'])
     if (!isValidRB) return res.status(400).json({ status: 400, message: 'Invalid field!' })
-
+    console.log(req.cred)
     try {
         let newComment
         if (req.cred?.isAuthenticated && req.cred.user) newComment = new CommentModel({ ...req.body, name: req.cred.user.name, email: req.cred.user.email, authorId: req.cred.user._id })

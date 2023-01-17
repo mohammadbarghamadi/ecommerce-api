@@ -2157,6 +2157,7 @@ POST: {{URL}}/paym/checkout
     "Authority":"A00000000000000000000000000401330946",
     "Status":"OK"
 }
+```
 
 نمونه پاسخ:
 
@@ -2470,5 +2471,384 @@ DELETE: {{URL}}/addr/delete/addressId
         "__v": 0
     },
     "message": "Address deleted."
+}
+```
+
+### افزودن به لیست علاقه مندی ها
+
+برای افزودن یک محصول به فهرست علاقه مندی های به آدرس زیر با متد Post ریکوست ارسال کنید:
+
+POST: {{URL}}/favo/add
+
+
+| فیلد | نوع | توضیحات |
+| :---:  | :---:  |  ---: |
+| prodId | ObjectId | شناسه محصول |
+
+نمونه ریکوست:
+
+``` json
+{
+    "prodId": "63ad11e3d7261f57cfbb4566"
+}
+```
+
+نمونه پاسخ:
+
+``` json
+{
+    "status": 200,
+    "message": "Item added to favorites."
+}
+```
+نکته: برای حذف یک محصول از فهرست علاقه مندی ها کافیست همان ریکوست تکرار شود.
+
+### نمایش فهرست علاقه مندی ها
+
+برای فهرست گرفتن از آیتم های موجود در علاقه مندی ها به آدرس زیر با متد Get ریکوست ارسال کنید:
+
+GET: {{URL}}/favo/list
+
+نمونه پاسخ:
+
+``` json
+{
+    "status": 200,
+    "data": {
+        "_id": "63c64d3a9294f4f5be73456a",
+        "userId": "63c23094cb76f81556b2df3a",
+        "list": [
+            {
+                "prodId": {
+                    "images": {
+                        "main": "63aaa7110c832c33351fb79e"
+                    },
+                    "_id": "63ad11e3d7261f57cfbb4566",
+                    "title": "Backend dev with Nodejs",
+                    "price": 98000,
+                    "url": "backend-dev-with-nodejs-58949-1672286691815"
+                },
+                "_id": "63c64d3a9294f4f5be73456b"
+            }
+        ],
+        "__v": 0
+    },
+    "message": "Favorite list"
+}
+```
+
+### خالی کردن فهرست علاقه مندی ها
+
+برای خالی نمودن کلیه ایتم های موجود در فهرست علاقه مندی ها به آدرس زیر با متد Delete ریکوست ارسال کنید:
+
+DELETE: {{URL}}/favo/clear
+
+نمونه پاسخ:
+
+``` json
+{
+    "status": 200,
+    "data": {
+        "_id": "63c64d3a9294f4f5be73456a",
+        "userId": "63c23094cb76f81556b2df3a",
+        "list": [],
+        "__v": 1
+    },
+    "message": "Favorite list emptied"
+}
+```
+
+### افزودن یا ثبت دیدگاه
+
+برای ثبت نظر به آدرس زیر با متد Post ریکوست ارسال کنید:
+
+POST: {{URL}}/cmnt/add
+
+| فیلد | نوع | توضیحات |
+| :---:  | :---:  |  ---: |
+| name | string | نام کاربر درصورتیکه وارد برنامه نشده باشد |
+| prodId | ObjectId | شناسه محصول |
+| rating | number | عدد ۱ تا 5 |
+| title | string | عنوان دیدگاه |
+| description | string | توضیحات دیدگاه |
+| email | string | آدرس ایمیل کاربر در صورتیکه وارد برنامه نشده باشد |
+
+نمونه ریکوست:
+``` json
+{
+    "prodId": "63ad11e3d7261f57cfbb4566",
+    "rating": 4,
+    "title": "Best Nodejs course ever",
+    "description": "I don't know how to say thank you, but I can say Thanks so much."
+}
+```
+نمونه پاسخ:
+
+``` json
+{
+    "status": 200,
+    "data": {
+        "name": "Mohammad Barghamadi",
+        "email": "mohammadbarghamadi@gmail.com",
+        "authorId": "63c23094cb76f81556b2df3a",
+        "prodId": "63ad11e3d7261f57cfbb4566",
+        "rating": 4,
+        "title": "Best Nodejs course ever",
+        "description": "I don't know how to say thank you, but I can say Thanks so much.",
+        "status": "PENDING",
+        "_id": "63c653c5a66636d4f0ff8db1",
+        "createdAt": "2023-01-17T07:52:37.158Z",
+        "updatedAt": "2023-01-17T07:52:37.158Z",
+        "__v": 0
+    },
+    "message": "New comment added."
+}
+```
+نمونه ریکوست برای زمانیکه کاربر ثبت نام نکرده و یا وارد برنامه نشده باشد:
+
+``` json
+{
+    "name": "Jim Kwik",
+    "email": "jimkwik@gmail.com",
+    "prodId": "63ad11e3d7261f57cfbb4566",
+    "rating": 5,
+    "title": "What a tutorial",
+    "description": "Best backend development you can find on whole Internet."
+}
+```
+نمونه پاسخ:
+
+``` json
+{
+    "status": 200,
+    "data": {
+        "name": "Jim Kwik",
+        "email": "jimkwik@gmail.com",
+        "prodId": "63ad11e3d7261f57cfbb4566",
+        "rating": 5,
+        "title": "What a tutorial",
+        "description": "Best backend development you can find on whole Internet.",
+        "status": "PENDING",
+        "_id": "63c6574f772d2f9ce1268a34",
+        "createdAt": "2023-01-17T08:07:43.376Z",
+        "updatedAt": "2023-01-17T08:07:43.376Z",
+        "__v": 0
+    },
+    "message": "New comment added."
+}
+```
+### نمایش دیدگاه‌های یک محصول
+
+برای فهرست گیری و نمایش کلیه دیدگاه های (تایید شده) یک محصول به آدرس زیر با متد Get ریکوست ارسال کنید:
+
+GET: {{URL}}/cmnt/show/prodId
+
+نمونه ریکوست:
+
+{{URL}}/cmnt/show/63ad11e3d7261f57cfbb4566
+
+نمونه پاسخ:
+
+``` json
+{
+    "status": 200,
+    "data": [
+        {
+            "_id": "63c653c5a66636d4f0ff8db1",
+            "name": "Mohammad Barghamadi",
+            "email": "mohammadbarghamadi@gmail.com",
+            "rating": 4,
+            "title": "Best Nodejs course ever",
+            "description": "I don't know how to say thank you, but I can say Thanks so much."
+        },
+        {
+            "_id": "63c6574f772d2f9ce1268a34",
+            "name": "Jim Kwik",
+            "email": "jimkwik@gmail.com",
+            "rating": 5,
+            "title": "What a tutorial",
+            "description": "Best backend development you can find on whole Internet."
+        }
+    ],
+    "message": "Product comments found."
+}
+```
+
+### فهرست گیری از کلیه دیدگاه‌ها
+
+برای فهرست گیری از کلیه دیدگاه ها ثبت شده در سایت به آدرس زیر با متد Get ریکوست ارسال کنید:
+
+GET: {{URL}}/cmnt/list
+
+| فیلد | نوع | توضیحات |
+| :---:  | :---:  |  ---: |
+| admin | boolean | درصورت true بودن فهرست کلیه دیدگاه ها ارسال میشود در غیر اینصورت فقط دیدگاه های فرد درخواست کنند نمایش داده میشود. |
+
+نمونه ریکوست برای دریافت همه دیدگاه ها به عنوان مدیر برنامه:
+
+``` json
+{
+    "admin":true
+}
+```
+
+نمونه پاسخ:
+
+``` json
+{
+    "status": 200,
+    "data": [
+        {
+            "_id": "63bd17ca36ee070579b89cda",
+            "name": "Sharif Mohamed",
+            "email": "sharifmohamed@gmail.com",
+            "prodId": "63aaa7dc465015f29b89fee1",
+            "rating": 4,
+            "title": "Best Laptop ever",
+            "description": "I don't know how to say thank you, but I can say Thanks so much.",
+            "status": "APPROVED",
+            "createdAt": "2023-01-10T07:46:18.191Z",
+            "updatedAt": "2023-01-10T07:50:34.457Z",
+            "__v": 0
+        },
+        {
+            "_id": "63c653c5a66636d4f0ff8db1",
+            "name": "Mohammad Barghamadi",
+            "email": "mohammadbarghamadi@gmail.com",
+            "authorId": "63c23094cb76f81556b2df3a",
+            "prodId": "63ad11e3d7261f57cfbb4566",
+            "rating": 4,
+            "title": "Best Nodejs course ever",
+            "description": "I don't know how to say thank you, but I can say Thanks so much.",
+            "status": "PENDING",
+            "createdAt": "2023-01-17T07:52:37.158Z",
+            "updatedAt": "2023-01-17T07:52:37.158Z",
+            "__v": 0
+        },
+        {
+            "_id": "63c6574f772d2f9ce1268a34",
+            "name": "Jim Kwik",
+            "email": "jimkwik@gmail.com",
+            "prodId": "63ad11e3d7261f57cfbb4566",
+            "rating": 5,
+            "title": "What a tutorial",
+            "description": "Best backend development you can find on whole Internet.",
+            "status": "PENDING",
+            "createdAt": "2023-01-17T08:07:43.376Z",
+            "updatedAt": "2023-01-17T08:07:43.376Z",
+            "__v": 0
+        }
+    ],
+    "message": "Comments found."
+}
+```
+
+### مشاهده یک دیدگاه
+
+برای مشاهده یک دیدگاه به آدرس زیر با متد Get ریکوست ارسال کنید:
+
+GET: {{URL}}/cmnt/get/commentId
+
+نمونه ریکوست:
+
+{{URL}}/cmnt/get/63bd15d14a35eb59ad50d235
+
+نمونه پاسخ:
+
+``` json
+{
+    "status": 200,
+    "data": {
+        "_id": "63bd15d14a35eb59ad50d235",
+        "name": "Mohammad Barghamadi",
+        "email": "mohammadbarghamadi@gmail.com",
+        "authorId": "63b51152f7daee2dfbd6d28a",
+        "prodId": "63aaa7dc465015f29b89fee1",
+        "rating": 5,
+        "title": "Amazing Product",
+        "description": "I really appricate for this nice product that you created for us, thank you and keep up good work.",
+        "status": "APPROVED",
+        "createdAt": "2023-01-10T07:37:53.982Z",
+        "updatedAt": "2023-01-10T07:51:31.509Z",
+        "__v": 0
+    },
+    "message": "comment found."
+}
+```
+ویرایش یک دیدگاه
+
+برای ویرایش و تایید و رد نمودن یک دیدگاه به آدرس زیر با متد Patch ریکوست ارسال کنید:
+
+PATCH: {{URL}}/cmnt/edit/commentId
+
+| فیلد | نوع | توضیحات |
+| :---:  | :---:  |  ---: |
+| status | string | میتواند: PENDING – REJECTED - APPROVED |
+| name | string | نام کاربر |
+| prodId | ObjectId | شناسه محصول |
+| rating | number | عدد ۱ تا 5 |
+| title | string | عنوان دیدگاه |
+| description | string | توضیحات دیدگاه |
+| email | string | آدرس ایمیل کاربر |
+
+نمونه ریکوست:
+
+``` json
+{
+    "status":"APPROVED"
+}
+```
+
+نمونه پاسخ:
+
+``` json
+{
+    "status": 200,
+    "data": {
+        "_id": "63c6574f772d2f9ce1268a34",
+        "name": "Jim Kwik",
+        "email": "jimkwik@gmail.com",
+        "prodId": "63ad11e3d7261f57cfbb4566",
+        "rating": 5,
+        "title": "What a tutorial",
+        "description": "Best backend development you can find on whole Internet.",
+        "status": "APPROVED",
+        "createdAt": "2023-01-17T08:07:43.376Z",
+        "updatedAt": "2023-01-17T08:20:14.116Z",
+        "__v": 0
+    },
+    "message": "Comment updated."
+}
+```
+
+### حذف یک دیدگاه
+
+برای حذف یک دیدگاه به آدرس زیر با متد Delete ریکوست ارسال کنید:
+
+DELETE: {{URL}}/cmnt/delete/63c6574f772d2f9ce1268a34
+
+نمونه ریکوست:
+
+{{URL}}/cmnt/delete/63c6574f772d2f9ce1268a34
+
+نمونه پاسخ:
+
+``` json
+{
+    "status": 200,
+    "data": {
+        "_id": "63c6574f772d2f9ce1268a34",
+        "name": "Jim Kwik",
+        "email": "jimkwik@gmail.com",
+        "prodId": "63ad11e3d7261f57cfbb4566",
+        "rating": 5,
+        "title": "What a tutorial",
+        "description": "Best backend development you can find on whole Internet.",
+        "status": "APPROVED",
+        "createdAt": "2023-01-17T08:07:43.376Z",
+        "updatedAt": "2023-01-17T08:20:14.116Z",
+        "__v": 0
+    },
+    "message": "Comment deleted."
 }
 ```

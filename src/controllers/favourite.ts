@@ -54,7 +54,7 @@ export const lisFavoCtr: RequestHandler = async (req, res, next) => {
             path: 'list.prodId',
             select: 'title price url images.main'
         })
-        if (!favoList) return next({ code: 404, message: 'list found!' })
+        if (!favoList) return next({ code: 404, message: 'Your favorite list is empty!' })
         res.json({ status: 200, data: favoList, message: 'Favorite list' })
     } catch (e) {
         next(e)

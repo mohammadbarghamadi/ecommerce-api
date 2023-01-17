@@ -10,7 +10,6 @@ interface JWTInt {
 
 export const NoAuth: RequestHandler = async (req, res, next) => {
     try {
-        req.cred.isAuthenticated = false
         const token: string = req.cookies.authToken
         if (!token) throw new Error
         const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY!) as JWTInt
