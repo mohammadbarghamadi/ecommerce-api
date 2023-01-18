@@ -1,4 +1,5 @@
 import mongoose, { Types, Document, Model } from "mongoose"
+import { isValidURL } from "../../config/regex.js"
 
 interface CategoryInt {
     name: string
@@ -19,8 +20,8 @@ const categorySchema = new mongoose.Schema<CategorySchemaInt>({
     url: {
         type: String,
         required: true,
-        unique: true,
-        lowercase: true
+        match: [isValidURL, 'Enter a valid URL(a-z A-Z 0-9 -)'],
+        unique: true
     },
     category: {
         type: mongoose.Schema.Types.ObjectId,

@@ -1,4 +1,5 @@
 import mongoose, { Document, Model, Types } from "mongoose";
+import { isValidURL } from "../../config/regex.js";
 
 interface ProductInt {
     title: string
@@ -37,6 +38,7 @@ const productSchema = new mongoose.Schema<ProductInt>({
     },
     url: {
         type: String,
+        match: [isValidURL, 'Enter a valid URL(a-z A-Z 0-9 -)'],
         unique: true
     },
     images: {

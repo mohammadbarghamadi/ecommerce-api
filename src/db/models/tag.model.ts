@@ -1,5 +1,5 @@
 import mongoose from "mongoose"
-
+import { isValidURL } from "../../config/regex.js"
 
 const tagSchema = new mongoose.Schema({
     name: {
@@ -11,8 +11,8 @@ const tagSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true,
-        lowercase: true,
-        trim: true
+        match: [isValidURL, 'Enter a valid URL(a-z A-Z 0-9 -)'],
+
     },
     meta: {
         type: mongoose.Schema.Types.ObjectId,

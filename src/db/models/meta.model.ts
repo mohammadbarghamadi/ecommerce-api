@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 
-
 const metaSchema = new mongoose.Schema({
     title: {
         type: String,
